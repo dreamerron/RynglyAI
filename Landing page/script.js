@@ -5,8 +5,8 @@
 // =====================================================
 // CONFIGURATION
 // =====================================================
-// Backend API endpoint — update this to your deployed URL in production
-const API_URL = 'http://localhost:3000/api/call-me';
+// Backend API endpoint — works for both local dev and Vercel production
+const API_URL = '/api/call-me';
 
 // Vapi credentials (used as fallback for direct client-side calls)
 const VAPI_CONFIG = {
