@@ -946,11 +946,94 @@ section {
     flex: 1
 }
 
+.consent-group {
+    margin-top: 4px
+}
+
+.consent-label {
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+    cursor: pointer;
+    position: relative
+}
+
+.consent-label input[type="checkbox"] {
+    position: absolute;
+    opacity: 0;
+    cursor: pointer;
+    width: 0;
+    height: 0
+}
+
+.consent-checkmark {
+    flex-shrink: 0;
+    width: 20px;
+    height: 20px;
+    border: 2px solid var(--glass-border-hover);
+    border-radius: 4px;
+    background: rgba(255, 255, 255, .04);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all .3s ease;
+    margin-top: 2px
+}
+
+.consent-label input:checked~.consent-checkmark {
+    background: var(--gradient-primary);
+    border-color: var(--accent-purple)
+}
+
+.consent-label input:checked~.consent-checkmark::after {
+    content: '✓';
+    color: white;
+    font-size: 12px;
+    font-weight: 700
+}
+
+.consent-label input:focus-visible~.consent-checkmark {
+    box-shadow: 0 0 0 3px rgba(124, 58, 237, .3)
+}
+
+.consent-text {
+    font-size: .75rem;
+    color: var(--text-muted);
+    line-height: 1.6
+}
+
+.consent-text a {
+    color: var(--accent-cyan);
+    text-decoration: none
+}
+
+.consent-text a:hover {
+    text-decoration: underline
+}
+
 .modal-disclaimer {
     text-align: center;
     font-size: .75rem;
     color: var(--text-muted);
     margin-top: 16px
+}
+
+.modal-disclaimer a {
+    color: var(--accent-cyan);
+    text-decoration: none
+}
+
+.modal-disclaimer a:hover {
+    text-decoration: underline
+}
+
+.footer-bottom a {
+    color: var(--accent-cyan);
+    text-decoration: none
+}
+
+.footer-bottom a:hover {
+    text-decoration: underline
 }
 
 .modal-success,
