@@ -204,3 +204,24 @@ document.querySelector('.nav-cta').addEventListener('click', (e) => {
     e.preventDefault();
     openModal();
 });
+
+// =====================================================
+// Pricing Toggle
+// =====================================================
+function switchPlan(plan) {
+    const voicePlans = document.getElementById('voicePlans');
+    const smsPlans = document.getElementById('smsPlans');
+    const toggleBtns = document.querySelectorAll('.toggle-btn');
+
+    toggleBtns.forEach(btn => {
+        btn.classList.toggle('active', btn.dataset.plan === plan);
+    });
+
+    if (plan === 'voice') {
+        voicePlans.style.display = '';
+        smsPlans.style.display = 'none';
+    } else {
+        voicePlans.style.display = 'none';
+        smsPlans.style.display = '';
+    }
+}
