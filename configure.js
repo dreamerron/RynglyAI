@@ -139,9 +139,66 @@ function selectVoice(voiceId) {
 }
 
 function playVoicePreview(voiceId) {
-    // Placeholder — in production, play actual audio samples
     const voice = VOICES.find(v => v.id === voiceId);
-    alert(`🔊 Playing preview for "${voice.name}" — (Audio samples coming soon!)`);
+    if (!voice) return;
+
+    // Use browser SpeechSynthesis for instant preview
+    if ('speechSynthesis' in window) {
+        // Stop any current speech
+        window.speechSynthesis.cancel();
+
+        const utterance = new SpeechSynthesisUtterance(
+            `Hi there! I'm ${voice.name}, your AI receptionist. How can I help you today?`
+        );
+
+        // Match voice character by adjusting pitch and rate
+        const voiceSettings = {
+            'alex': { pitch: 1.0, rate: 1.0 },
+            'sarah': { pitch: 1.2, rate: 1.05 },
+            'james': { pitch: 0.8, rate: 0.95 },
+            'emma': { pitch: 1.3, rate: 1.1 },
+            'daniel': { pitch: 0.7, rate: 0.9 },
+            'maya': { pitch: 1.15, rate: 1.0 },
+            'chris': { pitch: 1.1, rate: 1.15 },
+            'sofia': { pitch: 1.25, rate: 1.0 },
+            'marcus': { pitch: 0.6, rate: 0.85 },
+            'lily': { pitch: 1.35, rate: 0.95 },
+            'raj': { pitch: 0.9, rate: 1.0 },
+            'aiko': { pitch: 1.4, rate: 1.05 }
+        };
+
+        const settings = voiceSettings[voiceId] || { pitch: 1.0, rate: 1.0 };
+        utterance.pitch = settings.pitch;
+        utterance.rate = settings.rate;
+        utterance.volume = 1.0;
+
+        // Try to pick a matching system voice
+        const voices = window.speechSynthesis.getVoices();
+        if (voices.length > 0) {
+            const preferFemale = voice.gender === 'female';
+            const match = voices.find(v =>
+                v.lang.startsWith('en') &&
+                (preferFemale ? v.name.match(/female|zira|samantha|karen|victoria|fiona/i)
+                    : v.name.match(/male|david|daniel|james|mark|alex/i))
+            ) || voices.find(v => v.lang.startsWith('en')) || voices[0];
+            utterance.voice = match;
+        }
+
+        // Visual feedback on the play button
+        const btn = document.querySelector(`.voice-card[data-voice="${voiceId}"] .voice-play-btn`);
+        if (btn) {
+            btn.style.background = 'var(--gradient-primary)';
+            btn.style.color = 'white';
+            utterance.onend = () => {
+                btn.style.background = '';
+                btn.style.color = '';
+            };
+        }
+
+        window.speechSynthesis.speak(utterance);
+    } else {
+        alert(`Voice preview is not supported in this browser.`);
+    }
 }
 
 // =====================================================
