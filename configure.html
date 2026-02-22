@@ -1,0 +1,317 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Configure Your AI Receptionist — RinglyAI</title>
+    <meta name="description"
+        content="Customize your AI receptionist in minutes. Choose a voice, style, and tell us about your business — we'll generate everything for you.">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Outfit:wght@500;600;700;800&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="configure.css">
+</head>
+
+<body>
+
+    <!-- Animated background orbs -->
+    <div class="bg-orbs" aria-hidden="true">
+        <div class="orb orb-1"></div>
+        <div class="orb orb-2"></div>
+        <div class="orb orb-3"></div>
+        <div class="orb orb-4"></div>
+    </div>
+
+    <!-- Navbar -->
+    <nav class="navbar scrolled" id="navbar">
+        <div class="container nav-container">
+            <a href="index.html" class="logo">
+                <span class="logo-text">Ringly<span class="logo-highlight">AI</span></span>
+            </a>
+            <ul class="nav-links" id="navLinks">
+                <li><a href="index.html#features">Features</a></li>
+                <li><a href="index.html#pricing">Pricing</a></li>
+                <li><a href="index.html#demo" class="nav-cta">Get Demo Call</a></li>
+            </ul>
+            <button class="mobile-toggle" id="mobileToggle" aria-label="Toggle navigation">
+                <span></span><span></span><span></span>
+            </button>
+        </div>
+    </nav>
+
+    <!-- Configurator Page -->
+    <main class="config-page">
+        <div class="config-container">
+
+            <!-- Header -->
+            <div class="config-header fade-in visible">
+                <h1>Build Your <span class="gradient-text">AI Receptionist</span></h1>
+                <p>Customize your receptionist in 4 easy steps. Takes under 2 minutes.</p>
+            </div>
+
+            <!-- Progress Bar -->
+            <div class="progress-bar" id="progressBar">
+                <div class="progress-step active" data-step="1">
+                    <div class="step-circle">1</div>
+                    <span class="step-label">Plan</span>
+                </div>
+                <div class="progress-line" id="line1">
+                    <div class="line-fill"></div>
+                </div>
+                <div class="progress-step" data-step="2">
+                    <div class="step-circle">2</div>
+                    <span class="step-label">Voice</span>
+                </div>
+                <div class="progress-line" id="line2">
+                    <div class="line-fill"></div>
+                </div>
+                <div class="progress-step" data-step="3">
+                    <div class="step-circle">3</div>
+                    <span class="step-label">Style</span>
+                </div>
+                <div class="progress-line" id="line3">
+                    <div class="line-fill"></div>
+                </div>
+                <div class="progress-step" data-step="4">
+                    <div class="step-circle">4</div>
+                    <span class="step-label">Business</span>
+                </div>
+            </div>
+
+            <!-- Wizard Body -->
+            <div class="wizard-body">
+
+                <!-- ════════ STEP 1: Plan Selection ════════ -->
+                <div class="wizard-step active" id="step1">
+                    <h2 class="step-title">Choose Your Plan</h2>
+                    <p class="step-subtitle">Each plan unlocks more customization options for your AI receptionist.</p>
+
+                    <div class="plan-select-grid">
+                        <!-- Essentials -->
+                        <div class="plan-select-card" data-plan="starter" onclick="selectPlan('starter')">
+                            <h3>Essentials</h3>
+                            <div class="card-price">$149<span>/mo</span></div>
+                            <ul class="card-features">
+                                <li><span class="check">✓</span> 4 voices (2M / 2F)</li>
+                                <li><span class="check">✓</span> 3 style presets</li>
+                                <li><span class="check">✓</span> AI-generated script</li>
+                                <li><span class="check">✓</span> 100 min/month</li>
+                            </ul>
+                        </div>
+
+                        <!-- Growth -->
+                        <div class="plan-select-card" data-plan="growth" onclick="selectPlan('growth')">
+                            <div class="card-badge">⭐ Most Popular</div>
+                            <h3>Professional</h3>
+                            <div class="card-price">$349<span>/mo</span></div>
+                            <ul class="card-features">
+                                <li><span class="check">✓</span> 8 voices</li>
+                                <li><span class="check">✓</span> All styles + custom</li>
+                                <li><span class="check">✓</span> AI script + manual edit</li>
+                                <li><span class="check">✓</span> 500 min/month</li>
+                            </ul>
+                        </div>
+
+                        <!-- Scale -->
+                        <div class="plan-select-card" data-plan="enterprise" onclick="selectPlan('enterprise')">
+                            <h3>Scale</h3>
+                            <div class="card-price">$699<span>/mo</span></div>
+                            <ul class="card-features">
+                                <li><span class="check">✓</span> 12+ voices</li>
+                                <li><span class="check">✓</span> Full custom persona</li>
+                                <li><span class="check">✓</span> Full script control</li>
+                                <li><span class="check">✓</span> 1,500 min/month</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- ════════ STEP 2: Voice Selection ════════ -->
+                <div class="wizard-step" id="step2">
+                    <h2 class="step-title">Pick a Voice</h2>
+                    <p class="step-subtitle">Choose how your AI receptionist sounds. Tap play to preview.</p>
+
+                    <div class="selection-summary" id="step2Summary"></div>
+
+                    <div class="voice-grid" id="voiceGrid">
+                        <!-- Voices injected by JS -->
+                    </div>
+                </div>
+
+                <!-- ════════ STEP 3: Style & Tone ════════ -->
+                <div class="wizard-step" id="step3">
+                    <h2 class="step-title">Set the Tone</h2>
+                    <p class="step-subtitle">Choose a personality that matches your brand.</p>
+
+                    <div class="selection-summary" id="step3Summary"></div>
+
+                    <div class="style-grid" id="styleGrid">
+                        <!-- Styles injected by JS -->
+                    </div>
+
+                    <div class="custom-style-area" id="customStyleArea">
+                        <label class="form-group">
+                            <span
+                                style="display:block;font-size:.85rem;font-weight:500;color:var(--text-secondary);margin-bottom:8px">
+                                Custom Personality Description
+                            </span>
+                            <textarea id="customStyleText"
+                                placeholder="Describe your ideal receptionist personality... e.g. 'Warm and professional with a slight sense of humor, speaks like a seasoned concierge at a luxury hotel.'"></textarea>
+                        </label>
+                    </div>
+                </div>
+
+                <!-- ════════ STEP 4: Business Info ════════ -->
+                <div class="wizard-step" id="step4">
+                    <h2 class="step-title">Tell Us About Your Business</h2>
+                    <p class="step-subtitle">We'll use this to generate your receptionist's script automatically.</p>
+
+                    <div class="selection-summary" id="step4Summary"></div>
+
+                    <form class="biz-form" id="bizForm" onsubmit="return false;">
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="bizEmail">Your Email</label>
+                                <input type="email" id="bizEmail" placeholder="you@business.com" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="bizCountry">Country</label>
+                                <select id="bizCountry">
+                                    <option value="US">🇺🇸 United States</option>
+                                    <option value="CA">🇨🇦 Canada</option>
+                                    <option value="GB">🇬🇧 United Kingdom</option>
+                                    <option value="AU">🇦🇺 Australia</option>
+                                    <option value="IE">🇮🇪 Ireland</option>
+                                    <option value="DE">🇩🇪 Germany</option>
+                                    <option value="FR">🇫🇷 France</option>
+                                    <option value="ES">🇪🇸 Spain</option>
+                                    <option value="NL">🇳🇱 Netherlands</option>
+                                    <option value="IT">🇮🇹 Italy</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="bizName">Business Name</label>
+                                <input type="text" id="bizName" placeholder="Acme Dental" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="bizIndustry">Industry</label>
+                                <select id="bizIndustry" required>
+                                    <option value="" disabled selected>Select industry...</option>
+                                    <option value="healthcare">Healthcare / Medical</option>
+                                    <option value="dental">Dental</option>
+                                    <option value="legal">Legal / Law Firm</option>
+                                    <option value="real-estate">Real Estate</option>
+                                    <option value="salon">Salon / Spa</option>
+                                    <option value="auto">Automotive / Repair</option>
+                                    <option value="restaurant">Restaurant / Food</option>
+                                    <option value="fitness">Fitness / Gym</option>
+                                    <option value="hvac">HVAC / Plumbing</option>
+                                    <option value="insurance">Insurance</option>
+                                    <option value="accounting">Accounting / Finance</option>
+                                    <option value="consulting">Consulting</option>
+                                    <option value="ecommerce">E-commerce / Retail</option>
+                                    <option value="other">Other</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="bizHours">Business Hours</label>
+                                <input type="text" id="bizHours" placeholder="Mon-Fri 9am-5pm, Sat 10am-2pm">
+                            </div>
+                            <div class="form-group">
+                                <label for="bizPhone">Business Phone</label>
+                                <input type="tel" id="bizPhone" placeholder="(555) 123-4567">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="bizServices">Key Services (comma separated)</label>
+                            <input type="text" id="bizServices"
+                                placeholder="Teeth cleaning, Root canals, Cosmetic dentistry, Orthodontics">
+                        </div>
+                        <div class="form-group">
+                            <label for="bizFaqs">Common Questions & Answers (optional)</label>
+                            <textarea id="bizFaqs" rows="3"
+                                placeholder="Do you accept walk-ins? — Yes, but appointments are preferred.&#10;Do you take insurance? — We accept most major dental insurance plans."></textarea>
+                        </div>
+                    </form>
+
+                    <!-- Script Preview (shown after generation) -->
+                    <div class="script-preview" id="scriptPreview">
+                        <div class="script-preview-header">
+                            <h3>✨ Your AI Receptionist Script</h3>
+                        </div>
+                        <div class="script-box">
+                            <div class="script-section">
+                                <div class="script-label">Greeting</div>
+                                <div class="script-text" id="scriptGreeting"></div>
+                            </div>
+                            <div class="script-section">
+                                <div class="script-label">Personality</div>
+                                <div class="script-text" id="scriptPersonality"></div>
+                            </div>
+                            <div class="script-section">
+                                <div class="script-label">Full Script</div>
+                                <div class="script-text" id="scriptFull"></div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Loading state -->
+                    <div class="script-loading" id="scriptLoading" style="display:none;">
+                        <svg class="spinner" width="32" height="32" viewBox="0 0 24 24">
+                            <circle cx="12" cy="12" r="10" stroke="var(--accent-purple)" stroke-width="3" fill="none"
+                                stroke-dasharray="31.4 31.4" stroke-linecap="round" />
+                        </svg>
+                        <p>Generating your AI receptionist script...</p>
+                    </div>
+                </div>
+
+            </div>
+
+            <!-- Navigation Buttons -->
+            <div class="wizard-nav" id="wizardNav">
+                <button class="btn-back" id="btnBack" onclick="prevStep()" style="visibility:hidden;">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                        stroke-linecap="round" stroke-linejoin="round">
+                        <polyline points="15 18 9 12 15 6" />
+                    </svg>
+                    Back
+                </button>
+                <div class="nav-spacer"></div>
+                <button class="btn btn-primary btn-glow" id="btnNext" onclick="nextStep()">
+                    Next
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                        stroke-linecap="round" stroke-linejoin="round">
+                        <polyline points="9 18 15 12 9 6" />
+                    </svg>
+                </button>
+            </div>
+
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container footer-container">
+            <div class="footer-brand">
+                <span class="logo-text">Ringly<span class="logo-highlight">AI</span></span>
+                <p>Your AI receptionist that never sleeps.</p>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2026 Illusion Media LLC. All rights reserved. | <a href="consent.html">Consent & Privacy
+                        Policy</a></p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="configure.js"></script>
+</body>
+
+</html>
