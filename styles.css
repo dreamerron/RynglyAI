@@ -203,6 +203,15 @@ section {
     background-clip: text
 }
 
+.logo-img {
+    width: 36px;
+    height: 36px;
+    object-fit: contain;
+    filter: invert(1) brightness(2);
+    flex-shrink: 0;
+    display: block
+}
+
 .nav-links {
     display: flex;
     list-style: none;
