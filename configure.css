@@ -464,9 +464,10 @@
     margin-bottom: 0
 }
 
+.biz-form input,
+.biz-form select,
 .biz-form textarea {
     width: 100%;
-    min-height: 80px;
     padding: 14px 16px;
     background: rgba(255, 255, 255, .04);
     border: 1px solid var(--glass-border);
@@ -474,16 +475,39 @@
     color: var(--text-primary);
     font-family: var(--font-body);
     font-size: 1rem;
-    resize: vertical;
     outline: none;
     transition: border-color .3s ease
 }
 
+.biz-form textarea {
+    min-height: 80px;
+    resize: vertical
+}
+
+.biz-form select {
+    appearance: none;
+    -webkit-appearance: none;
+    cursor: pointer;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%23888' stroke-width='2'%3E%3Cpolyline points='6 9 12 15 18 9'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 14px center;
+    padding-right: 38px
+}
+
+.biz-form select option {
+    background: #1a1a2e;
+    color: #e2e8f0;
+    padding: 8px
+}
+
+.biz-form input:focus,
+.biz-form select:focus,
 .biz-form textarea:focus {
     border-color: var(--accent-purple);
     box-shadow: 0 0 0 3px rgba(124, 58, 237, .15)
 }
 
+.biz-form input::placeholder,
 .biz-form textarea::placeholder {
     color: var(--text-muted)
 }
