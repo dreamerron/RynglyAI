@@ -138,66 +138,79 @@ function selectVoice(voiceId) {
     renderVoices();
 }
 
-function playVoicePreview(voiceId) {
+// Track currently playing audio so we can stop it
+let _previewAudio = null;
+
+async function playVoicePreview(voiceId) {
     const voice = VOICES.find(v => v.id === voiceId);
     if (!voice) return;
 
-    // Use browser SpeechSynthesis for instant preview
-    if ('speechSynthesis' in window) {
-        // Stop any current speech
-        window.speechSynthesis.cancel();
+    // Stop any current playback
+    if (_previewAudio) {
+        _previewAudio.pause();
+        _previewAudio = null;
+    }
 
-        const utterance = new SpeechSynthesisUtterance(
-            `Hi there! I'm ${voice.name}, your AI receptionist. How can I help you today?`
-        );
+    const btn = document.querySelector(`.voice-card[data-voice="${voiceId}"] .voice-play-btn`);
 
-        // Match voice character by adjusting pitch and rate
-        const voiceSettings = {
-            'alex': { pitch: 1.0, rate: 1.0 },
-            'sarah': { pitch: 1.2, rate: 1.05 },
-            'james': { pitch: 0.8, rate: 0.95 },
-            'emma': { pitch: 1.3, rate: 1.1 },
-            'daniel': { pitch: 0.7, rate: 0.9 },
-            'maya': { pitch: 1.15, rate: 1.0 },
-            'chris': { pitch: 1.1, rate: 1.15 },
-            'sofia': { pitch: 1.25, rate: 1.0 },
-            'marcus': { pitch: 0.6, rate: 0.85 },
-            'lily': { pitch: 1.35, rate: 0.95 },
-            'raj': { pitch: 0.9, rate: 1.0 },
-            'aiko': { pitch: 1.4, rate: 1.05 }
-        };
-
-        const settings = voiceSettings[voiceId] || { pitch: 1.0, rate: 1.0 };
-        utterance.pitch = settings.pitch;
-        utterance.rate = settings.rate;
-        utterance.volume = 1.0;
-
-        // Try to pick a matching system voice
-        const voices = window.speechSynthesis.getVoices();
-        if (voices.length > 0) {
-            const preferFemale = voice.gender === 'female';
-            const match = voices.find(v =>
-                v.lang.startsWith('en') &&
-                (preferFemale ? v.name.match(/female|zira|samantha|karen|victoria|fiona/i)
-                    : v.name.match(/male|david|daniel|james|mark|alex/i))
-            ) || voices.find(v => v.lang.startsWith('en')) || voices[0];
-            utterance.voice = match;
-        }
-
-        // Visual feedback on the play button
-        const btn = document.querySelector(`.voice-card[data-voice="${voiceId}"] .voice-play-btn`);
-        if (btn) {
+    // Set loading state on button
+    const setBtn = (state) => {
+        if (!btn) return;
+        if (state === 'loading') {
+            btn.innerHTML = `<svg class="spinner" width="14" height="14" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10" stroke="currentColor" stroke-width="3" fill="none" stroke-dasharray="31.4 31.4" stroke-linecap="round"/></svg>`;
             btn.style.background = 'var(--gradient-primary)';
             btn.style.color = 'white';
-            utterance.onend = () => {
-                btn.style.background = '';
-                btn.style.color = '';
-            };
+        } else if (state === 'playing') {
+            btn.innerHTML = `<svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><rect x="6" y="4" width="4" height="16"/><rect x="14" y="4" width="4" height="16"/></svg>`;
+        } else {
+            btn.innerHTML = `<svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"/></svg>`;
+            btn.style.background = '';
+            btn.style.color = '';
+        }
+    };
+
+    try {
+        setBtn('loading');
+
+        const response = await fetch(`/api/voice-preview?voice=${voiceId}`);
+
+        if (!response.ok) {
+            throw new Error('API unavailable');
         }
 
-        window.speechSynthesis.speak(utterance);
-    } else {
-        alert(`Voice preview is not supported in this browser.`);
+        const blob = await response.blob();
+        const url = URL.createObjectURL(blob);
+        _previewAudio = new Audio(url);
+
+        setBtn('playing');
+
+        _previewAudio.onended = () => {
+            setBtn('idle');
+            URL.revokeObjectURL(url);
+            _previewAudio = null;
+        };
+
+        _previewAudio.onerror = () => {
+            setBtn('idle');
+            _previewAudio = null;
+        };
+
+        await _previewAudio.play();
+
+    } catch (err) {
+        // Fallback to browser SpeechSynthesis
+        console.warn('ElevenLabs preview unavailable, using browser TTS:', err.message);
+        setBtn('idle');
+
+        if ('speechSynthesis' in window) {
+            window.speechSynthesis.cancel();
+            const utterance = new SpeechSynthesisUtterance(
+                `Hi there! I'm ${voice.name}, your AI receptionist. How can I help you today?`
+            );
+            utterance.pitch = voice.gender === 'female' ? 1.2 : 0.9;
+            utterance.rate = 1.0;
+            window.speechSynthesis.speak(utterance);
+        }
     }
 }
 
