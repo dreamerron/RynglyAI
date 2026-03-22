@@ -672,7 +672,12 @@ function showCheckoutResult(status) {
                         <li>No charge until your 14-day trial ends</li>
                     </ul>
                 </div>
-                <a href="dashboard.html" class="btn btn-primary btn-glow" style="margin-top: 32px; display: inline-flex;">Go to Dashboard →</a>
+                <div style="margin-top: 32px; padding: 24px; border-radius: 16px; background: rgba(124,58,237,.08); border: 1px solid rgba(124,58,237,.2);">
+                    <p style="font-weight: 600; margin-bottom: 8px; color: var(--text-primary);">🔑 Access Your Dashboard</p>
+                    <p style="color: var(--text-secondary); font-size: .95rem; margin-bottom: 16px;">Create an account or sign in to manage your AI receptionist, view call logs, and track appointments.</p>
+                    <a href="dashboard.html" class="btn btn-primary btn-glow" style="display: inline-flex; width: 100%; justify-content: center;">Sign In / Create Account →</a>
+                </div>
+                <a href="index.html" style="display: inline-block; margin-top: 20px; color: var(--text-secondary); font-size: .9rem; text-decoration: underline;">← Back to RinglyAI Home</a>
             </div>`;
     } else {
         container.innerHTML = `
