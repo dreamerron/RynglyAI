@@ -116,6 +116,33 @@ document.addEventListener('DOMContentLoaded', async () => {
 });
 
 // =====================================================
+// SOCIAL LOGIN (Google OAuth)
+// =====================================================
+async function signInWithGoogle() {
+    if (!supabase) {
+        document.getElementById('authMessage').innerText = 'System not configured yet.';
+        return;
+    }
+
+    const msg = document.getElementById('authMessage');
+    msg.className = 'auth-msg';
+    msg.innerText = '';
+
+    const { error } = await supabase.auth.signInWithOAuth({
+        provider: 'google',
+        options: {
+            redirectTo: window.location.origin + '/dashboard.html'
+        }
+    });
+
+    if (error) {
+        msg.innerText = error.message;
+        msg.classList.add('error');
+    }
+    // Success: browser redirects to Google, then back to dashboard
+}
+
+// =====================================================
 // AUTH TAB SWITCHING
 // =====================================================
 function switchAuthTab(tab) {
