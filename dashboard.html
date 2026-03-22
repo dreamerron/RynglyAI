@@ -1,0 +1,293 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Customer Dashboard | RinglyAI</title>
+    <meta name="description" content="Manage your AI Receptionist, view call logs, and track appointments.">
+    <link rel="icon" type="image/x-icon" href="favicon.ico">
+    <link
+        href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&family=Inter:wght@400;500;600&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="dashboard.css">
+    <!-- Supabase JS -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+</head>
+
+<body>
+
+    <!-- Header -->
+    <header class="navbar">
+        <div class="nav-container">
+            <a href="index.html" class="logo">
+                <img src="logo.png" alt="RinglyAI Logo" class="logo-img">
+                <span class="logo-text">Ringly<span class="logo-highlight">AI</span></span>
+            </a>
+            <div class="nav-actions">
+                <button class="btn btn-outline" id="btnLogout" style="display: none;">Logout</button>
+            </div>
+        </div>
+    </header>
+
+    <main class="dashboard-page">
+
+        <!-- Auth Screen -->
+        <div class="auth-container visible" id="authScreen">
+            <div class="auth-card">
+                <!-- Login / Register Toggle -->
+                <div class="auth-tabs">
+                    <button class="auth-tab active" id="tabLogin" onclick="switchAuthTab('login')">Sign In</button>
+                    <button class="auth-tab" id="tabRegister" onclick="switchAuthTab('register')">Create
+                        Account</button>
+                </div>
+
+                <!-- Login Form -->
+                <form id="loginForm" class="auth-form">
+                    <div class="form-group">
+                        <label for="loginEmail">Email</label>
+                        <input type="email" id="loginEmail" placeholder="you@company.com" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="loginPassword">Password</label>
+                        <input type="password" id="loginPassword" placeholder="Enter your password" required
+                            minlength="6">
+                    </div>
+                    <button type="submit" class="btn btn-primary btn-glow btn-full" id="btnLogin">Sign In</button>
+                    <p class="auth-link">Don't have an account? <a href="#" onclick="switchAuthTab('register')">Create
+                            one</a></p>
+                </form>
+
+                <!-- Register Form -->
+                <form id="registerForm" class="auth-form" style="display:none;">
+                    <div class="form-group">
+                        <label for="regName">Full Name</label>
+                        <input type="text" id="regName" placeholder="John Doe" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="regEmail">Email</label>
+                        <input type="email" id="regEmail" placeholder="you@company.com" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="regPassword">Password</label>
+                        <input type="password" id="regPassword" placeholder="Create a password (6+ characters)" required
+                            minlength="6">
+                    </div>
+                    <div class="form-group">
+                        <label for="regConfirm">Confirm Password</label>
+                        <input type="password" id="regConfirm" placeholder="Confirm your password" required
+                            minlength="6">
+                    </div>
+                    <button type="submit" class="btn btn-primary btn-glow btn-full" id="btnRegister">Create
+                        Account</button>
+                    <p class="auth-link">Already have an account? <a href="#" onclick="switchAuthTab('login')">Sign
+                            in</a></p>
+                </form>
+
+                <p class="auth-msg" id="authMessage"></p>
+            </div>
+        </div>
+
+        <!-- Dashboard Content -->
+        <div class="app-container" id="appScreen" style="display: none;">
+
+            <div class="dashboard-header">
+                <div>
+                    <h1 id="userGreeting">Your Dashboard</h1>
+                    <p>Manage your AI receptionists, view calls, and track appointments.</p>
+                </div>
+            </div>
+
+            <!-- Dashboard Tabs -->
+            <div class="dashboard-tabs">
+                <button class="dash-tab active" data-tab="overview" onclick="switchDashTab('overview')">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <rect x="3" y="3" width="7" height="7" />
+                        <rect x="14" y="3" width="7" height="7" />
+                        <rect x="3" y="14" width="7" height="7" />
+                        <rect x="14" y="14" width="7" height="7" />
+                    </svg>
+                    Overview
+                </button>
+                <button class="dash-tab" data-tab="calls" onclick="switchDashTab('calls')">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path
+                            d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 22 16.92z" />
+                    </svg>
+                    Calls
+                </button>
+                <button class="dash-tab" data-tab="calendar" onclick="switchDashTab('calendar')">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <rect x="3" y="4" width="18" height="18" rx="2" ry="2" />
+                        <line x1="16" y1="2" x2="16" y2="6" />
+                        <line x1="8" y1="2" x2="8" y2="6" />
+                        <line x1="3" y1="10" x2="21" y2="10" />
+                    </svg>
+                    Calendar
+                </button>
+                <button class="dash-tab" data-tab="account" onclick="switchDashTab('account')">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" />
+                        <circle cx="12" cy="7" r="4" />
+                    </svg>
+                    Account
+                </button>
+            </div>
+
+            <!-- Loading State -->
+            <div id="dashboardLoader" class="loading-box">
+                <svg class="spinner" width="24" height="24" viewBox="0 0 24 24">
+                    <circle cx="12" cy="12" r="10" stroke="currentColor" stroke-width="3" fill="none"
+                        stroke-dasharray="31.4 31.4" stroke-linecap="round" />
+                </svg>
+                <p>Loading your profile...</p>
+            </div>
+
+            <!-- Tab Panels -->
+            <div id="dashboardContent" style="display: none;">
+
+                <!-- Overview Tab -->
+                <div class="tab-panel active" id="panelOverview">
+                    <div class="stats-row">
+                        <div class="stat-card glass">
+                            <div class="stat-icon">📞</div>
+                            <div class="stat-value" id="statTotalCalls">0</div>
+                            <div class="stat-label">Total Calls</div>
+                        </div>
+                        <div class="stat-card glass">
+                            <div class="stat-icon">⏱️</div>
+                            <div class="stat-value" id="statAvgDuration">0:00</div>
+                            <div class="stat-label">Avg Duration</div>
+                        </div>
+                        <div class="stat-card glass">
+                            <div class="stat-icon">📅</div>
+                            <div class="stat-value" id="statAppointments">0</div>
+                            <div class="stat-label">Appointments</div>
+                        </div>
+                        <div class="stat-card glass">
+                            <div class="stat-icon">🤖</div>
+                            <div class="stat-value" id="statAssistants">0</div>
+                            <div class="stat-label">Assistants</div>
+                        </div>
+                    </div>
+
+                    <div class="dashboard-grid">
+                        <!-- Left: Assistants -->
+                        <div class="config-section">
+                            <h3>My AI Assistants</h3>
+                            <div id="assistantsList" class="assistants-list">
+                                <!-- Populated by JS -->
+                            </div>
+                        </div>
+                        <!-- Right: Recent Calls -->
+                        <div class="logs-section">
+                            <h3>Recent Calls</h3>
+                            <div class="logs-container">
+                                <div id="recentCallsList" class="call-logs-list">
+                                    <!-- Populated by JS -->
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Calls Tab -->
+                <div class="tab-panel" id="panelCalls">
+                    <h3>Call History</h3>
+                    <div class="logs-container">
+                        <div id="callLogsList" class="call-logs-list">
+                            <!-- Populated by JS -->
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Calendar Tab -->
+                <div class="tab-panel" id="panelCalendar">
+                    <div class="calendar-header">
+                        <h3>Appointments</h3>
+                        <button class="btn btn-primary btn-small" onclick="openNewAppointment()">
+                            + New Appointment
+                        </button>
+                    </div>
+                    <div class="calendar-view">
+                        <div id="appointmentsList" class="appointments-list">
+                            <!-- Populated by JS -->
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Account Tab -->
+                <div class="tab-panel" id="panelAccount">
+                    <h3>Account Settings</h3>
+                    <div class="account-card glass">
+                        <div class="account-row">
+                            <span class="account-label">Name</span>
+                            <span class="account-value" id="accountName">—</span>
+                        </div>
+                        <div class="account-row">
+                            <span class="account-label">Email</span>
+                            <span class="account-value" id="accountEmail">—</span>
+                        </div>
+                        <div class="account-row">
+                            <span class="account-label">Plan</span>
+                            <span class="account-value" id="accountPlan">—</span>
+                        </div>
+                        <div class="account-row">
+                            <span class="account-label">Status</span>
+                            <span class="account-value" id="accountStatus">—</span>
+                        </div>
+                        <div class="account-actions">
+                            <button class="btn btn-outline btn-small" onclick="manageSubscription()">Manage
+                                Billing</button>
+                            <button class="btn btn-outline btn-small" style="border-color:#ef4444;color:#ef4444;"
+                                onclick="confirmLogout()">Log Out</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Transcript Modal -->
+    <div class="modal-overlay" id="transcriptModal">
+        <div class="modal-content">
+            <button class="modal-close" onclick="closeModal()">×</button>
+            <h3 id="modalTitle">Call Transcript</h3>
+            <div class="modal-body" id="modalBody"></div>
+        </div>
+    </div>
+
+    <!-- New Appointment Modal -->
+    <div class="modal-overlay" id="appointmentModal">
+        <div class="modal-content">
+            <button class="modal-close" onclick="closeAppointmentModal()">×</button>
+            <h3>New Appointment</h3>
+            <div class="modal-body">
+                <form id="appointmentForm" class="appt-form">
+                    <div class="form-group">
+                        <label for="apptName">Client Name</label>
+                        <input type="text" id="apptName" placeholder="Client name" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="apptDate">Date & Time</label>
+                        <input type="datetime-local" id="apptDate" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="apptService">Service</label>
+                        <input type="text" id="apptService" placeholder="e.g., Consultation">
+                    </div>
+                    <div class="form-group">
+                        <label for="apptNotes">Notes</label>
+                        <textarea id="apptNotes" rows="3" placeholder="Optional notes..."></textarea>
+                    </div>
+                    <button type="submit" class="btn btn-primary btn-glow btn-full">Save Appointment</button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <script src="dashboard.js"></script>
+</body>
+
+</html>

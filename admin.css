@@ -1,0 +1,298 @@
+/* ===================================================
+   RinglyAI — Admin Dashboard Styles
+   =================================================== */
+
+.admin-page {
+    padding: 100px 24px;
+    max-width: 1200px;
+    margin: 0 auto;
+    min-height: 100vh;
+}
+
+/* ── Login Screen ── */
+.login-container {
+    display: none;
+    align-items: center;
+    justify-content: center;
+    min-height: 60vh;
+}
+
+.login-container.visible {
+    display: flex;
+}
+
+.login-card {
+    background: rgba(18, 18, 20, 0.7);
+    border: 1px solid var(--glass-border);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    padding: 48px;
+    border-radius: var(--radius-lg);
+    text-align: center;
+    width: 100%;
+    max-width: 440px;
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+}
+
+.login-icon {
+    font-size: 48px;
+    margin-bottom: 24px;
+}
+
+.login-card h2 {
+    margin-bottom: 8px;
+    font-size: 2rem;
+}
+
+.login-card p {
+    color: var(--text-secondary);
+    margin-bottom: 32px;
+}
+
+.login-card input {
+    width: 100%;
+    padding: 14px 16px;
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid var(--glass-border);
+    border-radius: var(--radius-sm);
+    color: var(--text-primary);
+    margin-bottom: 16px;
+    font-size: 1rem;
+    text-align: center;
+}
+
+.login-card input:focus {
+    border-color: var(--primary);
+    outline: none;
+    background: rgba(255, 255, 255, 0.08);
+}
+
+.login-error {
+    color: #ef4444;
+    margin-top: 16px;
+    font-size: 0.9rem;
+    font-weight: 500;
+}
+
+/* ── Dashboard Stats ── */
+.dashboard-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: 40px;
+    flex-wrap: wrap;
+    gap: 24px;
+}
+
+.dashboard-header h1 {
+    font-size: 2.2rem;
+    margin-bottom: 8px;
+}
+
+.dashboard-header p {
+    color: var(--text-secondary);
+}
+
+.dashboard-stats {
+    display: flex;
+    gap: 16px;
+}
+
+.stat-card {
+    background: rgba(255, 255, 255, 0.03);
+    border: 1px solid var(--glass-border);
+    border-radius: var(--radius-sm);
+    padding: 20px 32px;
+    min-width: 160px;
+    text-align: right;
+}
+
+.stat-value {
+    font-size: 2rem;
+    font-weight: 700;
+    color: var(--primary);
+    font-family: var(--font-heading);
+}
+
+.stat-label {
+    color: var(--text-secondary);
+    font-size: 0.9rem;
+    margin-top: 4px;
+}
+
+/* ── Toolbar ── */
+.toolbar {
+    display: flex;
+    gap: 12px;
+    margin-bottom: 24px;
+    flex-wrap: wrap;
+}
+
+.search-input {
+    flex: 1;
+    min-width: 200px;
+    padding: 10px 16px;
+    background: rgba(255, 255, 255, 0.03);
+    border: 1px solid var(--glass-border);
+    border-radius: var(--radius-sm);
+    color: var(--text-primary);
+}
+
+.filter-select {
+    padding: 10px 16px;
+    background: rgba(255, 255, 255, 0.03);
+    border: 1px solid var(--glass-border);
+    border-radius: var(--radius-sm);
+    color: var(--text-primary);
+    appearance: none;
+    -webkit-appearance: none;
+    min-width: 140px;
+}
+
+.filter-select:focus,
+.search-input:focus {
+    border-color: var(--primary);
+    outline: none;
+}
+
+/* ── Data Table ── */
+.table-wrapper {
+    background: rgba(255, 255, 255, 0.02);
+    border: 1px solid var(--glass-border);
+    border-radius: var(--radius-lg);
+    overflow-x: auto;
+}
+
+.data-table {
+    width: 100%;
+    border-collapse: collapse;
+    text-align: left;
+}
+
+.data-table th,
+.data-table td {
+    padding: 16px 20px;
+    border-bottom: 1px solid var(--glass-border);
+    vertical-align: top;
+}
+
+.data-table th {
+    font-weight: 600;
+    color: var(--text-secondary);
+    font-size: 0.85rem;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    background: rgba(255, 255, 255, 0.01);
+}
+
+.data-table tbody tr:hover {
+    background: rgba(255, 255, 255, 0.03);
+}
+
+.data-table tbody tr:last-child td {
+    border-bottom: none;
+}
+
+.loading-state {
+    text-align: center;
+    padding: 48px !important;
+    color: var(--text-secondary);
+}
+
+/* Cell contents */
+.td-main {
+    font-weight: 500;
+    margin-bottom: 4px;
+}
+
+.td-sub {
+    color: var(--text-secondary);
+    font-size: 0.85rem;
+    line-height: 1.5;
+}
+
+/* Status Badges */
+.badge {
+    display: inline-block;
+    padding: 4px 10px;
+    border-radius: 100px;
+    font-size: 0.75rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    margin-bottom: 6px;
+}
+
+.badge.paid {
+    background: rgba(16, 185, 129, 0.15);
+    color: #34d399;
+}
+
+.badge.active {
+    background: rgba(16, 185, 129, 0.15);
+    color: #34d399;
+}
+
+.badge.trial {
+    background: rgba(124, 58, 237, 0.15);
+    color: #a78bfa;
+}
+
+.badge.draft {
+    background: rgba(156, 163, 175, 0.15);
+    color: #9ca3af;
+}
+
+.badge.cancelled {
+    background: rgba(239, 68, 68, 0.15);
+    color: #ef4444;
+}
+
+.badge.live {
+    background: rgba(139, 92, 246, 0.15);
+    color: #a78bfa;
+}
+
+.badge.plan-starter {
+    background: rgba(59, 130, 246, 0.15);
+    color: #60a5fa;
+}
+
+.badge.plan-growth {
+    background: rgba(245, 158, 11, 0.15);
+    color: #fbbf24;
+}
+
+.badge.plan-enterprise {
+    background: rgba(236, 72, 153, 0.15);
+    color: #f472b6;
+}
+
+.badge.plan-sms_basic {
+    background: rgba(20, 184, 166, 0.15);
+    color: #2dd4bf;
+}
+
+.badge.plan-sms_pro {
+    background: rgba(16, 185, 129, 0.15);
+    color: #10b981;
+}
+
+.badge.plan-bundle {
+    background: rgba(139, 92, 246, 0.15);
+    color: #c084fc;
+}
+
+/* Script preview in table */
+.script-snippet {
+    max-width: 300px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    font-family: monospace;
+    font-size: 0.8rem;
+    background: rgba(0, 0, 0, 0.2);
+    padding: 4px 8px;
+    border-radius: 4px;
+    margin-top: 6px;
+}

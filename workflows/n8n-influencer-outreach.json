@@ -1,0 +1,136 @@
+{
+  "name": "RinglyAI — Influencer Affiliate Outreach",
+  "nodes": [
+    {
+      "parameters": {},
+      "id": "manual-trigger",
+      "name": "Manual Trigger",
+      "type": "n8n-nodes-base.manualTrigger",
+      "typeVersion": 1,
+      "position": [250, 300]
+    },
+    {
+      "parameters": {
+        "operation": "read",
+        "documentId": { "__rl": true, "value": "YOUR_GOOGLE_SHEET_ID", "mode": "id" },
+        "sheetName": { "__rl": true, "value": "Influencers", "mode": "name" },
+        "filters": {
+          "conditions": [
+            { "column": "Status", "operation": "equals", "value": "new" }
+          ]
+        },
+        "options": { "returnAllMatches": true }
+      },
+      "id": "fetch-influencers",
+      "name": "Fetch Influencer List",
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.5,
+      "position": [470, 300],
+      "notes": "Create a Google Sheet with a tab called 'Influencers' with columns: Name, Email, Platform, Niche, Followers, Profile URL, Status. Manually add influencer contacts you find on TikTok, YouTube, Instagram, or X."
+    },
+    {
+      "parameters": {
+        "model": "gpt-4o-mini",
+        "messages": {
+          "values": [
+            {
+              "role": "system",
+              "content": "You are a partnership outreach specialist for RinglyAI, an AI receptionist SaaS for small businesses. Write a warm, professional partnership proposal email.\n\nKey details to include:\n- RinglyAI is an AI phone receptionist that answers calls 24/7 for small businesses\n- We offer a 30% RECURRING monthly commission for every customer they refer\n- Average customer pays $99/mo, so that's ~$30/mo per referral, forever\n- We provide a custom referral link, promo codes, and marketing assets\n- Their audience of small business owners is the perfect fit\n- We handle all customer support, billing, and onboarding\n\nKeep the email under 150 words. Be genuine and enthusiastic. End with a CTA to book a 15-min alignment call.\n\nReturn ONLY valid JSON with keys: \"subject\" and \"body\"."
+            },
+            {
+              "role": "user",
+              "content": "=Write a partnership proposal for:\n\nInfluencer Name: {{ $json['Name'] }}\nPlatform: {{ $json['Platform'] }}\nNiche: {{ $json['Niche'] }}\nFollowers: {{ $json['Followers'] }}\nProfile: {{ $json['Profile URL'] }}"
+            }
+          ]
+        },
+        "options": {
+          "temperature": 0.85,
+          "maxTokens": 400
+        }
+      },
+      "id": "openai-proposal",
+      "name": "OpenAI: Generate Proposal",
+      "type": "@n8n/n8n-nodes-langchain.openAi",
+      "typeVersion": 1.8,
+      "position": [690, 300],
+      "credentials": {
+        "openAiApi": { "id": "YOUR_OPENAI_CREDENTIAL_ID", "name": "OpenAI" }
+      }
+    },
+    {
+      "parameters": {
+        "jsCode": "let raw = $input.first().json.text || $input.first().json.message?.content || '';\nraw = raw.replace(/```json\\n?/g, '').replace(/```\\n?/g, '').trim();\n\ntry {\n  const parsed = JSON.parse(raw);\n  return [{\n    json: {\n      ...$input.first().json,\n      email_subject: parsed.subject || 'Partnership Opportunity — RinglyAI',\n      email_body: parsed.body || raw,\n    }\n  }];\n} catch (e) {\n  return [{\n    json: {\n      ...$input.first().json,\n      email_subject: 'Partnership Opportunity — RinglyAI x ' + ($input.first().json['Name'] || 'You'),\n      email_body: raw,\n    }\n  }];\n}"
+      },
+      "id": "parse-proposal",
+      "name": "Parse AI Response",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [910, 300]
+    },
+    {
+      "parameters": {
+        "sendTo": "={{ $json['Email'] }}",
+        "subject": "={{ $json.email_subject }}",
+        "emailType": "text",
+        "message": "={{ $json.email_body }}\n\n📅 Book a 15-min call: https://calendly.com/YOUR_CALENDLY_LINK\n\n---\nBest,\nRon\nFounder, RinglyAI\nhttps://ringly.ai\n\nP.S. Reply STOP to opt out.",
+        "options": {
+          "replyTo": "ron@ringly.ai"
+        }
+      },
+      "id": "send-gmail",
+      "name": "Send via Gmail",
+      "type": "n8n-nodes-base.gmail",
+      "typeVersion": 2.1,
+      "position": [1130, 300],
+      "credentials": {
+        "gmailOAuth2": { "id": "YOUR_GMAIL_CREDENTIAL_ID", "name": "Gmail" }
+      },
+      "notes": "Replace YOUR_CALENDLY_LINK with your actual Calendly scheduling URL."
+    },
+    {
+      "parameters": {
+        "operation": "update",
+        "documentId": { "__rl": true, "value": "YOUR_GOOGLE_SHEET_ID", "mode": "id" },
+        "sheetName": { "__rl": true, "value": "Influencers", "mode": "name" },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "Status": "contacted",
+            "Contacted Date": "={{ $now.toISODate() }}"
+          }
+        },
+        "options": { "cellFormat": "USER_ENTERED" },
+        "lookupColumn": "Email",
+        "lookupValue": "={{ $json['Email'] }}"
+      },
+      "id": "update-status",
+      "name": "Mark as Contacted",
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.5,
+      "position": [1350, 300]
+    },
+    {
+      "parameters": {
+        "amount": 60,
+        "unit": "seconds"
+      },
+      "id": "wait-between",
+      "name": "Wait 60s Between Emails",
+      "type": "n8n-nodes-base.wait",
+      "typeVersion": 1.1,
+      "position": [1570, 300]
+    }
+  ],
+  "connections": {
+    "Manual Trigger": { "main": [[{ "node": "Fetch Influencer List", "type": "main", "index": 0 }]] },
+    "Fetch Influencer List": { "main": [[{ "node": "OpenAI: Generate Proposal", "type": "main", "index": 0 }]] },
+    "OpenAI: Generate Proposal": { "main": [[{ "node": "Parse AI Response", "type": "main", "index": 0 }]] },
+    "Parse AI Response": { "main": [[{ "node": "Send via Gmail", "type": "main", "index": 0 }]] },
+    "Send via Gmail": { "main": [[{ "node": "Mark as Contacted", "type": "main", "index": 0 }]] },
+    "Mark as Contacted": { "main": [[{ "node": "Wait 60s Between Emails", "type": "main", "index": 0 }]] }
+  },
+  "settings": { "executionOrder": "v1" },
+  "staticData": null,
+  "tags": [{ "name": "RinglyAI Marketing" }],
+  "triggerCount": 0
+}

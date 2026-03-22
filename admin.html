@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Dashboard | RinglyAI</title>
+    <link rel="icon" type="image/x-icon" href="favicon.ico">
+    <link
+        href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&family=Inter:wght@400;500;600&display=swap"
+        rel="stylesheet">
+    <!-- Base styles -->
+    <link rel="stylesheet" href="styles.css">
+    <!-- Admin styles -->
+    <link rel="stylesheet" href="admin.css">
+</head>
+
+<body>
+
+    <!-- Header -->
+    <header class="navbar">
+        <div class="nav-container">
+            <a href="index.html" class="logo">
+                <img src="logo.png" alt="RinglyAI Logo" class="logo-img">
+                <span class="logo-text">Ringly<span class="logo-highlight">AI</span></span>
+            </a>
+            <div class="nav-actions">
+                <button class="btn btn-outline" id="btnLogout" style="display: none;">Logout</button>
+            </div>
+        </div>
+    </header>
+
+    <main class="admin-page">
+        <!-- Login Screen -->
+        <div class="login-container visible" id="loginScreen">
+            <div class="login-card">
+                <div class="login-icon">🔒</div>
+                <h2>Admin Login</h2>
+                <p>Enter the master password to access customer data.</p>
+                <form id="loginForm" onsubmit="return false;">
+                    <input type="password" id="adminPassword" placeholder="Master Password" required>
+                    <button type="submit" class="btn btn-primary btn-glow btn-full" id="btnLogin">Access
+                        Dashboard</button>
+                    <div id="loginError" class="login-error"></div>
+                </form>
+            </div>
+        </div>
+
+        <!-- Dashboard Screen -->
+        <div class="dashboard-container" id="dashboardScreen" style="display: none;">
+
+            <div class="dashboard-header">
+                <div>
+                    <h1>Customer Database</h1>
+                    <p>Live view of all receptionist configurations.</p>
+                </div>
+                <div class="dashboard-stats">
+                    <div class="stat-card">
+                        <div class="stat-value" id="statTotal">-</div>
+                        <div class="stat-label">Total Signups</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-value" id="statPaid">-</div>
+                        <div class="stat-label">Paid Accounts</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Toolbar -->
+            <div class="toolbar">
+                <input type="text" id="searchInput" placeholder="Search by email, name, or phone..."
+                    class="search-input">
+                <select id="statusFilter" class="filter-select">
+                    <option value="all">All Statuses</option>
+                    <option value="active">Active</option>
+                    <option value="trial">Trial</option>
+                    <option value="paid">Paid</option>
+                    <option value="live">Live</option>
+                    <option value="draft">Draft</option>
+                    <option value="cancelled">Cancelled</option>
+                </select>
+                <select id="planFilter" class="filter-select">
+                    <option value="all">All Plans</option>
+                    <option value="starter">Essentials</option>
+                    <option value="growth">Professional</option>
+                    <option value="enterprise">Scale</option>
+                    <option value="sms_basic">SMS Text Basic</option>
+                    <option value="sms_pro">SMS Text Pro</option>
+                    <option value="bundle">Voice + Text Bundle</option>
+                </select>
+                <button class="btn btn-outline" id="btnRefresh">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M21 2v6h-6M3 12a9 9 0 0 1 15-6.7L21 8M3 22v-6h6M21 12a9 9 0 0 1-15 6.7L3 16" />
+                    </svg>
+                    Refresh
+                </button>
+            </div>
+
+            <!-- Data Table -->
+            <div class="table-wrapper">
+                <table class="data-table" id="customersTable">
+                    <thead>
+                        <tr>
+                            <th>Date</th>
+                            <th>Customer</th>
+                            <th>Business</th>
+                            <th>Plan / Status</th>
+                            <th>Configuration</th>
+                            <th>Contacts / Limits</th>
+                            <th>Integrations</th>
+                        </tr>
+                    </thead>
+                    <tbody id="customersBody">
+                        <tr>
+                            <td colspan="7" class="loading-state">Loading customer data...</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+        </div>
+    </main>
+
+    <script src="admin.js"></script>
+</body>
+
+</html>

@@ -37,6 +37,7 @@
             <ul class="nav-links" id="navLinks">
                 <li><a href="index.html#features">Features</a></li>
                 <li><a href="index.html#pricing">Pricing</a></li>
+                <li><a href="dashboard.html" class="nav-login">Login</a></li>
                 <li><a href="index.html#demo" class="nav-cta">Get Demo Call</a></li>
             </ul>
             <button class="mobile-toggle" id="mobileToggle" aria-label="Toggle navigation">
@@ -49,10 +50,9 @@
     <main class="config-page">
         <div class="config-container">
 
-            <!-- Header -->
             <div class="config-header fade-in visible">
                 <h1>Build Your <span class="gradient-text">AI Receptionist</span></h1>
-                <p>Customize your receptionist in 4 easy steps. Takes under 2 minutes.</p>
+                <p>Customize your receptionist in 5 easy steps. Takes under 2 minutes.</p>
             </div>
 
             <!-- Progress Bar -->
@@ -80,7 +80,14 @@
                 </div>
                 <div class="progress-step" data-step="4">
                     <div class="step-circle">4</div>
-                    <span class="step-label">Business</span>
+                    <span class="step-label">Business Info</span>
+                </div>
+                <div class="progress-line" id="line4">
+                    <div class="line-fill"></div>
+                </div>
+                <div class="progress-step" data-step="5">
+                    <div class="step-circle">5</div>
+                    <span class="step-label">Tools</span>
                 </div>
             </div>
 
@@ -90,13 +97,23 @@
                 <!-- ════════ STEP 1: Plan Selection ════════ -->
                 <div class="wizard-step active" id="step1">
                     <h2 class="step-title">Choose Your Plan</h2>
-                    <p class="step-subtitle">Each plan unlocks more customization options for your AI receptionist.</p>
+                    <p class="step-subtitle">14-day free trial on all plans · No charge until trial ends</p>
 
-                    <div class="plan-select-grid">
+                    <!-- Plan Type Toggle -->
+                    <div class="plan-type-toggle">
+                        <button class="plan-type-btn active" onclick="switchPlanType('voice')" id="toggleVoice">📞 Voice
+                            AI</button>
+                        <button class="plan-type-btn" onclick="switchPlanType('sms')" id="toggleSms">💬 SMS AI</button>
+                        <button class="plan-type-btn" onclick="switchPlanType('bundle')" id="toggleBundle">🎯
+                            Bundle</button>
+                    </div>
+
+                    <!-- Voice Plans -->
+                    <div class="plan-select-grid" id="voicePlanCards">
                         <!-- Essentials -->
                         <div class="plan-select-card" data-plan="starter" onclick="selectPlan('starter')">
                             <h3>Essentials</h3>
-                            <div class="card-price">$149<span>/mo</span></div>
+                            <div class="card-price">$69<span>/mo</span></div>
                             <ul class="card-features">
                                 <li><span class="check">✓</span> 4 voices (2M / 2F)</li>
                                 <li><span class="check">✓</span> 3 style presets</li>
@@ -109,7 +126,7 @@
                         <div class="plan-select-card" data-plan="growth" onclick="selectPlan('growth')">
                             <div class="card-badge">⭐ Most Popular</div>
                             <h3>Professional</h3>
-                            <div class="card-price">$349<span>/mo</span></div>
+                            <div class="card-price">$99<span>/mo</span></div>
                             <ul class="card-features">
                                 <li><span class="check">✓</span> 8 voices</li>
                                 <li><span class="check">✓</span> All styles + custom</li>
@@ -119,14 +136,58 @@
                         </div>
 
                         <!-- Scale -->
-                        <div class="plan-select-card" data-plan="enterprise" onclick="selectPlan('enterprise')">
+                        <div class="plan-select-card" data-plan="enterprise" onclick="selectPlan('enterprise')"
+                            style="display: none;">
                             <h3>Scale</h3>
-                            <div class="card-price">$699<span>/mo</span></div>
+                            <div class="card-price">Custom</div>
                             <ul class="card-features">
                                 <li><span class="check">✓</span> 12+ voices</li>
                                 <li><span class="check">✓</span> Full custom persona</li>
                                 <li><span class="check">✓</span> Full script control</li>
                                 <li><span class="check">✓</span> 1,500 min/month</li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <!-- SMS Plans -->
+                    <div class="plan-select-grid" id="smsPlanCards" style="display:none;">
+                        <!-- Text Basic -->
+                        <div class="plan-select-card" data-plan="sms_basic" onclick="selectPlan('sms_basic')">
+                            <h3>Text Basic</h3>
+                            <div class="card-price">$29<span>/mo</span></div>
+                            <ul class="card-features">
+                                <li><span class="check">✓</span> 500 SMS / month</li>
+                                <li><span class="check">✓</span> AI text responses</li>
+                                <li><span class="check">✓</span> Auto follow-ups</li>
+                                <li><span class="check">✓</span> Appointment via text</li>
+                            </ul>
+                        </div>
+
+                        <!-- Text Pro -->
+                        <div class="plan-select-card" data-plan="sms_pro" onclick="selectPlan('sms_pro')">
+                            <div class="card-badge">⭐ Best Value</div>
+                            <h3>Text Pro</h3>
+                            <div class="card-price">$59<span>/mo</span></div>
+                            <ul class="card-features">
+                                <li><span class="check">✓</span> 2,000 SMS / month</li>
+                                <li><span class="check">✓</span> AI text responses</li>
+                                <li><span class="check">✓</span> Custom keywords</li>
+                                <li><span class="check">✓</span> Broadcast messaging</li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <!-- Bundle Plan -->
+                    <div class="plan-select-grid" id="bundlePlanCards" style="display:none;">
+                        <div class="plan-select-card" data-plan="bundle" onclick="selectPlan('bundle')">
+                            <div class="card-badge">🎯 Best Deal — Save $29/mo</div>
+                            <h3>Voice + Text</h3>
+                            <div class="card-price">$129<span>/mo</span></div>
+                            <ul class="card-features">
+                                <li><span class="check">✓</span> 500 voice min + 2,000 SMS</li>
+                                <li><span class="check">✓</span> 8 voices + all styles</li>
+                                <li><span class="check">✓</span> CRM integration</li>
+                                <li><span class="check">✓</span> All premium features</li>
                             </ul>
                         </div>
                     </div>
@@ -187,6 +248,8 @@
                                     <option value="CA">🇨🇦 Canada</option>
                                     <option value="GB">🇬🇧 United Kingdom</option>
                                     <option value="AU">🇦🇺 Australia</option>
+                                    <option value="NZ">🇳🇿 New Zealand</option>
+                                    <option value="IN">🇮🇳 India</option>
                                     <option value="IE">🇮🇪 Ireland</option>
                                     <option value="DE">🇩🇪 Germany</option>
                                     <option value="FR">🇫🇷 France</option>
@@ -243,58 +306,119 @@
                                 placeholder="Do you accept walk-ins? — Yes, but appointments are preferred.&#10;Do you take insurance? — We accept most major dental insurance plans."></textarea>
                         </div>
                     </form>
+                </div>
 
-                    <!-- Script Preview (shown after generation) -->
-                    <div class="script-preview" id="scriptPreview">
-                        <div class="script-preview-header">
-                            <h3>✨ Your AI Receptionist Script</h3>
-                        </div>
-                        <div class="script-box">
-                            <div class="script-section">
-                                <div class="script-label">Greeting</div>
-                                <div class="script-text" id="scriptGreeting"></div>
-                            </div>
-                            <div class="script-section">
-                                <div class="script-label">Personality</div>
-                                <div class="script-text" id="scriptPersonality"></div>
-                            </div>
-                            <div class="script-section">
-                                <div class="script-label">Full Script</div>
-                                <div class="script-text" id="scriptFull"></div>
-                            </div>
-                        </div>
-                    </div>
+                <!-- ════════ STEP 5: Integrations ════════ -->
+                <div class="wizard-step" id="step5">
+                    <h2 class="step-title">Connect Your Tools</h2>
+                    <p class="step-subtitle">Allow your AI receptionist to book appointments and sync data directly to
+                        your CRM.</p>
 
-                    <!-- Loading state -->
-                    <div class="script-loading" id="scriptLoading" style="display:none;">
-                        <svg class="spinner" width="32" height="32" viewBox="0 0 24 24">
-                            <circle cx="12" cy="12" r="10" stroke="var(--accent-purple)" stroke-width="3" fill="none"
-                                stroke-dasharray="31.4 31.4" stroke-linecap="round" />
-                        </svg>
-                        <p>Generating your AI receptionist script...</p>
+                    <div class="selection-summary" id="step5Summary"></div>
+
+                    <div class="biz-form">
+                        <div class="form-group">
+                            <label for="bookingLink">Scheduling Link (Optional)</label>
+                            <input type="url" id="bookingLink" placeholder="e.g. https://calendly.com/your-name/30min">
+                            <small
+                                style="color:var(--text-muted); font-size: 0.8rem; margin-top: 6px; display: block;">Paste
+                                your Calendly, Cal.com, or other scheduling link.</small>
+                        </div>
+
+                        <div class="form-group" id="crmGroup">
+                            <label for="crmLink">CRM Webhook / API Key (Optional)</label>
+                            <input type="password" id="crmLink" placeholder="Paste your CRM Webhook URL or API Key">
+                            <small
+                                style="color:var(--text-muted); font-size: 0.8rem; margin-top: 6px; display: block;">Connect
+                                Twenty CRM or any Webhook to log calls automatically.</small>
+                        </div>
                     </div>
                 </div>
 
+                <!-- Script Preview (shown after generation) -->
+                <div class="script-preview" id="scriptPreview">
+                    <div class="script-preview-header">
+                        <h3>✨ Your AI Receptionist Script</h3>
+                        <div class="script-actions">
+                            <button class="btn-script-action btn-regenerate" onclick="regenerateScript()"
+                                title="Generate a new script">
+                                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                    stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                    <path
+                                        d="M21 2v6h-6M3 12a9 9 0 0 1 15-6.7L21 8M3 22v-6h6M21 12a9 9 0 0 1-15 6.7L3 16" />
+                                </svg>
+                                Regenerate
+                            </button>
+                            <button class="btn-script-action btn-edit" id="btnEditScript" onclick="toggleEditMode()">
+                                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                    stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                    <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7" />
+                                    <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z" />
+                                </svg>
+                                <span id="editBtnText">Edit Manually</span>
+                            </button>
+                            <button class="btn-script-action btn-save" id="btnSaveScript" onclick="saveManualEdits()"
+                                style="display:none;">
+                                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                    stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                    <polyline points="20 6 9 17 4 12" />
+                                </svg>
+                                Save Changes
+                            </button>
+                        </div>
+                    </div>
+                    <div class="script-box">
+                        <div class="script-section">
+                            <div class="script-label">Greeting</div>
+                            <div class="script-text" id="scriptGreeting"></div>
+                            <textarea class="script-textarea" id="scriptGreetingEdit" style="display:none;" rows="3"
+                                placeholder="Enter the greeting..."></textarea>
+                        </div>
+                        <div class="script-section">
+                            <div class="script-label">Personality</div>
+                            <div class="script-text" id="scriptPersonality"></div>
+                            <textarea class="script-textarea" id="scriptPersonalityEdit" style="display:none;" rows="3"
+                                placeholder="Describe the personality..."></textarea>
+                        </div>
+                        <div class="script-section">
+                            <div class="script-label">Full Script</div>
+                            <div class="script-text" id="scriptFull"></div>
+                            <textarea class="script-textarea" id="scriptFullEdit" style="display:none;" rows="8"
+                                placeholder="Enter the full script..."></textarea>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Loading state -->
+                <div class="script-loading" id="scriptLoading" style="display:none;">
+                    <svg class="spinner" width="32" height="32" viewBox="0 0 24 24">
+                        <circle cx="12" cy="12" r="10" stroke="var(--accent-purple)" stroke-width="3" fill="none"
+                            stroke-dasharray="31.4 31.4" stroke-linecap="round" />
+                    </svg>
+                    <p>Generating your AI receptionist script...</p>
+                </div>
             </div>
 
-            <!-- Navigation Buttons -->
-            <div class="wizard-nav" id="wizardNav">
-                <button class="btn-back" id="btnBack" onclick="prevStep()" style="visibility:hidden;">
-                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
-                        stroke-linecap="round" stroke-linejoin="round">
-                        <polyline points="15 18 9 12 15 6" />
-                    </svg>
-                    Back
-                </button>
-                <div class="nav-spacer"></div>
-                <button class="btn btn-primary btn-glow" id="btnNext" onclick="nextStep()">
-                    Next
-                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
-                        stroke-linecap="round" stroke-linejoin="round">
-                        <polyline points="9 18 15 12 9 6" />
-                    </svg>
-                </button>
-            </div>
+        </div>
+
+        <!-- Navigation Buttons -->
+        <div class="wizard-nav" id="wizardNav">
+            <button class="btn-back" id="btnBack" onclick="prevStep()" style="visibility:hidden;">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                    stroke-linecap="round" stroke-linejoin="round">
+                    <polyline points="15 18 9 12 15 6" />
+                </svg>
+                Back
+            </button>
+            <div class="nav-spacer"></div>
+            <button class="btn btn-primary btn-glow" id="btnNext" onclick="nextStep()">
+                Next
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                    stroke-linecap="round" stroke-linejoin="round">
+                    <polyline points="9 18 15 12 9 6" />
+                </svg>
+            </button>
+        </div>
 
         </div>
     </main>

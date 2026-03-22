@@ -862,6 +862,21 @@ section {
     white-space: nowrap
 }
 
+.trial-badge {
+    position: absolute;
+    top: 12px;
+    right: 14px;
+    background: rgba(16, 185, 129, .15);
+    color: var(--success);
+    border: 1px solid rgba(16, 185, 129, .3);
+    padding: 4px 12px;
+    border-radius: 50px;
+    font-size: .7rem;
+    font-weight: 600;
+    letter-spacing: .3px;
+    white-space: nowrap
+}
+
 .plan-badge {
     display: inline-block;
     font-size: .7rem;

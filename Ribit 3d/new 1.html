@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Sleek Robot Landing Page</title>
+  <style>
+    body {
+      margin: 0;
+      padding: 0;
+      background-color: #0f172a; /* Dark sleek background */
+      color: white;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      display: flex;
+      align-items: center;
+      height: 100vh;
+      overflow: hidden;
+    }
+    .content {
+      position: absolute;
+      left: 10%;
+      z-index: 10;
+      max-width: 500px;
+    }
+    h1 {
+      font-size: 3.5rem;
+      margin-bottom: 20px;
+      background: linear-gradient(90deg, #38bdf8, #818cf8);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+    p {
+      font-size: 1.2rem;
+      line-height: 1.6;
+      color: #cbd5e1;
+      margin-bottom: 30px;
+    }
+    button {
+      padding: 15px 30px;
+      font-size: 1.1rem;
+      color: white;
+      background-color: #3b82f6;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      font-weight: bold;
+      transition: background-color 0.3s ease;
+    }
+    button:hover {
+      background-color: #2563eb;
+    }
+    /* This holds our 3D canvas */
+    #canvas-container {
+      position: absolute;
+      right: 0;
+      top: 0;
+      width: 55vw;
+      height: 100vh;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="content">
+    <h1>Meet Your AI Guide</h1>
+    <p>No subscriptions required. This interactive 3D robot is built entirely with free, open-source code directly in your browser. Move your mouse to see it react!</p>
+    <button>Get Started</button>
+  </div>
+
+  <div id="canvas-container"></div>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+  
+  <script>
+    // 1. Scene Setup
+    const container = document.getElementById('canvas-container');
+    const scene = new THREE.Scene();
+    const camera = new THREE.PerspectiveCamera(45, container.clientWidth / container.clientHeight, 0.1, 1000);
+    const renderer = new THREE.WebGLRenderer({ alpha: true, antialias: true });
+    
+    renderer.setSize(container.clientWidth, container.clientHeight);
+    container.appendChild(renderer.domElement);
+
+    // 2. Lighting (Sleek and futuristic)
+    const ambientLight = new THREE.AmbientLight(0xffffff, 0.5);
+    scene.add(ambientLight);
+
+    const dirLight = new THREE.DirectionalLight(0x38bdf8, 1);
+    dirLight.position.set(5, 10, 5);
+    scene.add(dirLight);
+
+    const backLight = new THREE.DirectionalLight(0x818cf8, 0.8);
+    backLight.position.set(-5, 5, -5);
+    scene.add(backLight);
+
+    // 3. Create the Robot Group
+    const robot = new THREE.Group();
+
+    // Materials (Metallic gray and glowing blue)
+    const bodyMaterial = new THREE.MeshStandardMaterial({ color: 0x94a3b8, metalness: 0.6, roughness: 0.2 });
+    const glowMaterial = new THREE.MeshBasicMaterial({ color: 0x38bdf8 });
+
+    // Head
+    const headGeometry = new THREE.BoxGeometry(1.5, 1.2, 1.2);
+    const head = new THREE.Mesh(headGeometry, bodyMaterial);
+    head.position.y = 2.5;
+    robot.add(head);
+
+    // Glowing Eyes
+    const eyeGeom = new THREE.CylinderGeometry(0.2, 0.2, 0.1, 32);
+    eyeGeom.rotateX(Math.PI / 2);
+    const eyeLeft = new THREE.Mesh(eyeGeom, glowMaterial);
+    eyeLeft.position.set(-0.4, 2.6, 0.61);
+    robot.add(eyeLeft);
+
+    const eyeRight = new THREE.Mesh(eyeGeom, glowMaterial);
+    eyeRight.position.set(0.4, 2.6, 0.61);
+    robot.add(eyeRight);
+
+    // Body
+    const bodyGeometry = new THREE.CylinderGeometry(1, 0.8, 2.5, 32);
+    const body = new THREE.Mesh(bodyGeometry, bodyMaterial);
+    body.position.y = 0.5;
+    robot.add(body);
+
+    // Floating Energy Ring (Sleek detail)
+    const ringGeometry = new THREE.TorusGeometry(1.5, 0.05, 16, 100);
+    const ring = new THREE.Mesh(ringGeometry, glowMaterial);
+    ring.position.y = 0.5;
+    ring.rotation.x = Math.PI / 2;
+    robot.add(ring);
+
+    // Arms
+    const armGeom = new THREE.CylinderGeometry(0.2, 0.2, 1.8, 16);
+    const armLeft = new THREE.Mesh(armGeom, bodyMaterial);
+    armLeft.position.set(-1.4, 0.8, 0);
+    armLeft.rotation.z = Math.PI / 8;
+    robot.add(armLeft);
+
+    const armRight = new THREE.Mesh(armGeom, bodyMaterial);
+    armRight.position.set(1.4, 0.8, 0);
+    armRight.rotation.z = -Math.PI / 8;
+    robot.add(armRight);
+
+    scene.add(robot);
+
+    // Position Camera
+    camera.position.z = 8;
+    camera.position.y = 1;
+
+    // 4. Interaction (Follow Mouse)
+    let mouseX = 0;
+    let mouseY = 0;
+    let targetX = 0;
+    let targetY = 0;
+
+    const windowHalfX = window.innerWidth / 2;
+    const windowHalfY = window.innerHeight / 2;
+
+    document.addEventListener('mousemove', (event) => {
+        mouseX = (event.clientX - windowHalfX);
+        mouseY = (event.clientY - windowHalfY);
+    });
+
+    // 5. Animation Loop
+    function animate() {
+        requestAnimationFrame(animate);
+
+        // Smooth mouse following
+        targetX = mouseX * 0.001;
+        targetY = mouseY * 0.001;
+        
+        robot.rotation.y += 0.05 * (targetX - robot.rotation.y);
+        robot.rotation.x += 0.05 * (targetY - robot.rotation.x);
+
+        // Make the robot float up and down slightly
+        robot.position.y = Math.sin(Date.now() * 0.002) * 0.2;
+        ring.rotation.z -= 0.02; // Spin the energy ring
+
+        renderer.render(scene, camera);
+    }
+    
+    animate();
+
+    // Make it responsive
+    window.addEventListener('resize', () => {
+        camera.aspect = container.clientWidth / container.clientHeight;
+        camera.updateProjectionMatrix();
+        renderer.setSize(container.clientWidth, container.clientHeight);
+    });
+  </script>
+</body>
+</html>

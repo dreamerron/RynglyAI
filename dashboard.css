@@ -1,0 +1,694 @@
+/* ===================================================
+   RinglyAI — Customer Dashboard Styles
+   =================================================== */
+
+.dashboard-page {
+    padding: 100px 24px;
+    max-width: 1080px;
+    margin: 0 auto;
+    min-height: 100vh;
+}
+
+/* ── Auth Screen ── */
+.auth-container {
+    display: none;
+    align-items: center;
+    justify-content: center;
+    min-height: 60vh;
+}
+
+.auth-container.visible {
+    display: flex;
+}
+
+.auth-card {
+    background: rgba(18, 18, 20, 0.7);
+    border: 1px solid var(--glass-border);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    padding: 40px;
+    border-radius: var(--radius-lg);
+    width: 100%;
+    max-width: 420px;
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+}
+
+.auth-tabs {
+    display: flex;
+    gap: 4px;
+    margin-bottom: 32px;
+    background: rgba(255, 255, 255, 0.04);
+    border-radius: 50px;
+    padding: 4px;
+}
+
+.auth-tab {
+    flex: 1;
+    padding: 10px 20px;
+    border-radius: 50px;
+    border: none;
+    background: transparent;
+    color: var(--text-secondary);
+    font-family: var(--font-body);
+    font-size: .9rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all .3s ease;
+}
+
+.auth-tab.active {
+    background: var(--gradient-primary);
+    color: white;
+}
+
+.auth-tab:hover:not(.active) {
+    color: var(--text-primary);
+}
+
+.auth-form .form-group {
+    margin-bottom: 16px;
+    text-align: left;
+}
+
+.auth-form .form-group label {
+    display: block;
+    font-size: .82rem;
+    font-weight: 500;
+    color: var(--text-secondary);
+    margin-bottom: 6px;
+}
+
+.auth-form input {
+    width: 100%;
+    padding: 12px 16px;
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid var(--glass-border);
+    border-radius: var(--radius-sm);
+    color: var(--text-primary);
+    font-size: .95rem;
+    font-family: var(--font-body);
+    transition: all .3s ease;
+    outline: none;
+}
+
+.auth-form input:focus {
+    border-color: var(--accent-purple);
+    box-shadow: 0 0 0 3px rgba(124, 58, 237, .15);
+}
+
+.auth-form input::placeholder {
+    color: var(--text-muted);
+}
+
+.auth-form .btn {
+    margin-top: 8px;
+}
+
+.auth-link {
+    text-align: center;
+    margin-top: 16px;
+    font-size: .85rem;
+    color: var(--text-muted);
+}
+
+.auth-link a {
+    color: var(--accent-cyan);
+    text-decoration: none;
+    font-weight: 500;
+}
+
+.auth-link a:hover {
+    text-decoration: underline;
+}
+
+.auth-msg {
+    margin-top: 16px;
+    font-size: 0.9rem;
+    font-weight: 500;
+    text-align: center;
+}
+
+.auth-msg.success {
+    color: #34d399;
+}
+
+.auth-msg.error {
+    color: #ef4444;
+}
+
+/* ── App Screen ── */
+.dashboard-header {
+    margin-bottom: 28px;
+}
+
+.dashboard-header h1 {
+    font-size: 2rem;
+    margin-bottom: 6px;
+}
+
+.dashboard-header p {
+    color: var(--text-secondary);
+    font-size: .95rem;
+}
+
+/* ── Dashboard Tabs ── */
+.dashboard-tabs {
+    display: flex;
+    gap: 6px;
+    margin-bottom: 32px;
+    background: rgba(255, 255, 255, 0.03);
+    border: 1px solid var(--glass-border);
+    border-radius: var(--radius-md);
+    padding: 6px;
+    overflow-x: auto;
+}
+
+.dash-tab {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 10px 20px;
+    border-radius: var(--radius-sm);
+    border: none;
+    background: transparent;
+    color: var(--text-secondary);
+    font-family: var(--font-body);
+    font-size: .88rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all .3s ease;
+    white-space: nowrap;
+}
+
+.dash-tab:hover {
+    color: var(--text-primary);
+    background: rgba(255, 255, 255, 0.04);
+}
+
+.dash-tab.active {
+    background: rgba(124, 58, 237, .15);
+    color: white;
+    border: 1px solid rgba(124, 58, 237, .3);
+}
+
+.dash-tab svg {
+    opacity: .6;
+}
+
+.dash-tab.active svg {
+    opacity: 1;
+}
+
+/* Tab Panels */
+.tab-panel {
+    display: none;
+}
+
+.tab-panel.active {
+    display: block;
+}
+
+/* ── Stats Row ── */
+.stats-row {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 16px;
+    margin-bottom: 32px;
+}
+
+.stat-card {
+    padding: 24px 20px;
+    border-radius: var(--radius-md);
+    text-align: center;
+    transition: transform .2s;
+}
+
+.stat-card:hover {
+    transform: translateY(-2px);
+}
+
+.stat-icon {
+    font-size: 1.6rem;
+    margin-bottom: 8px;
+}
+
+.stat-value {
+    font-family: var(--font-heading);
+    font-size: 2rem;
+    font-weight: 700;
+    line-height: 1;
+    margin-bottom: 4px;
+}
+
+.stat-label {
+    font-size: .8rem;
+    color: var(--text-muted);
+    text-transform: uppercase;
+    letter-spacing: .5px;
+}
+
+/* ── Loading ── */
+.loading-box {
+    text-align: center;
+    padding: 60px 20px;
+    background: rgba(255, 255, 255, 0.02);
+    border: 1px solid var(--glass-border);
+    border-radius: var(--radius-lg);
+    color: var(--text-secondary);
+}
+
+@keyframes spin {
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+.spinner {
+    animation: spin 1s linear infinite;
+    margin-bottom: 12px;
+}
+
+/* ── Dashboard Grid ── */
+.dashboard-grid {
+    display: grid;
+    grid-template-columns: 1fr 1.5fr;
+    gap: 24px;
+}
+
+/* Sections */
+.config-section h3,
+.logs-section h3 {
+    margin-bottom: 16px;
+    font-size: 1.15rem;
+    font-weight: 600;
+}
+
+/* ── Assistant Cards ── */
+.assistant-card {
+    background: rgba(255, 255, 255, 0.03);
+    border: 1px solid var(--glass-border);
+    border-radius: var(--radius-md);
+    padding: 24px;
+    margin-bottom: 16px;
+    transition: transform 0.2s;
+}
+
+.assistant-card:hover {
+    transform: translateY(-2px);
+    background: rgba(255, 255, 255, 0.04);
+}
+
+.assistant-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 16px;
+    border-bottom: 1px solid var(--glass-border);
+    padding-bottom: 16px;
+}
+
+.badge {
+    padding: 4px 10px;
+    border-radius: 100px;
+    font-size: 0.75rem;
+    font-weight: 600;
+    text-transform: uppercase;
+}
+
+.badge.live,
+.badge.active {
+    background: rgba(16, 185, 129, 0.15);
+    color: #34d399;
+}
+
+.badge.paid {
+    background: rgba(245, 158, 11, 0.15);
+    color: #fbbf24;
+}
+
+.badge.trial {
+    background: rgba(124, 58, 237, 0.15);
+    color: #a78bfa;
+}
+
+.badge.draft {
+    background: rgba(156, 163, 175, 0.15);
+    color: #9ca3af;
+}
+
+.badge.cancelled {
+    background: rgba(239, 68, 68, 0.15);
+    color: #ef4444;
+}
+
+.assistant-details p {
+    color: var(--text-secondary);
+    font-size: 0.9rem;
+    margin-bottom: 8px;
+}
+
+.assistant-details strong {
+    color: var(--text-primary);
+}
+
+/* ── Call Logs ── */
+.logs-container {
+    background: rgba(255, 255, 255, 0.02);
+    border: 1px solid var(--glass-border);
+    border-radius: var(--radius-md);
+    overflow: hidden;
+}
+
+.log-item {
+    padding: 16px 20px;
+    border-bottom: 1px solid var(--glass-border);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.log-item:last-child {
+    border-bottom: none;
+}
+
+.log-item:hover {
+    background: rgba(255, 255, 255, 0.03);
+}
+
+.log-main {
+    flex: 1;
+}
+
+.log-phone {
+    font-weight: 600;
+    margin-bottom: 4px;
+    font-family: monospace;
+    font-size: 1.05rem;
+}
+
+.log-meta {
+    color: var(--text-secondary);
+    font-size: 0.85rem;
+}
+
+.log-summary {
+    color: var(--text-primary);
+    font-size: 0.9rem;
+    margin-top: 8px;
+    line-height: 1.4;
+}
+
+.log-actions {
+    margin-left: 16px;
+}
+
+.btn-small {
+    padding: 6px 12px;
+    font-size: 0.8rem;
+}
+
+/* ── Calendar ── */
+.calendar-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+.calendar-header h3 {
+    margin: 0;
+}
+
+.empty-state {
+    text-align: center;
+    padding: 60px 20px;
+    color: var(--text-secondary);
+}
+
+.empty-icon {
+    font-size: 3rem;
+    margin-bottom: 12px;
+    opacity: .5;
+}
+
+.empty-state p {
+    font-weight: 600;
+    margin-bottom: 6px;
+    color: var(--text-primary);
+}
+
+.empty-state span {
+    font-size: .9rem;
+}
+
+.appointment-card {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    padding: 20px;
+    background: rgba(255, 255, 255, 0.03);
+    border: 1px solid var(--glass-border);
+    border-radius: var(--radius-md);
+    margin-bottom: 12px;
+    transition: transform .2s, background .2s;
+}
+
+.appointment-card:hover {
+    transform: translateY(-1px);
+    background: rgba(255, 255, 255, 0.05);
+}
+
+.appointment-card.past {
+    opacity: .6;
+}
+
+.appt-date-badge {
+    min-width: 56px;
+    text-align: center;
+    padding: 10px;
+    background: rgba(124, 58, 237, .1);
+    border: 1px solid rgba(124, 58, 237, .2);
+    border-radius: var(--radius-sm);
+}
+
+.appt-day {
+    font-family: var(--font-heading);
+    font-size: 1.5rem;
+    font-weight: 700;
+    line-height: 1;
+}
+
+.appt-month {
+    font-size: .7rem;
+    text-transform: uppercase;
+    color: var(--accent-cyan);
+    letter-spacing: 1px;
+    margin-top: 2px;
+}
+
+.appt-details {
+    flex: 1;
+}
+
+.appt-name {
+    font-weight: 600;
+    margin-bottom: 2px;
+}
+
+.appt-time {
+    font-size: .85rem;
+    color: var(--text-secondary);
+}
+
+.appt-notes {
+    font-size: .82rem;
+    color: var(--text-muted);
+    margin-top: 4px;
+    font-style: italic;
+}
+
+.appt-status {
+    font-size: .75rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    padding: 4px 10px;
+    border-radius: 50px;
+    white-space: nowrap;
+}
+
+.appt-status.upcoming {
+    background: rgba(16, 185, 129, .12);
+    color: #34d399;
+}
+
+.appt-status.completed {
+    background: rgba(156, 163, 175, .12);
+    color: #9ca3af;
+}
+
+/* ── Account ── */
+.account-card {
+    padding: 32px;
+    border-radius: var(--radius-md);
+}
+
+.account-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 16px 0;
+    border-bottom: 1px solid rgba(255, 255, 255, .04);
+}
+
+.account-row:last-of-type {
+    border-bottom: none;
+}
+
+.account-label {
+    font-size: .9rem;
+    color: var(--text-secondary);
+}
+
+.account-value {
+    font-weight: 600;
+}
+
+.account-actions {
+    display: flex;
+    gap: 12px;
+    margin-top: 24px;
+    padding-top: 16px;
+    border-top: 1px solid rgba(255, 255, 255, .04);
+}
+
+/* ── Appointment Form ── */
+.appt-form .form-group {
+    margin-bottom: 16px;
+}
+
+.appt-form .form-group label {
+    display: block;
+    font-size: .82rem;
+    font-weight: 500;
+    color: var(--text-secondary);
+    margin-bottom: 6px;
+}
+
+.appt-form input,
+.appt-form textarea {
+    width: 100%;
+    padding: 12px 16px;
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid var(--glass-border);
+    border-radius: var(--radius-sm);
+    color: var(--text-primary);
+    font-family: var(--font-body);
+    font-size: .95rem;
+    outline: none;
+    transition: border-color .3s;
+}
+
+.appt-form input:focus,
+.appt-form textarea:focus {
+    border-color: var(--accent-purple);
+    box-shadow: 0 0 0 3px rgba(124, 58, 237, .15);
+}
+
+.appt-form textarea {
+    resize: vertical;
+}
+
+/* ── Modal (overrides) ── */
+.modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.8);
+    backdrop-filter: blur(5px);
+    display: none;
+    align-items: center;
+    justify-content: center;
+    z-index: 1000;
+}
+
+.modal-overlay.visible {
+    display: flex;
+}
+
+.modal-content {
+    background: #121214;
+    border: 1px solid var(--glass-border);
+    border-radius: var(--radius-md);
+    width: 90%;
+    max-width: 500px;
+    max-height: 80vh;
+    display: flex;
+    flex-direction: column;
+    position: relative;
+}
+
+.modal-close {
+    position: absolute;
+    top: 16px;
+    right: 20px;
+    background: none;
+    border: none;
+    color: var(--text-secondary);
+    font-size: 24px;
+    cursor: pointer;
+}
+
+.modal-content h3 {
+    padding: 24px 24px 16px;
+    border-bottom: 1px solid var(--glass-border);
+}
+
+.modal-body {
+    padding: 24px;
+    overflow-y: auto;
+    font-size: 0.95rem;
+    line-height: 1.6;
+    color: var(--text-secondary);
+    white-space: pre-wrap;
+}
+
+/* ── Responsive ── */
+@media (max-width: 768px) {
+    .dashboard-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .stats-row {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    .dashboard-tabs {
+        gap: 4px;
+    }
+
+    .dash-tab {
+        padding: 8px 14px;
+        font-size: .82rem;
+    }
+
+    .auth-card {
+        padding: 28px;
+    }
+}
+
+@media (max-width: 480px) {
+    .stats-row {
+        grid-template-columns: 1fr 1fr;
+        gap: 10px;
+    }
+
+    .stat-card {
+        padding: 16px 12px;
+    }
+
+    .stat-value {
+        font-size: 1.5rem;
+    }
+}

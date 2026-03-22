@@ -1,0 +1,161 @@
+{
+  "name": "RinglyAI — AI Cold Email Sender",
+  "nodes": [
+    {
+      "parameters": {
+        "rule": {
+          "interval": [{ "field": "days", "triggerAtHour": 10 }]
+        }
+      },
+      "id": "daily-trigger",
+      "name": "Daily Trigger (10 AM)",
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1.2,
+      "position": [250, 300]
+    },
+    {
+      "parameters": {
+        "operation": "read",
+        "documentId": { "__rl": true, "value": "YOUR_GOOGLE_SHEET_ID", "mode": "id" },
+        "sheetName": { "__rl": true, "value": "Leads", "mode": "name" },
+        "filters": {
+          "conditions": [
+            { "column": "Status", "operation": "equals", "value": "new" }
+          ]
+        },
+        "options": { "range": "", "returnAllMatches": true }
+      },
+      "id": "fetch-leads",
+      "name": "Fetch Uncontacted Leads",
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.5,
+      "position": [470, 300],
+      "notes": "Replace YOUR_GOOGLE_SHEET_ID with the same Sheet ID from the scraper workflow. This reads only rows where Status = 'new'."
+    },
+    {
+      "parameters": {
+        "maxItems": 30
+      },
+      "id": "limit-batch",
+      "name": "Limit to 30/day",
+      "type": "n8n-nodes-base.limit",
+      "typeVersion": 1,
+      "position": [690, 300],
+      "notes": "Limits to 30 emails per day to stay under Gmail daily send limits and avoid spam flags. Adjust as needed."
+    },
+    {
+      "parameters": {
+        "model": "gpt-4o-mini",
+        "messages": {
+          "values": [
+            {
+              "role": "system",
+              "content": "You are an expert cold email copywriter for a B2B AI receptionist SaaS called RinglyAI. Your emails must be:\n- Exactly 3-4 sentences long\n- Hyper-personalized to the specific business\n- Start with a genuine compliment about something specific to their business\n- Mention the pain point of missed calls costing them revenue\n- End with a soft CTA offering a free 14-day AI receptionist trial\n- Sound human, warm, and conversational — NOT salesy\n- Use the business owner's first name if available\n\nReturn ONLY a JSON object with two keys:\n- \"subject\": a short, curiosity-driven subject line (under 50 chars)\n- \"body\": the email body (3-4 sentences, plain text, no HTML)"
+            },
+            {
+              "role": "user",
+              "content": "=Write a personalized cold email for this business:\n\nBusiness Name: {{ $json['Business Name'] }}\nCategory: {{ $json['Category'] }}\nWebsite: {{ $json['Website'] }}\nOwner First Name: {{ $json['First Name'] || 'there' }}\nCity/Address: {{ $json['Address'] }}\nRating: {{ $json['Rating'] }}\n\nRemember: return ONLY valid JSON with \"subject\" and \"body\" keys."
+            }
+          ]
+        },
+        "options": {
+          "temperature": 0.8,
+          "maxTokens": 300
+        }
+      },
+      "id": "openai-personalize",
+      "name": "OpenAI: Personalize Email",
+      "type": "@n8n/n8n-nodes-langchain.openAi",
+      "typeVersion": 1.8,
+      "position": [910, 300],
+      "credentials": {
+        "openAiApi": { "id": "YOUR_OPENAI_CREDENTIAL_ID", "name": "OpenAI" }
+      },
+      "notes": "Connect your OpenAI API credential in n8n. The model generates a hyper-personalized 3-sentence cold email as JSON."
+    },
+    {
+      "parameters": {
+        "jsCode": "// Parse OpenAI response (handles markdown code blocks)\nlet raw = $input.first().json.text || $input.first().json.message?.content || '';\n\n// Strip markdown code fencing if present\nraw = raw.replace(/```json\\n?/g, '').replace(/```\\n?/g, '').trim();\n\ntry {\n  const parsed = JSON.parse(raw);\n  return [{\n    json: {\n      ...$input.first().json,\n      email_subject: parsed.subject || 'Quick question about your business',\n      email_body: parsed.body || raw,\n    }\n  }];\n} catch (e) {\n  // Fallback if JSON parse fails\n  return [{\n    json: {\n      ...$input.first().json,\n      email_subject: 'Quick question for ' + ($input.first().json['Business Name'] || 'you'),\n      email_body: raw,\n    }\n  }];\n}"
+      },
+      "id": "parse-email",
+      "name": "Parse AI Response",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [1130, 300]
+    },
+    {
+      "parameters": {
+        "sendTo": "={{ $json['Email'] }}",
+        "subject": "={{ $json.email_subject }}",
+        "emailType": "text",
+        "message": "={{ $json.email_body }}\n\n---\nBest,\nRon\nRinglyAI — Your 24/7 AI Receptionist\nhttps://ringly.ai\n\nP.S. Reply STOP to opt out.",
+        "options": {
+          "replyTo": "ron@ringly.ai"
+        }
+      },
+      "id": "send-gmail",
+      "name": "Send via Gmail",
+      "type": "n8n-nodes-base.gmail",
+      "typeVersion": 2.1,
+      "position": [1350, 300],
+      "credentials": {
+        "gmailOAuth2": { "id": "YOUR_GMAIL_CREDENTIAL_ID", "name": "Gmail" }
+      },
+      "notes": "Connect your Gmail OAuth2 credential in n8n. Update the signature block (name, email, URL) to match your brand."
+    },
+    {
+      "parameters": {
+        "operation": "update",
+        "documentId": { "__rl": true, "value": "YOUR_GOOGLE_SHEET_ID", "mode": "id" },
+        "sheetName": { "__rl": true, "value": "Leads", "mode": "name" },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "Status": "contacted",
+            "Contacted Date": "={{ $now.toISODate() }}"
+          }
+        },
+        "options": {
+          "cellFormat": "USER_ENTERED",
+          "handlingExtraData": "ignoreIt"
+        },
+        "lookupColumn": "Email",
+        "lookupValue": "={{ $json['Email'] }}"
+      },
+      "id": "update-status",
+      "name": "Mark as Contacted",
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.5,
+      "position": [1570, 300],
+      "notes": "Updates the lead row in Google Sheets to 'contacted' so it won't be picked up again tomorrow."
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "id": "wait-between",
+      "name": "Wait 30-60s Between Emails",
+      "type": "n8n-nodes-base.wait",
+      "typeVersion": 1.1,
+      "position": [1790, 300],
+      "parameters": {
+        "amount": 45,
+        "unit": "seconds"
+      },
+      "notes": "Adds a delay between emails to avoid triggering Gmail's spam detection. Adjust timing as needed."
+    }
+  ],
+  "connections": {
+    "Daily Trigger (10 AM)": { "main": [[{ "node": "Fetch Uncontacted Leads", "type": "main", "index": 0 }]] },
+    "Fetch Uncontacted Leads": { "main": [[{ "node": "Limit to 30/day", "type": "main", "index": 0 }]] },
+    "Limit to 30/day": { "main": [[{ "node": "OpenAI: Personalize Email", "type": "main", "index": 0 }]] },
+    "OpenAI: Personalize Email": { "main": [[{ "node": "Parse AI Response", "type": "main", "index": 0 }]] },
+    "Parse AI Response": { "main": [[{ "node": "Send via Gmail", "type": "main", "index": 0 }]] },
+    "Send via Gmail": { "main": [[{ "node": "Mark as Contacted", "type": "main", "index": 0 }]] },
+    "Mark as Contacted": { "main": [[{ "node": "Wait 30-60s Between Emails", "type": "main", "index": 0 }]] }
+  },
+  "settings": { "executionOrder": "v1" },
+  "staticData": null,
+  "tags": [{ "name": "RinglyAI Marketing" }],
+  "triggerCount": 1
+}

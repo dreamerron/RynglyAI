@@ -37,12 +37,20 @@ const STYLES = [
 ];
 
 const PLAN_TIERS = {
-    starter: { level: 0, label: 'Essentials', price: '$149/mo' },
-    growth: { level: 1, label: 'Professional', price: '$349/mo' },
-    enterprise: { level: 2, label: 'Scale', price: '$699/mo' }
+    starter: { level: 0, label: 'Essentials', price: '$69/mo', type: 'voice' },
+    growth: { level: 1, label: 'Professional', price: '$99/mo', type: 'voice' },
+    enterprise: { level: 2, label: 'Scale', price: 'Custom', type: 'voice' },
+    sms_basic: { level: 0, label: 'Text Basic', price: '$29/mo', type: 'sms' },
+    sms_pro: { level: 1, label: 'Text Pro', price: '$59/mo', type: 'sms' },
+    bundle: { level: 1, label: 'Voice + Text', price: '$129/mo', type: 'bundle' }
 };
 
 const TIER_ORDER = ['starter', 'growth', 'enterprise'];
+
+// Helper: does this plan skip voice/style steps?
+function isSMSOnlyPlan(plan) {
+    return PLAN_TIERS[plan]?.type === 'sms';
+}
 
 // =====================================================
 // STATE
@@ -52,6 +60,7 @@ let selectedPlan = null;
 let selectedVoice = null;
 let selectedStyle = null;
 let generatedScript = null;
+let isEditMode = false;
 
 // =====================================================
 // INIT — read URL params, set up mobile nav
@@ -61,6 +70,13 @@ document.addEventListener('DOMContentLoaded', () => {
     const params = new URLSearchParams(window.location.search);
     const planParam = params.get('plan');
     if (planParam && PLAN_TIERS[planParam]) {
+        // Switch plan type toggle if needed
+        const planType = PLAN_TIERS[planParam].type;
+        if (planType === 'sms') {
+            switchPlanType('sms');
+        } else if (planType === 'bundle') {
+            switchPlanType('bundle');
+        }
         selectPlan(planParam);
     }
 
@@ -96,10 +112,27 @@ function selectPlan(planId) {
     selectedVoice = null;
     selectedStyle = null;
 
-    // UI — highlight selected card
+    // UI — highlight selected card across all grids
     document.querySelectorAll('.plan-select-card').forEach(card => {
         card.classList.toggle('selected', card.dataset.plan === planId);
     });
+}
+
+// Plan type toggle (Voice / SMS / Bundle)
+function switchPlanType(type) {
+    // Reset selection when switching type
+    selectedPlan = null;
+    document.querySelectorAll('.plan-select-card').forEach(c => c.classList.remove('selected'));
+
+    // Toggle buttons
+    document.getElementById('toggleVoice').classList.toggle('active', type === 'voice');
+    document.getElementById('toggleSms').classList.toggle('active', type === 'sms');
+    document.getElementById('toggleBundle').classList.toggle('active', type === 'bundle');
+
+    // Toggle plan grids
+    document.getElementById('voicePlanCards').style.display = type === 'voice' ? '' : 'none';
+    document.getElementById('smsPlanCards').style.display = type === 'sms' ? '' : 'none';
+    document.getElementById('bundlePlanCards').style.display = type === 'bundle' ? '' : 'none';
 }
 
 // =====================================================
@@ -281,7 +314,8 @@ function updateProgressBar() {
     const lines = [
         document.getElementById('line1'),
         document.getElementById('line2'),
-        document.getElementById('line3')
+        document.getElementById('line3'),
+        document.getElementById('line4')
     ];
 
     steps.forEach((step, i) => {
@@ -313,9 +347,9 @@ function showStep(step) {
 
     // Next button text
     const btnNext = document.getElementById('btnNext');
-    if (step === 4) {
+    if (step === 5) {
         if (generatedScript) {
-            btnNext.innerHTML = '🎉 Looks Great!';
+            btnNext.innerHTML = '🚀 Start Free Trial';
         } else {
             btnNext.innerHTML = `
                 ✨ Generate Script
@@ -345,6 +379,18 @@ function showStep(step) {
     if (step === 4) {
         renderSummaryChips('step4Summary');
     }
+    if (step === 5) {
+        renderSummaryChips('step5Summary');
+
+        // Hide CRM if not Enterprise (planGate)
+        const crmGroup = document.getElementById('crmGroup');
+        const planLevel = PLAN_TIERS[selectedPlan]?.level || 0;
+        if (planLevel < 2) {
+            crmGroup.style.display = 'none';
+        } else {
+            crmGroup.style.display = 'block';
+        }
+    }
 
     // Scroll to top
     window.scrollTo({ top: 0, behavior: 'smooth' });
@@ -368,24 +414,37 @@ function nextStep() {
             return;
         }
     } else if (currentStep === 4) {
+        if (!validateBizForm()) return;
+    } else if (currentStep === 5) {
         if (generatedScript) {
             // Final confirmation
             showFinalConfirmation();
             return;
         }
-        // Validate business form then generate
-        if (!validateBizForm()) return;
+        // Generate script
         generateScript();
         return;
     }
 
     currentStep++;
+
+    // SMS-only plans skip voice (step 2) and style (step 3)
+    if (isSMSOnlyPlan(selectedPlan) && (currentStep === 2 || currentStep === 3)) {
+        currentStep = 4;
+    }
+
     showStep(currentStep);
 }
 
 function prevStep() {
     if (currentStep > 1) {
         currentStep--;
+
+        // SMS-only plans skip back over voice/style
+        if (isSMSOnlyPlan(selectedPlan) && (currentStep === 2 || currentStep === 3)) {
+            currentStep = 1;
+        }
+
         showStep(currentStep);
     }
 }
@@ -469,7 +528,7 @@ async function generateScript() {
 
         // Update button
         const btnNext = document.getElementById('btnNext');
-        btnNext.innerHTML = '🎉 Looks Great!';
+        btnNext.innerHTML = '🚀 Start Free Trial';
         btnNext.disabled = false;
         btnNext.style.opacity = '';
     } catch (err) {
@@ -486,7 +545,7 @@ async function generateScript() {
         document.getElementById('scriptPreview').classList.add('visible');
 
         const btnNext = document.getElementById('btnNext');
-        btnNext.innerHTML = '🎉 Looks Great!';
+        btnNext.innerHTML = '🚀 Start Free Trial';
         btnNext.disabled = false;
         btnNext.style.opacity = '';
     }
@@ -552,6 +611,8 @@ async function showFinalConfirmation() {
             services: document.getElementById('bizServices').value.trim(),
             faqs: document.getElementById('bizFaqs').value.trim() || null,
             country: document.getElementById('bizCountry').value,
+            bookingLink: document.getElementById('bookingLink').value.trim() || null,
+            crmLink: document.getElementById('crmLink').value.trim() || null,
             greeting: generatedScript?.greeting || null,
             personality: generatedScript?.personality || null,
             script: generatedScript?.script || null,
@@ -586,7 +647,7 @@ async function showFinalConfirmation() {
         alert('Something went wrong saving your configuration. Please try again.');
     } finally {
         btnNext.disabled = false;
-        btnNext.innerHTML = '🎉 Looks Great!';
+        btnNext.innerHTML = '🚀 Start Free Trial';
         btnNext.style.opacity = '';
     }
 }
@@ -601,16 +662,17 @@ function showCheckoutResult(status) {
         container.innerHTML = `
             <div class="config-header fade-in visible" style="margin-top: 60px;">
                 <h1>🎉 <span class="gradient-text">You're All Set!</span></h1>
-                <p style="font-size: 1.1rem; margin-top: 16px;">Your payment was successful. We're provisioning your AI receptionist now.</p>
+                <p style="font-size: 1.1rem; margin-top: 16px;">Your 14-day free trial has started. We're provisioning your AI receptionist now.</p>
                 <div style="margin-top: 32px; padding: 24px; border-radius: 16px; background: rgba(16,185,129,.08); border: 1px solid rgba(16,185,129,.2);">
                     <p style="color: var(--success); font-weight: 600; margin-bottom: 8px;">✅ What happens next:</p>
                     <ul style="text-align: left; max-width: 400px; margin: 0 auto; color: var(--text-secondary); font-size: .95rem; line-height: 2;">
                         <li>Your AI receptionist is being created (~1 min)</li>
                         <li>You'll receive a confirmation email with your phone number</li>
                         <li>Start receiving AI-answered calls immediately</li>
+                        <li>No charge until your 14-day trial ends</li>
                     </ul>
                 </div>
-                <a href="index.html" class="btn btn-primary btn-glow" style="margin-top: 32px; display: inline-flex;">← Back to Home</a>
+                <a href="dashboard.html" class="btn btn-primary btn-glow" style="margin-top: 32px; display: inline-flex;">Go to Dashboard →</a>
             </div>`;
     } else {
         container.innerHTML = `
@@ -620,6 +682,74 @@ function showCheckoutResult(status) {
                 <a href="configure.html" class="btn btn-primary btn-glow" style="margin-top: 32px; display: inline-flex;">Try Again</a>
             </div>`;
     }
+}
+
+// =====================================================
+// SCRIPT REGENERATE / EDIT
+// =====================================================
+async function regenerateScript() {
+    // Exit edit mode if active
+    if (isEditMode) toggleEditMode();
+
+    // Clear current script so it regenerates fresh
+    generatedScript = null;
+    document.getElementById('scriptPreview').classList.remove('visible');
+
+    // Re-generate
+    await generateScript();
+}
+
+function toggleEditMode() {
+    isEditMode = !isEditMode;
+
+    const fields = ['Greeting', 'Personality', 'Full'];
+    const editBtnText = document.getElementById('editBtnText');
+    const saveBtn = document.getElementById('btnSaveScript');
+
+    fields.forEach(field => {
+        const textDiv = document.getElementById(`script${field}`);
+        const textarea = document.getElementById(`script${field}Edit`);
+
+        if (isEditMode) {
+            // Copy content to textarea and show it
+            textarea.value = textDiv.textContent;
+            textDiv.style.display = 'none';
+            textarea.style.display = '';
+        } else {
+            // Switch back to read-only
+            textDiv.style.display = '';
+            textarea.style.display = 'none';
+        }
+    });
+
+    editBtnText.textContent = isEditMode ? 'Cancel Edit' : 'Edit Manually';
+    saveBtn.style.display = isEditMode ? '' : 'none';
+}
+
+function saveManualEdits() {
+    const greeting = document.getElementById('scriptGreetingEdit').value.trim();
+    const personality = document.getElementById('scriptPersonalityEdit').value.trim();
+    const script = document.getElementById('scriptFullEdit').value.trim();
+
+    if (!greeting && !personality && !script) {
+        alert('Please fill in at least one field before saving.');
+        return;
+    }
+
+    // Update state
+    generatedScript = {
+        greeting: greeting || generatedScript?.greeting || '',
+        personality: personality || generatedScript?.personality || '',
+        script: script || generatedScript?.script || ''
+    };
+
+    // Update display divs
+    document.getElementById('scriptGreeting').textContent = generatedScript.greeting;
+    document.getElementById('scriptPersonality').textContent = generatedScript.personality;
+    document.getElementById('scriptFull').textContent = generatedScript.script;
+
+    // Exit edit mode
+    toggleEditMode();
 }
 
 // =====================================================

@@ -5,6 +5,7 @@
 //   SUPABASE_URL, SUPABASE_ANON_KEY
 //   STRIPE_SECRET_KEY
 //   STRIPE_PRICE_STARTER, STRIPE_PRICE_GROWTH, STRIPE_PRICE_ENTERPRISE
+//   STRIPE_PRICE_SMS_BASIC, STRIPE_PRICE_SMS_PRO, STRIPE_PRICE_BUNDLE
 
 module.exports = async function handler(req, res) {
     if (req.method !== 'POST') {
@@ -15,7 +16,7 @@ module.exports = async function handler(req, res) {
         plan, voiceId, style, customStyle, language,
         businessName, industry, hours, phone, services, faqs, country,
         greeting, personality, script,
-        customerEmail
+        customerEmail, bookingLink, crmLink
     } = req.body;
 
     // Validate required fields
@@ -49,7 +50,9 @@ module.exports = async function handler(req, res) {
                 greeting: greeting || null,
                 personality: personality || null,
                 script: script || null,
-                customer_email: customerEmail
+                customer_email: customerEmail,
+                booking_link: bookingLink || null,
+                crm_link: crmLink || null
             };
 
             const dbResponse = await fetch(`${supabaseUrl}/rest/v1/receptionist_configs`, {
@@ -76,7 +79,10 @@ module.exports = async function handler(req, res) {
             const priceMap = {
                 starter: process.env.STRIPE_PRICE_STARTER,
                 growth: process.env.STRIPE_PRICE_GROWTH,
-                enterprise: process.env.STRIPE_PRICE_ENTERPRISE
+                enterprise: process.env.STRIPE_PRICE_ENTERPRISE,
+                sms_basic: process.env.STRIPE_PRICE_SMS_BASIC,
+                sms_pro: process.env.STRIPE_PRICE_SMS_PRO,
+                bundle: process.env.STRIPE_PRICE_BUNDLE
             };
 
             const priceId = priceMap[plan];
@@ -93,6 +99,9 @@ module.exports = async function handler(req, res) {
             params.append('customer_email', customerEmail);
             params.append('line_items[0][price]', priceId);
             params.append('line_items[0][quantity]', '1');
+            params.append('subscription_data[trial_period_days]', '14');
+            params.append('payment_method_collection', 'always');
+            params.append('automatic_tax[enabled]', 'true');
             params.append('success_url', `${origin}/configure.html?success=true&session_id={CHECKOUT_SESSION_ID}`);
             params.append('cancel_url', `${origin}/configure.html?cancelled=true`);
             if (configId) {

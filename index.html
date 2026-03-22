@@ -38,6 +38,7 @@
                 <li><a href="#features">Features</a></li>
                 <li><a href="#how-it-works">How It Works</a></li>
                 <li><a href="#pricing">Pricing</a></li>
+                <li><a href="dashboard.html" class="nav-login">Login</a></li>
                 <li><a href="#demo" class="nav-cta">Get Demo Call</a></li>
             </ul>
             <button class="mobile-toggle" id="mobileToggle" aria-label="Toggle navigation">
@@ -70,7 +71,7 @@
                     </svg>
                     Experience a Demo Call
                 </button>
-                <p class="hero-note">Free • No credit card • 30-second setup</p>
+                <p class="hero-note">14-day free trial • No charge until trial ends • 30-second setup</p>
             </div>
             <div class="hero-visual fade-in">
                 <div class="phone-mockup">
@@ -262,15 +263,16 @@
             <div class="pricing-grid" id="voicePlans">
                 <!-- Starter -->
                 <div class="pricing-card glass fade-in">
+                    <div class="trial-badge">🎉 14 days free</div>
                     <div class="plan-badge">Starter</div>
                     <h3 class="plan-name">Essentials</h3>
                     <p class="plan-desc">Perfect for solo operators and small businesses just getting started.</p>
                     <div class="plan-price">
                         <span class="price-currency">$</span>
-                        <span class="price-amount">149</span>
+                        <span class="price-amount">69</span>
                         <span class="price-period">/ month</span>
                     </div>
-                    <p class="plan-billing">Billed monthly · No contracts</p>
+                    <p class="plan-billing">14-day free trial · then billed monthly</p>
                     <ul class="plan-features">
                         <li class="included"><span class="check">✓</span> 100 minutes / month (~40 calls)</li>
                         <li class="included"><span class="check">✓</span> 24/7 AI answering</li>
@@ -282,21 +284,22 @@
                     </ul>
                     <p class="plan-overage">Overage: $0.20/min</p>
                     <button class="btn btn-secondary btn-full"
-                        onclick="window.location.href='configure.html?plan=starter'">Build Your Receptionist</button>
+                        onclick="window.location.href='configure.html?plan=starter'">Start Free Trial</button>
                 </div>
 
                 <!-- Growth (Popular) -->
                 <div class="pricing-card pricing-popular glass fade-in">
                     <div class="popular-badge">⭐ Most Popular</div>
+                    <div class="trial-badge">🎉 14 days free</div>
                     <div class="plan-badge plan-badge-primary">Growth</div>
                     <h3 class="plan-name">Professional</h3>
                     <p class="plan-desc">The sweet spot for growing businesses ready to scale their intake.</p>
                     <div class="plan-price">
                         <span class="price-currency">$</span>
-                        <span class="price-amount">349</span>
+                        <span class="price-amount">99</span>
                         <span class="price-period">/ month</span>
                     </div>
-                    <p class="plan-billing">Billed monthly · No contracts</p>
+                    <p class="plan-billing">14-day free trial · then billed monthly</p>
                     <ul class="plan-features">
                         <li class="included"><span class="check">✓</span> 500 minutes / month (~200 calls)</li>
                         <li class="included"><span class="check">✓</span> 24/7 AI answering</li>
@@ -308,21 +311,20 @@
                     </ul>
                     <p class="plan-overage">Overage: $0.18/min</p>
                     <button class="btn btn-primary btn-glow btn-full"
-                        onclick="window.location.href='configure.html?plan=growth'">Build Your Receptionist</button>
+                        onclick="window.location.href='configure.html?plan=growth'">Start Free Trial</button>
                 </div>
 
                 <!-- Enterprise -->
                 <div class="pricing-card glass fade-in">
+                    <div class="trial-badge">🎉 14 days free</div>
                     <div class="plan-badge">Enterprise</div>
                     <h3 class="plan-name">Scale</h3>
                     <p class="plan-desc">Custom volume, dedicated setup, and white-glove onboarding for larger teams.
                     </p>
                     <div class="plan-price">
-                        <span class="price-currency">$</span>
-                        <span class="price-amount">699</span>
-                        <span class="price-period">/ month</span>
+                        <span class="price-amount" style="font-size: 2.5rem; line-height: 1.2;">Custom</span>
                     </div>
-                    <p class="plan-billing">Billed monthly · Volume discounts available</p>
+                    <p class="plan-billing">Tailored to your needs</p>
                     <ul class="plan-features">
                         <li class="included"><span class="check">✓</span> 1,500 minutes / month (~600 calls)</li>
                         <li class="included"><span class="check">✓</span> 24/7 AI answering</li>
@@ -334,7 +336,7 @@
                     </ul>
                     <p class="plan-overage">Overage: $0.15/min</p>
                     <button class="btn btn-secondary btn-full"
-                        onclick="window.location.href='configure.html?plan=enterprise'">Build Your Receptionist</button>
+                        onclick="window.location.href='mailto:contact@ringly.ai'">Contact Sales</button>
                 </div>
             </div>
 
@@ -342,15 +344,16 @@
             <div class="pricing-grid pricing-sms" id="smsPlans" style="display:none;">
                 <!-- Text Basic -->
                 <div class="pricing-card glass fade-in">
-                    <div class="plan-badge">Add-on</div>
+                    <div class="trial-badge">🎉 14 days free</div>
+                    <div class="plan-badge">SMS AI</div>
                     <h3 class="plan-name">Text Basic</h3>
                     <p class="plan-desc">Automated SMS for appointment confirmations and follow-ups.</p>
                     <div class="plan-price">
                         <span class="price-currency">$</span>
-                        <span class="price-amount">49</span>
+                        <span class="price-amount">29</span>
                         <span class="price-period">/ month</span>
                     </div>
-                    <p class="plan-billing">Add to any Voice AI plan</p>
+                    <p class="plan-billing">Standalone or bundle with Voice</p>
                     <ul class="plan-features">
                         <li class="included"><span class="check">✓</span> 500 SMS messages / month</li>
                         <li class="included"><span class="check">✓</span> AI text responses</li>
@@ -360,21 +363,23 @@
                         <li class="excluded"><span class="x">✕</span> Broadcast messaging</li>
                     </ul>
                     <p class="plan-overage">Overage: $0.05/msg</p>
-                    <button class="btn btn-secondary btn-full" onclick="openModal()">Start Free Demo</button>
+                    <button class="btn btn-secondary btn-full"
+                        onclick="window.location.href='configure.html?plan=sms_basic'">Start Free Trial</button>
                 </div>
 
                 <!-- Text Pro (Popular) -->
                 <div class="pricing-card pricing-popular glass fade-in">
                     <div class="popular-badge">⭐ Best Value</div>
-                    <div class="plan-badge plan-badge-primary">Add-on</div>
+                    <div class="trial-badge">🎉 14 days free</div>
+                    <div class="plan-badge plan-badge-primary">SMS AI</div>
                     <h3 class="plan-name">Text Pro</h3>
                     <p class="plan-desc">Full AI-powered text conversations with smart automation.</p>
                     <div class="plan-price">
                         <span class="price-currency">$</span>
-                        <span class="price-amount">99</span>
+                        <span class="price-amount">59</span>
                         <span class="price-period">/ month</span>
                     </div>
-                    <p class="plan-billing">Add to any Voice AI plan</p>
+                    <p class="plan-billing">Standalone or bundle with Voice</p>
                     <ul class="plan-features">
                         <li class="included"><span class="check">✓</span> 2,000 SMS messages / month</li>
                         <li class="included"><span class="check">✓</span> AI text responses</li>
@@ -384,21 +389,23 @@
                         <li class="included"><span class="check">✓</span> Broadcast messaging</li>
                     </ul>
                     <p class="plan-overage">Overage: $0.03/msg</p>
-                    <button class="btn btn-primary btn-glow btn-full" onclick="openModal()">Start Free Demo</button>
+                    <button class="btn btn-primary btn-glow btn-full"
+                        onclick="window.location.href='configure.html?plan=sms_pro'">Start Free Trial</button>
                 </div>
 
                 <!-- Bundle -->
                 <div class="pricing-card glass fade-in">
+                    <div class="trial-badge">🎉 14 days free</div>
                     <div class="plan-badge">Bundle</div>
                     <h3 class="plan-name">Voice + Text</h3>
                     <p class="plan-desc">Get the best of both worlds. Combine Growth voice plan with Text Pro at a
                         discount.</p>
                     <div class="plan-price">
                         <span class="price-currency">$</span>
-                        <span class="price-amount">399</span>
+                        <span class="price-amount">129</span>
                         <span class="price-period">/ month</span>
                     </div>
-                    <p class="plan-billing">Save $49/mo vs. buying separately</p>
+                    <p class="plan-billing">14-day free trial · Save $29/mo vs. separately</p>
                     <ul class="plan-features">
                         <li class="included"><span class="check">✓</span> 500 voice minutes / month</li>
                         <li class="included"><span class="check">✓</span> 2,000 SMS messages / month</li>
@@ -408,7 +415,8 @@
                         <li class="included"><span class="check">✓</span> All premium features</li>
                     </ul>
                     <p class="plan-overage">Overage: $0.18/min · $0.03/msg</p>
-                    <button class="btn btn-secondary btn-full" onclick="openModal()">Start Free Demo</button>
+                    <button class="btn btn-secondary btn-full"
+                        onclick="window.location.href='configure.html?plan=bundle'">Start Free Trial</button>
                 </div>
             </div>
         </div>
@@ -504,10 +512,12 @@
                         <label for="userPhone">Phone Number</label>
                         <div class="phone-input-wrapper">
                             <select id="countryCode" name="countryCode">
-                                <option value="+1">🇺🇸 +1</option>
-                                <option value="+44">🇬🇧 +44</option>
-                                <option value="+91">🇮🇳 +91</option>
-                                <option value="+61">🇦🇺 +61</option>
+                                <option value="CA">🇨🇦 Canada</option>
+                                <option value="GB">🇬🇧 United Kingdom</option>
+                                <option value="AU">🇦🇺 Australia</option>
+                                <option value="NZ">🇳🇿 New Zealand</option>
+                                <option value="IN">🇮🇳 India</option>
+                                <option value="IE">🇮🇪 Ireland</option>
                                 <option value="+49">🇩🇪 +49</option>
                                 <option value="+33">🇫🇷 +33</option>
                                 <option value="+81">🇯🇵 +81</option>

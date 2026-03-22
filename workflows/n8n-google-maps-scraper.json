@@ -1,0 +1,204 @@
+{
+  "name": "RinglyAI — Google Maps Lead Scraper",
+  "nodes": [
+    {
+      "parameters": {
+        "rule": {
+          "interval": [{ "field": "weeks", "weekInterval": 1, "triggerAtDay": [1], "triggerAtHour": 9 }]
+        }
+      },
+      "id": "schedule-trigger",
+      "name": "Weekly Trigger (Mon 9 AM)",
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1.2,
+      "position": [250, 300]
+    },
+    {
+      "parameters": {
+        "values": {
+          "string": [
+            {
+              "name": "searches",
+              "value": "Dentist in Austin TX, Roofer in Miami FL, Plumber in Dallas TX, HVAC in Phoenix AZ, Chiropractor in Charlotte NC, Auto Repair in Atlanta GA, Veterinarian in Denver CO, Electrician in Nashville TN, Landscaper in Orlando FL, Hair Salon in San Diego CA"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "set-search-terms",
+      "name": "Set Search Terms",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [470, 300]
+    },
+    {
+      "parameters": {
+        "fieldToSplitOut": "searches",
+        "options": { "separator": "," }
+      },
+      "id": "split-searches",
+      "name": "Split Into Individual Searches",
+      "type": "n8n-nodes-base.itemLists",
+      "typeVersion": 3.1,
+      "position": [690, 300]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://google.serper.dev/maps",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            { "name": "X-API-KEY", "value": "={{ $credentials.serperApiKey }}" },
+            { "name": "Content-Type", "value": "application/json" }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={{ JSON.stringify({ q: $json.searches.trim(), gl: 'us', num: 20 }) }}"
+      },
+      "id": "serper-maps",
+      "name": "Serper.dev Google Maps Search",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [910, 300],
+      "notes": "Replace $credentials.serperApiKey with your actual Serper.dev API key in the header, or use n8n's credential system."
+    },
+    {
+      "parameters": {
+        "fieldToSplitOut": "places",
+        "options": {}
+      },
+      "id": "extract-places",
+      "name": "Extract Places Array",
+      "type": "n8n-nodes-base.itemLists",
+      "typeVersion": 3.1,
+      "position": [1130, 300]
+    },
+    {
+      "parameters": {
+        "values": {
+          "string": [
+            { "name": "business_name", "value": "={{ $json.title }}" },
+            { "name": "address", "value": "={{ $json.address }}" },
+            { "name": "phone", "value": "={{ $json.phoneNumber || '' }}" },
+            { "name": "website", "value": "={{ $json.website || '' }}" },
+            { "name": "rating", "value": "={{ $json.rating || '' }}" },
+            { "name": "category", "value": "={{ $json.category || '' }}" }
+          ]
+        },
+        "options": { "dotNotation": false }
+      },
+      "id": "format-leads",
+      "name": "Format Lead Data",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [1350, 300]
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "string": [
+            { "value1": "={{ $json.website }}", "operation": "isNotEmpty" }
+          ]
+        }
+      },
+      "id": "filter-has-website",
+      "name": "Filter: Has Website",
+      "type": "n8n-nodes-base.filter",
+      "typeVersion": 2,
+      "position": [1570, 300]
+    },
+    {
+      "parameters": {
+        "method": "GET",
+        "url": "=https://api.hunter.io/v2/domain-search?domain={{ encodeURIComponent($json.website.replace('https://','').replace('http://','').split('/')[0]) }}&api_key={{ $credentials.hunterApiKey }}",
+        "options": { "timeout": 10000 }
+      },
+      "id": "hunter-email-lookup",
+      "name": "Hunter.io Email Lookup",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [1790, 300],
+      "notes": "Replace $credentials.hunterApiKey with your actual Hunter.io API key, or use n8n's HTTP credential system."
+    },
+    {
+      "parameters": {
+        "values": {
+          "string": [
+            { "name": "email", "value": "={{ $json.data?.emails?.[0]?.value || '' }}" },
+            { "name": "email_confidence", "value": "={{ $json.data?.emails?.[0]?.confidence || '' }}" },
+            { "name": "first_name", "value": "={{ $json.data?.emails?.[0]?.first_name || '' }}" },
+            { "name": "last_name", "value": "={{ $json.data?.emails?.[0]?.last_name || '' }}" }
+          ]
+        },
+        "options": { "dotNotation": false }
+      },
+      "id": "extract-email",
+      "name": "Extract Best Email",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [2010, 300]
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "string": [
+            { "value1": "={{ $json.email }}", "operation": "isNotEmpty" }
+          ]
+        }
+      },
+      "id": "filter-has-email",
+      "name": "Filter: Has Email",
+      "type": "n8n-nodes-base.filter",
+      "typeVersion": 2,
+      "position": [2230, 300]
+    },
+    {
+      "parameters": {
+        "operation": "append",
+        "documentId": { "__rl": true, "value": "YOUR_GOOGLE_SHEET_ID", "mode": "id" },
+        "sheetName": { "__rl": true, "value": "Leads", "mode": "name" },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "Business Name": "={{ $json.business_name }}",
+            "Address": "={{ $json.address }}",
+            "Phone": "={{ $json.phone }}",
+            "Website": "={{ $json.website }}",
+            "Email": "={{ $json.email }}",
+            "First Name": "={{ $json.first_name }}",
+            "Last Name": "={{ $json.last_name }}",
+            "Rating": "={{ $json.rating }}",
+            "Category": "={{ $json.category }}",
+            "Status": "new",
+            "Scraped Date": "={{ $now.toISODate() }}"
+          }
+        },
+        "options": {}
+      },
+      "id": "google-sheets-save",
+      "name": "Save to Google Sheets",
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.5,
+      "position": [2450, 300],
+      "notes": "Replace YOUR_GOOGLE_SHEET_ID with the actual Sheet ID. Create a sheet named 'Leads' with columns: Business Name, Address, Phone, Website, Email, First Name, Last Name, Rating, Category, Status, Scraped Date."
+    }
+  ],
+  "connections": {
+    "Weekly Trigger (Mon 9 AM)": { "main": [[{ "node": "Set Search Terms", "type": "main", "index": 0 }]] },
+    "Set Search Terms": { "main": [[{ "node": "Split Into Individual Searches", "type": "main", "index": 0 }]] },
+    "Split Into Individual Searches": { "main": [[{ "node": "Serper.dev Google Maps Search", "type": "main", "index": 0 }]] },
+    "Serper.dev Google Maps Search": { "main": [[{ "node": "Extract Places Array", "type": "main", "index": 0 }]] },
+    "Extract Places Array": { "main": [[{ "node": "Format Lead Data", "type": "main", "index": 0 }]] },
+    "Format Lead Data": { "main": [[{ "node": "Filter: Has Website", "type": "main", "index": 0 }]] },
+    "Filter: Has Website": { "main": [[{ "node": "Hunter.io Email Lookup", "type": "main", "index": 0 }]] },
+    "Hunter.io Email Lookup": { "main": [[{ "node": "Extract Best Email", "type": "main", "index": 0 }]] },
+    "Extract Best Email": { "main": [[{ "node": "Filter: Has Email", "type": "main", "index": 0 }]] },
+    "Filter: Has Email": { "main": [[{ "node": "Save to Google Sheets", "type": "main", "index": 0 }]] }
+  },
+  "settings": { "executionOrder": "v1" },
+  "staticData": null,
+  "tags": [{ "name": "RinglyAI Marketing" }],
+  "triggerCount": 1
+}

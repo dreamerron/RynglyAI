@@ -4,10 +4,10 @@
 // Env vars: STRIPE_SECRET_KEY, STRIPE_WEBHOOK_SECRET,
 //           SUPABASE_URL, SUPABASE_ANON_KEY
 
-// Stripe requires raw body for webhook signature verification
 module.exports.config = { api: { bodyParser: false } };
 
 const crypto = require('crypto');
+const twilio = require('twilio');
 
 module.exports = async function handler(req, res) {
     if (req.method !== 'POST') {
@@ -45,8 +45,26 @@ module.exports = async function handler(req, res) {
         const supabaseKey = process.env.SUPABASE_ANON_KEY;
 
         try {
-            // Update config status to 'paid'
+            // Update config status — 'trial' if trial period, otherwise 'paid'
             if (configId && supabaseUrl && supabaseKey) {
+                const subscription = session.subscription;
+                let status = 'paid';
+
+                // Check if subscription has a trial (fetch from Stripe)
+                if (subscription && stripeKey) {
+                    try {
+                        const subRes = await fetch(`https://api.stripe.com/v1/subscriptions/${subscription}`, {
+                            headers: { 'Authorization': `Bearer ${stripeKey}` }
+                        });
+                        const subData = await subRes.json();
+                        if (subData.trial_end) {
+                            status = 'trial';
+                        }
+                    } catch (e) {
+                        console.log('Could not check trial status:', e.message);
+                    }
+                }
+
                 await fetch(`${supabaseUrl}/rest/v1/receptionist_configs?id=eq.${configId}`, {
                     method: 'PATCH',
                     headers: {
@@ -55,7 +73,7 @@ module.exports = async function handler(req, res) {
                         'Content-Type': 'application/json'
                     },
                     body: JSON.stringify({
-                        status: 'paid',
+                        status,
                         stripe_customer_id: session.customer,
                         stripe_subscription_id: session.subscription
                     })
@@ -108,15 +126,48 @@ module.exports = async function handler(req, res) {
         }
     }
 
+    // Handle subscription updated (trial ended → active)
+    if (event.type === 'customer.subscription.updated') {
+        const subscription = event.data.object;
+        const supabaseUrl = process.env.SUPABASE_URL;
+        const supabaseKey = process.env.SUPABASE_ANON_KEY;
+
+        // Trial → active transition
+        if (subscription.status === 'active' && !subscription.trial_end && supabaseUrl && supabaseKey) {
+            await fetch(
+                `${supabaseUrl}/rest/v1/receptionist_configs?stripe_subscription_id=eq.${subscription.id}`,
+                {
+                    method: 'PATCH',
+                    headers: {
+                        'apikey': supabaseKey,
+                        'Authorization': `Bearer ${supabaseKey}`,
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ status: 'active' })
+                }
+            );
+        }
+    }
+
     return res.status(200).json({ received: true });
 };
 
-// ── Provision the AI receptionist via Vapi ──
+// ── Provision the AI receptionist via Vapi & Twilio ──
 async function provisionReceptionist(config, supabaseUrl, supabaseKey) {
     const vapiKey = process.env.VAPI_PRIVATE_KEY;
+    const twilioAccountSid = process.env.TWILIO_ACCOUNT_SID;
+    const twilioAuthToken = process.env.TWILIO_AUTH_TOKEN;
+
     if (!vapiKey) {
         console.error('VAPI_PRIVATE_KEY not set — skipping provisioning');
         return;
+    }
+
+    let twilioClient = null;
+    if (twilioAccountSid && twilioAuthToken) {
+        twilioClient = twilio(twilioAccountSid, twilioAuthToken);
+    } else {
+        console.warn('Twilio credentials missing — will not provision a phone number automatically');
     }
 
     // Voice mapping: wizard voice → ElevenLabs voice ID
@@ -185,7 +236,72 @@ async function provisionReceptionist(config, supabaseUrl, supabaseKey) {
             throw new Error(assistant.message || 'Failed to create Vapi assistant');
         }
 
-        // Update config with assistant ID and set status to live
+        let twilioNumberStr = null;
+
+        // ── Provision Twilio Number & Bind to Vapi ──
+        if (twilioClient) {
+            try {
+                // 1. Search for an available local number in their specified country
+                const targetCountry = config.country || 'US';
+                const availableNumbers = await twilioClient.availablePhoneNumbers(targetCountry).local.list({
+                    voiceEnabled: true,
+                    smsEnabled: true,
+                    limit: 1
+                });
+
+                if (availableNumbers && availableNumbers.length > 0) {
+                    const numberToBuy = availableNumbers[0].phoneNumber;
+
+                    // 2. Buy the number
+                    const purchasedNumber = await twilioClient.incomingPhoneNumbers.create({
+                        phoneNumber: numberToBuy,
+                        friendlyName: `RinglyAI - ${config.business_name}`
+                    });
+
+                    twilioNumberStr = purchasedNumber.phoneNumber;
+                    console.log(`📞 Purchased Twilio number: ${twilioNumberStr}`);
+
+                    // 3. Bind the Twilio number to the Vapi Assistant
+                    const vapiPhoneRes = await fetch('https://api.vapi.ai/phone-number', {
+                        method: 'POST',
+                        headers: {
+                            'Authorization': `Bearer ${vapiKey}`,
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify({
+                            provider: 'twilio',
+                            number: twilioNumberStr,
+                            twilioAccountSid: twilioAccountSid,
+                            twilioAuthToken: twilioAuthToken,
+                            assistantId: assistant.id,
+                            name: `RinglyAI - ${config.business_name}`
+                        })
+                    });
+
+                    if (!vapiPhoneRes.ok) {
+                        const vapiPhoneErr = await vapiPhoneRes.json();
+                        console.error('Failed to bind Twilio to Vapi:', vapiPhoneErr);
+                        // We do not throw here, so we still save the assistant ID at the very least
+                    } else {
+                        console.log(`🔗 Successfully bound Twilio number to Vapi assistant.`);
+                    }
+                } else {
+                    console.error('No Twilio numbers available to purchase in US.');
+                }
+            } catch (twilioErr) {
+                console.error('Error during Twilio provisioning:', twilioErr);
+            }
+        }
+
+        // Update config with assistant ID, Twilio number, and set status to live
+        const patchPayload = {
+            status: 'live',
+            vapi_assistant_id: assistant.id
+        };
+        if (twilioNumberStr) {
+            patchPayload.twilio_number = twilioNumberStr;
+        }
+
         await fetch(`${supabaseUrl}/rest/v1/receptionist_configs?id=eq.${config.id}`, {
             method: 'PATCH',
             headers: {
@@ -193,13 +309,10 @@ async function provisionReceptionist(config, supabaseUrl, supabaseKey) {
                 'Authorization': `Bearer ${supabaseKey}`,
                 'Content-Type': 'application/json'
             },
-            body: JSON.stringify({
-                status: 'live',
-                vapi_assistant_id: assistant.id
-            })
+            body: JSON.stringify(patchPayload)
         });
 
-        console.log(`✅ Provisioned: ${config.business_name} → assistant ${assistant.id}`);
+        console.log(`✅ Provisioned: ${config.business_name} → assistant ${assistant.id} | Phone: ${twilioNumberStr || 'None'}`);
 
     } catch (error) {
         console.error('Provisioning error:', error);
