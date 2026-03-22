@@ -2,7 +2,7 @@
 // RinglyAI — Customer Dashboard Scripts
 // ===================================================
 
-let supabase = null;
+let supabaseClient = null;
 let currentUser = null;
 let dashboardData = null;
 
@@ -13,7 +13,7 @@ document.addEventListener('DOMContentLoaded', async () => {
         const env = await envRes.json();
 
         if (env.supabaseUrl && env.supabaseAnonKey) {
-            supabase = window.supabase.createClient(env.supabaseUrl, env.supabaseAnonKey);
+            supabaseClient = window.supabase.createClient(env.supabaseUrl, env.supabaseAnonKey);
         } else {
             document.getElementById('authMessage').innerText = 'System not configured yet.';
             return;
@@ -24,10 +24,10 @@ document.addEventListener('DOMContentLoaded', async () => {
     }
 
     // 2. Check current session
-    const { data: { session } } = await supabase.auth.getSession();
+    const { data: { session } } = await supabaseClient.auth.getSession();
 
     // Listen for auth changes
-    supabase.auth.onAuthStateChange((event, session) => {
+    supabaseClient.auth.onAuthStateChange((event, session) => {
         if (event === 'SIGNED_IN') {
             loadDashboard(session.user);
         } else if (event === 'SIGNED_OUT') {
@@ -54,7 +54,7 @@ document.addEventListener('DOMContentLoaded', async () => {
         msg.className = 'auth-msg';
         msg.innerText = '';
 
-        const { error } = await supabase.auth.signInWithPassword({ email, password });
+        const { error } = await supabaseClient.auth.signInWithPassword({ email, password });
 
         if (error) {
             msg.innerText = error.message;
@@ -86,7 +86,7 @@ document.addEventListener('DOMContentLoaded', async () => {
         msg.className = 'auth-msg';
         msg.innerText = '';
 
-        const { error } = await supabase.auth.signUp({
+        const { error } = await supabaseClient.auth.signUp({
             email,
             password,
             options: {
@@ -111,7 +111,7 @@ document.addEventListener('DOMContentLoaded', async () => {
 
     // Logout
     document.getElementById('btnLogout').addEventListener('click', async () => {
-        await supabase.auth.signOut();
+        await supabaseClient.auth.signOut();
     });
 });
 
@@ -119,7 +119,7 @@ document.addEventListener('DOMContentLoaded', async () => {
 // SOCIAL LOGIN (Google OAuth)
 // =====================================================
 async function signInWithGoogle() {
-    if (!supabase) {
+    if (!supabaseClient) {
         document.getElementById('authMessage').innerText = 'System not configured yet.';
         return;
     }
@@ -128,7 +128,7 @@ async function signInWithGoogle() {
     msg.className = 'auth-msg';
     msg.innerText = '';
 
-    const { error } = await supabase.auth.signInWithOAuth({
+    const { error } = await supabaseClient.auth.signInWithOAuth({
         provider: 'google',
         options: {
             redirectTo: window.location.origin + '/dashboard.html'
@@ -176,7 +176,7 @@ async function loadDashboard(user) {
     document.getElementById('accountEmail').innerText = user.email;
 
     try {
-        const { data: { session } } = await supabase.auth.getSession();
+        const { data: { session } } = await supabaseClient.auth.getSession();
 
         const res = await fetch('/api/customer-data', {
             headers: {
@@ -383,7 +383,7 @@ function renderAccountPlan(configs) {
 // =====================================================
 async function manageSubscription() {
     try {
-        const { data: { session } } = await supabase.auth.getSession();
+        const { data: { session } } = await supabaseClient.auth.getSession();
         const res = await fetch('/api/stripe-portal', {
             method: 'POST',
             headers: {
@@ -415,7 +415,7 @@ function closeModal() {
 
 function confirmLogout() {
     if (confirm('Are you sure you want to log out?')) {
-        supabase.auth.signOut();
+        supabaseClient.auth.signOut();
     }
 }
 
@@ -453,7 +453,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
             // Save to Supabase
             try {
-                const { data: { session } } = await supabase.auth.getSession();
+                const { data: { session } } = await supabaseClient.auth.getSession();
                 if (!session) throw new Error('Not authenticated');
 
                 const res = await fetch('/api/customer-data', {
