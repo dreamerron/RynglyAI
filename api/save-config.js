@@ -16,11 +16,12 @@ module.exports = async function handler(req, res) {
         plan, voiceId, style, customStyle, language,
         businessName, industry, hours, phone, services, faqs, country,
         greeting, personality, script,
-        customerEmail, bookingLink, crmLink
+        customerEmail, bookingLink, crmLink,
+        smsRules, smsFallback
     } = req.body;
 
-    // Validate required fields
-    if (!plan || !voiceId || !style || !businessName || !industry || !customerEmail) {
+    // Validate required fields (voiceId/style optional for SMS plans)
+    if (!plan || !businessName || !industry || !customerEmail) {
         return res.status(400).json({ error: 'Missing required fields' });
     }
 
@@ -52,7 +53,9 @@ module.exports = async function handler(req, res) {
                 script: script || null,
                 customer_email: customerEmail,
                 booking_link: bookingLink || null,
-                crm_link: crmLink || null
+                crm_link: crmLink || null,
+                sms_rules: smsRules || null,
+                sms_fallback: smsFallback || null
             };
 
             const dbResponse = await fetch(`${supabaseUrl}/rest/v1/receptionist_configs`, {
@@ -82,6 +85,7 @@ module.exports = async function handler(req, res) {
                 enterprise: process.env.STRIPE_PRICE_ENTERPRISE,
                 sms_basic: process.env.STRIPE_PRICE_SMS_BASIC,
                 sms_pro: process.env.STRIPE_PRICE_SMS_PRO,
+                sms_scale: process.env.STRIPE_PRICE_SMS_SCALE,
                 bundle: process.env.STRIPE_PRICE_BUNDLE
             };
 

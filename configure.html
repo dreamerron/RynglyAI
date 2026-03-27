@@ -50,326 +50,378 @@
     <main class="config-page">
         <div class="config-container">
 
-            <div class="config-header fade-in visible">
-                <h1>Build Your <span class="gradient-text">AI Receptionist</span></h1>
-                <p>Customize your receptionist in 3 easy steps. Takes under 2 minutes.</p>
+            <!-- ════════ PRODUCT GATE ════════ -->
+            <div id="productGate">
+                <div class="config-header fade-in visible">
+                    <h1>Choose Your <span class="gradient-text">AI Product</span></h1>
+                    <p>Pick the tool that fits your business. Set up in under 2 minutes.</p>
+                </div>
+
+                <div class="product-gate product-cards">
+
+                    <!-- Voice AI -->
+                    <div class="product-card" onclick="selectProduct('voice')">
+                        <span class="product-icon">📞</span>
+                        <h2>AI Voice Receptionist</h2>
+                        <p>Answers calls 24/7. Books appointments. Takes messages.</p>
+                        <ul>
+                            <li><span>✓</span> Auto-answers inbound calls</li>
+                            <li><span>✓</span> Trained on your business script</li>
+                            <li><span>✓</span> Books appointments via voice</li>
+                            <li><span>✓</span> Local phone number included</li>
+                        </ul>
+                        <button class="btn btn-primary btn-glow" type="button">Get Started →</button>
+                        <p class="product-price-hint">From $69/month · 14-day free trial</p>
+                    </div>
+
+                    <!-- SMS AI -->
+                    <div class="product-card" onclick="selectProduct('sms')">
+                        <span class="product-icon">💬</span>
+                        <h2>SMS AI Frontdesk</h2>
+                        <p>Auto-replies to customer texts instantly. Handles inquiries 24/7.</p>
+                        <ul>
+                            <li><span>✓</span> Instant auto-replies to texts</li>
+                            <li><span>✓</span> Keyword-triggered responses</li>
+                            <li><span>✓</span> Appointment scheduling via SMS</li>
+                            <li><span>✓</span> Broadcast messaging</li>
+                        </ul>
+                        <button class="btn btn-primary btn-glow" type="button">Get Started →</button>
+                        <p class="product-price-hint">From $29/month · 14-day free trial</p>
+                    </div>
+
+                </div>
+
+                <p class="product-gate-footer">Not sure? <a href="index.html#pricing">Compare plans</a> or <a href="index.html#demo">get a live demo</a>.</p>
             </div>
 
-            <!-- Progress Bar -->
-            <div class="progress-bar" id="progressBar">
-                <div class="progress-step active" data-step="1">
-                    <div class="step-circle">1</div>
-                    <span class="step-label">Plan</span>
+            <!-- ════════ WIZARD CONTAINER ════════ -->
+            <div id="wizardContainer" style="display:none">
+
+                <div class="config-header fade-in visible">
+                    <div class="wizard-product-badge" id="productBadge"></div>
+                    <h1 id="wizardTitle">Build Your <span class="gradient-text">AI Receptionist</span></h1>
+                    <p id="wizardSubtitle">3 easy steps. Takes under 2 minutes.</p>
                 </div>
-                <div class="progress-line" id="line1">
-                    <div class="line-fill"></div>
+
+                <!-- Progress Bar (rendered by JS) -->
+                <div class="progress-bar" id="progressBar"></div>
+
+                <!-- Wizard Body -->
+                <div class="wizard-body">
+
+                    <!-- ════════ STEP 1: Plan Selection ════════ -->
+                    <div class="wizard-step" id="step1">
+                        <h2 class="step-title">Choose Your Plan</h2>
+                        <p class="step-subtitle">14-day free trial on all plans · No charge until trial ends</p>
+
+                        <!-- Voice Plans -->
+                        <div class="plan-select-grid" id="voicePlansContainer">
+                            <!-- Essential -->
+                            <div class="plan-select-card" data-plan="starter" onclick="selectPlan('starter')">
+                                <h3>Essential</h3>
+                                <div class="card-price">$69<span>/mo</span></div>
+                                <div class="card-volume-hint">~4–5 calls/day</div>
+                                <ul class="card-features">
+                                    <li><span class="check">✓</span> 100 min/month</li>
+                                    <li><span class="check">✓</span> AI-generated script</li>
+                                    <li><span class="check">✓</span> Local phone number</li>
+                                    <li><span class="check">✓</span> Call logs & transcripts</li>
+                                </ul>
+                            </div>
+
+                            <!-- Professional -->
+                            <div class="plan-select-card" data-plan="growth" onclick="selectPlan('growth')">
+                                <div class="card-badge">⭐ Most Popular</div>
+                                <h3>Professional</h3>
+                                <div class="card-price">$99<span>/mo</span></div>
+                                <div class="card-volume-hint">~20–25 calls/day</div>
+                                <ul class="card-features">
+                                    <li><span class="check">✓</span> 500 min/month</li>
+                                    <li><span class="check">✓</span> AI script + manual edit</li>
+                                    <li><span class="check">✓</span> Local phone number</li>
+                                    <li><span class="check">✓</span> Calendar integration</li>
+                                    <li><span class="check">✓</span> Priority support</li>
+                                </ul>
+                            </div>
+                        </div>
+
+                        <!-- SMS Plans -->
+                        <div class="plan-select-grid" id="smsPlansContainer" style="display:none;">
+                            <!-- Starter -->
+                            <div class="plan-select-card" data-plan="sms_basic" onclick="selectPlan('sms_basic')">
+                                <h3>Starter</h3>
+                                <div class="card-price">$29<span>/mo</span></div>
+                                <div class="card-volume-hint">~16 texts/day</div>
+                                <ul class="card-features">
+                                    <li><span class="check">✓</span> 500 SMS/month</li>
+                                    <li><span class="check">✓</span> AI auto-replies</li>
+                                    <li><span class="check">✓</span> Keyword triggers</li>
+                                    <li><span class="check">✓</span> Appointment via text</li>
+                                </ul>
+                            </div>
+
+                            <!-- Growth -->
+                            <div class="plan-select-card" data-plan="sms_pro" onclick="selectPlan('sms_pro')">
+                                <div class="card-badge">⭐ Best Value</div>
+                                <h3>Growth</h3>
+                                <div class="card-price">$59<span>/mo</span></div>
+                                <div class="card-volume-hint">~65 texts/day</div>
+                                <ul class="card-features">
+                                    <li><span class="check">✓</span> 2,000 SMS/month</li>
+                                    <li><span class="check">✓</span> AI auto-replies</li>
+                                    <li><span class="check">✓</span> Custom keywords</li>
+                                    <li><span class="check">✓</span> Broadcast messaging</li>
+                                    <li><span class="check">✓</span> Analytics dashboard</li>
+                                </ul>
+                            </div>
+
+                            <!-- Scale -->
+                            <div class="plan-select-card" data-plan="sms_scale" onclick="selectPlan('sms_scale')">
+                                <h3>Scale</h3>
+                                <div class="card-price">$149<span>/mo</span></div>
+                                <div class="card-volume-hint">~330 texts/day</div>
+                                <ul class="card-features">
+                                    <li><span class="check">✓</span> 10,000 SMS/month</li>
+                                    <li><span class="check">✓</span> All Growth features</li>
+                                    <li><span class="check">✓</span> Dedicated number</li>
+                                    <li><span class="check">✓</span> API access</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- ════════ STEP 2: Business Info ════════ -->
+                    <div class="wizard-step" id="step2">
+                        <h2 class="step-title">Tell Us About Your Business</h2>
+                        <p class="step-subtitle">We'll use this to generate your receptionist's script automatically.</p>
+
+                        <div class="selection-summary" id="step2Summary"></div>
+
+                        <form class="biz-form" id="bizForm" onsubmit="return false;">
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label for="bizEmail">Your Email</label>
+                                    <input type="email" id="bizEmail" placeholder="you@business.com" required>
+                                </div>
+                                <div class="form-group">
+                                    <label for="bizCountry">Country</label>
+                                    <select id="bizCountry">
+                                        <option value="US">🇺🇸 United States</option>
+                                        <option value="CA">🇨🇦 Canada</option>
+                                        <option value="GB">🇬🇧 United Kingdom</option>
+                                        <option value="AU">🇦🇺 Australia</option>
+                                        <option value="NZ">🇳🇿 New Zealand</option>
+                                        <option value="IN">🇮🇳 India</option>
+                                        <option value="IE">🇮🇪 Ireland</option>
+                                        <option value="DE">🇩🇪 Germany</option>
+                                        <option value="FR">🇫🇷 France</option>
+                                        <option value="ES">🇪🇸 Spain</option>
+                                        <option value="NL">🇳🇱 Netherlands</option>
+                                        <option value="IT">🇮🇹 Italy</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label for="bizName">Business Name</label>
+                                    <input type="text" id="bizName" placeholder="Acme Dental" required>
+                                </div>
+                                <div class="form-group">
+                                    <label for="bizIndustry">Industry</label>
+                                    <select id="bizIndustry" required>
+                                        <option value="" disabled selected>Select industry...</option>
+                                        <option value="healthcare">Healthcare / Medical</option>
+                                        <option value="dental">Dental</option>
+                                        <option value="legal">Legal / Law Firm</option>
+                                        <option value="real-estate">Real Estate</option>
+                                        <option value="salon">Salon / Spa</option>
+                                        <option value="auto">Automotive / Repair</option>
+                                        <option value="restaurant">Restaurant / Food</option>
+                                        <option value="fitness">Fitness / Gym</option>
+                                        <option value="hvac">HVAC / Plumbing</option>
+                                        <option value="insurance">Insurance</option>
+                                        <option value="accounting">Accounting / Finance</option>
+                                        <option value="consulting">Consulting</option>
+                                        <option value="ecommerce">E-commerce / Retail</option>
+                                        <option value="other">Other</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label for="bizHours">Business Hours</label>
+                                    <input type="text" id="bizHours" placeholder="Mon-Fri 9am-5pm, Sat 10am-2pm">
+                                </div>
+                                <div class="form-group">
+                                    <label for="bizPhone">Business Phone</label>
+                                    <input type="tel" id="bizPhone" placeholder="(555) 123-4567">
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label for="bizServices">Key Services (comma separated)</label>
+                                <input type="text" id="bizServices"
+                                    placeholder="Teeth cleaning, Root canals, Cosmetic dentistry, Orthodontics">
+                            </div>
+                            <div class="form-group">
+                                <label for="bizFaqs">Common Questions & Answers (optional)</label>
+                                <textarea id="bizFaqs" rows="3"
+                                    placeholder="Do you accept walk-ins? — Yes, but appointments are preferred.&#10;Do you take insurance? — We accept most major dental insurance plans."></textarea>
+                            </div>
+                        </form>
+                    </div>
+
+                    <!-- ════════ STEP 3 VOICE: Phone Number ════════ -->
+                    <div class="wizard-step" id="step3voice">
+                        <h2 class="step-title">Your AI Receptionist's Phone Number</h2>
+                        <p class="step-subtitle">We'll automatically assign a local number in your region after payment. Customers call this number — it activates within 60 seconds.</p>
+                        <div class="selection-summary" id="step3vSummary"></div>
+
+                        <div class="phone-preview-card">
+                            <div class="phone-preview-icon">📞</div>
+                            <div class="phone-preview-info">
+                                <h3>Local Number — Automatically Assigned</h3>
+                                <p>Based on your country selection, we'll purchase a local phone number and bind it to your AI receptionist instantly after payment. No action needed from you.</p>
+                            </div>
+                        </div>
+
+                        <div class="phone-feature-list">
+                            <div class="phone-feature-item">✓ Local area code builds customer trust</div>
+                            <div class="phone-feature-item">✓ Live within 60 seconds of payment</div>
+                            <div class="phone-feature-item">✓ Keep the same number for life</div>
+                            <div class="phone-feature-item">✓ Forward to your existing number anytime</div>
+                        </div>
+
+                        <div class="biz-form" style="margin-top: 32px;">
+                            <div class="form-group">
+                                <label for="bookingLink">Scheduling Link (Optional)</label>
+                                <input type="url" id="bookingLink" placeholder="e.g. https://calendly.com/your-name/30min">
+                                <small style="color:var(--text-muted); font-size: 0.8rem; margin-top: 6px; display: block;">The AI will share this link when callers want to book an appointment.</small>
+                            </div>
+                            <div class="form-group" id="crmGroup" style="display:none;">
+                                <label for="crmLink">CRM Webhook / API Key (Optional)</label>
+                                <input type="password" id="crmLink" placeholder="Paste your CRM Webhook URL or API Key">
+                                <small style="color:var(--text-muted); font-size: 0.8rem; margin-top: 6px; display: block;">Log calls automatically to your CRM.</small>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- ════════ STEP 3 SMS: SMS Rules ════════ -->
+                    <div class="wizard-step" id="step3sms">
+                        <h2 class="step-title">Set Up Your Auto-Replies</h2>
+                        <p class="step-subtitle">Define how your AI responds to customer texts. Add keyword rules for common questions.</p>
+                        <div class="selection-summary" id="step3sSummary"></div>
+
+                        <div id="smsRulesContainer"></div>
+
+                        <button type="button" class="btn-add-rule" onclick="addSmsRule()">+ Add Keyword Rule</button>
+
+                        <div class="biz-form" style="margin-top: 28px;">
+                            <div class="form-group">
+                                <label for="smsFallback">Fallback Message <span style="color:var(--text-muted); font-weight:400;">(when no keyword matches)</span></label>
+                                <textarea id="smsFallback" rows="3" placeholder="Thanks for texting us! For appointments, text BOOK. For hours, text HOURS. We'll get back to you shortly."></textarea>
+                            </div>
+                            <div class="form-group">
+                                <label for="bookingLinkSms">Scheduling Link (Optional)</label>
+                                <input type="url" id="bookingLinkSms" placeholder="https://calendly.com/your-name/30min">
+                                <small style="color:var(--text-muted); font-size: 0.8rem; margin-top: 6px; display: block;">AI will include this link in booking replies.</small>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- ════════ STEP 4 VOICE: Script Generation ════════ -->
+                    <div class="wizard-step" id="step4voice">
+                        <h2 class="step-title">Your AI Receptionist Script</h2>
+                        <p class="step-subtitle">We'll generate a professional script based on your business details. You can edit it before launching.</p>
+
+                        <div class="selection-summary" id="step4Summary"></div>
+
+                        <!-- Script Preview (shown after generation) -->
+                        <div class="script-preview" id="scriptPreview">
+                            <div class="script-preview-header">
+                                <h3>✨ Your AI Receptionist Script</h3>
+                                <div class="script-actions">
+                                    <button class="btn-script-action btn-regenerate" onclick="regenerateScript()"
+                                        title="Generate a new script">
+                                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                            stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                            <path
+                                                d="M21 2v6h-6M3 12a9 9 0 0 1 15-6.7L21 8M3 22v-6h6M21 12a9 9 0 0 1-15 6.7L3 16" />
+                                        </svg>
+                                        Regenerate
+                                    </button>
+                                    <button class="btn-script-action btn-edit" id="btnEditScript" onclick="toggleEditMode()">
+                                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                            stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                            <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7" />
+                                            <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z" />
+                                        </svg>
+                                        <span id="editBtnText">Edit Manually</span>
+                                    </button>
+                                    <button class="btn-script-action btn-save" id="btnSaveScript" onclick="saveManualEdits()"
+                                        style="display:none;">
+                                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                            stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                            <polyline points="20 6 9 17 4 12" />
+                                        </svg>
+                                        Save Changes
+                                    </button>
+                                </div>
+                            </div>
+                            <div class="script-box">
+                                <div class="script-section">
+                                    <div class="script-label">Greeting</div>
+                                    <div class="script-text" id="scriptGreeting"></div>
+                                    <textarea class="script-textarea" id="scriptGreetingEdit" style="display:none;" rows="3"
+                                        placeholder="Enter the greeting..."></textarea>
+                                </div>
+                                <div class="script-section">
+                                    <div class="script-label">Personality</div>
+                                    <div class="script-text" id="scriptPersonality"></div>
+                                    <textarea class="script-textarea" id="scriptPersonalityEdit" style="display:none;" rows="3"
+                                        placeholder="Describe the personality..."></textarea>
+                                </div>
+                                <div class="script-section">
+                                    <div class="script-label">Full Script</div>
+                                    <div class="script-text" id="scriptFull"></div>
+                                    <textarea class="script-textarea" id="scriptFullEdit" style="display:none;" rows="8"
+                                        placeholder="Enter the full script..."></textarea>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Loading state -->
+                        <div class="script-loading" id="scriptLoading" style="display:none;">
+                            <svg class="spinner" width="32" height="32" viewBox="0 0 24 24">
+                                <circle cx="12" cy="12" r="10" stroke="var(--accent-purple)" stroke-width="3" fill="none"
+                                    stroke-dasharray="31.4 31.4" stroke-linecap="round" />
+                            </svg>
+                            <p>Generating your AI receptionist script...</p>
+                        </div>
+                    </div>
+
                 </div>
-                <div class="progress-step" data-step="2">
-                    <div class="step-circle">2</div>
-                    <span class="step-label">Business Info</span>
-                </div>
-                <div class="progress-line" id="line2">
-                    <div class="line-fill"></div>
-                </div>
-                <div class="progress-step" data-step="3">
-                    <div class="step-circle">3</div>
-                    <span class="step-label">Tools</span>
-                </div>
+
             </div>
+            <!-- end wizardContainer -->
 
-            <!-- Wizard Body -->
-            <div class="wizard-body">
-
-                <!-- ════════ STEP 1: Plan Selection ════════ -->
-                <div class="wizard-step active" id="step1">
-                    <h2 class="step-title">Choose Your Plan</h2>
-                    <p class="step-subtitle">14-day free trial on all plans · No charge until trial ends</p>
-
-                    <!-- Plan Type Toggle -->
-                    <div class="plan-type-toggle">
-                        <button class="plan-type-btn active" onclick="switchPlanType('voice')" id="toggleVoice">📞 Voice
-                            AI</button>
-                        <button class="plan-type-btn" onclick="switchPlanType('sms')" id="toggleSms">💬 SMS AI</button>
-                        <button class="plan-type-btn" onclick="switchPlanType('bundle')" id="toggleBundle">🎯
-                            Bundle</button>
-                    </div>
-
-                    <!-- Voice Plans -->
-                    <div class="plan-select-grid" id="voicePlanCards">
-                        <!-- Essentials -->
-                        <div class="plan-select-card" data-plan="starter" onclick="selectPlan('starter')">
-                            <h3>Essentials</h3>
-                            <div class="card-price">$69<span>/mo</span></div>
-                            <ul class="card-features">
-                                <li><span class="check">✓</span> 4 voices (2M / 2F)</li>
-                                <li><span class="check">✓</span> 3 style presets</li>
-                                <li><span class="check">✓</span> AI-generated script</li>
-                                <li><span class="check">✓</span> 100 min/month</li>
-                            </ul>
-                        </div>
-
-                        <!-- Growth -->
-                        <div class="plan-select-card" data-plan="growth" onclick="selectPlan('growth')">
-                            <div class="card-badge">⭐ Most Popular</div>
-                            <h3>Professional</h3>
-                            <div class="card-price">$99<span>/mo</span></div>
-                            <ul class="card-features">
-                                <li><span class="check">✓</span> 8 voices</li>
-                                <li><span class="check">✓</span> All styles + custom</li>
-                                <li><span class="check">✓</span> AI script + manual edit</li>
-                                <li><span class="check">✓</span> 500 min/month</li>
-                            </ul>
-                        </div>
-
-                        <!-- Scale -->
-                        <div class="plan-select-card" data-plan="enterprise" onclick="selectPlan('enterprise')"
-                            style="display: none;">
-                            <h3>Scale</h3>
-                            <div class="card-price">Custom</div>
-                            <ul class="card-features">
-                                <li><span class="check">✓</span> 12+ voices</li>
-                                <li><span class="check">✓</span> Full custom persona</li>
-                                <li><span class="check">✓</span> Full script control</li>
-                                <li><span class="check">✓</span> 1,500 min/month</li>
-                            </ul>
-                        </div>
-                    </div>
-
-                    <!-- SMS Plans -->
-                    <div class="plan-select-grid" id="smsPlanCards" style="display:none;">
-                        <!-- Text Basic -->
-                        <div class="plan-select-card" data-plan="sms_basic" onclick="selectPlan('sms_basic')">
-                            <h3>Text Basic</h3>
-                            <div class="card-price">$29<span>/mo</span></div>
-                            <ul class="card-features">
-                                <li><span class="check">✓</span> 500 SMS / month</li>
-                                <li><span class="check">✓</span> AI text responses</li>
-                                <li><span class="check">✓</span> Auto follow-ups</li>
-                                <li><span class="check">✓</span> Appointment via text</li>
-                            </ul>
-                        </div>
-
-                        <!-- Text Pro -->
-                        <div class="plan-select-card" data-plan="sms_pro" onclick="selectPlan('sms_pro')">
-                            <div class="card-badge">⭐ Best Value</div>
-                            <h3>Text Pro</h3>
-                            <div class="card-price">$59<span>/mo</span></div>
-                            <ul class="card-features">
-                                <li><span class="check">✓</span> 2,000 SMS / month</li>
-                                <li><span class="check">✓</span> AI text responses</li>
-                                <li><span class="check">✓</span> Custom keywords</li>
-                                <li><span class="check">✓</span> Broadcast messaging</li>
-                            </ul>
-                        </div>
-                    </div>
-
-                    <!-- Bundle Plan -->
-                    <div class="plan-select-grid" id="bundlePlanCards" style="display:none;">
-                        <div class="plan-select-card" data-plan="bundle" onclick="selectPlan('bundle')">
-                            <div class="card-badge">🎯 Best Deal — Save $29/mo</div>
-                            <h3>Voice + Text</h3>
-                            <div class="card-price">$129<span>/mo</span></div>
-                            <ul class="card-features">
-                                <li><span class="check">✓</span> 500 voice min + 2,000 SMS</li>
-                                <li><span class="check">✓</span> 8 voices + all styles</li>
-                                <li><span class="check">✓</span> CRM integration</li>
-                                <li><span class="check">✓</span> All premium features</li>
-                            </ul>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- ════════ STEP 2: Business Info ════════ -->
-                <div class="wizard-step" id="step2">
-                    <h2 class="step-title">Tell Us About Your Business</h2>
-                    <p class="step-subtitle">We'll use this to generate your receptionist's script automatically.</p>
-
-                    <div class="selection-summary" id="step2Summary"></div>
-
-                    <form class="biz-form" id="bizForm" onsubmit="return false;">
-                        <div class="form-row">
-                            <div class="form-group">
-                                <label for="bizEmail">Your Email</label>
-                                <input type="email" id="bizEmail" placeholder="you@business.com" required>
-                            </div>
-                            <div class="form-group">
-                                <label for="bizCountry">Country</label>
-                                <select id="bizCountry">
-                                    <option value="US">🇺🇸 United States</option>
-                                    <option value="CA">🇨🇦 Canada</option>
-                                    <option value="GB">🇬🇧 United Kingdom</option>
-                                    <option value="AU">🇦🇺 Australia</option>
-                                    <option value="NZ">🇳🇿 New Zealand</option>
-                                    <option value="IN">🇮🇳 India</option>
-                                    <option value="IE">🇮🇪 Ireland</option>
-                                    <option value="DE">🇩🇪 Germany</option>
-                                    <option value="FR">🇫🇷 France</option>
-                                    <option value="ES">🇪🇸 Spain</option>
-                                    <option value="NL">🇳🇱 Netherlands</option>
-                                    <option value="IT">🇮🇹 Italy</option>
-                                </select>
-                            </div>
-                        </div>
-                        <div class="form-row">
-                            <div class="form-group">
-                                <label for="bizName">Business Name</label>
-                                <input type="text" id="bizName" placeholder="Acme Dental" required>
-                            </div>
-                            <div class="form-group">
-                                <label for="bizIndustry">Industry</label>
-                                <select id="bizIndustry" required>
-                                    <option value="" disabled selected>Select industry...</option>
-                                    <option value="healthcare">Healthcare / Medical</option>
-                                    <option value="dental">Dental</option>
-                                    <option value="legal">Legal / Law Firm</option>
-                                    <option value="real-estate">Real Estate</option>
-                                    <option value="salon">Salon / Spa</option>
-                                    <option value="auto">Automotive / Repair</option>
-                                    <option value="restaurant">Restaurant / Food</option>
-                                    <option value="fitness">Fitness / Gym</option>
-                                    <option value="hvac">HVAC / Plumbing</option>
-                                    <option value="insurance">Insurance</option>
-                                    <option value="accounting">Accounting / Finance</option>
-                                    <option value="consulting">Consulting</option>
-                                    <option value="ecommerce">E-commerce / Retail</option>
-                                    <option value="other">Other</option>
-                                </select>
-                            </div>
-                        </div>
-                        <div class="form-row">
-                            <div class="form-group">
-                                <label for="bizHours">Business Hours</label>
-                                <input type="text" id="bizHours" placeholder="Mon-Fri 9am-5pm, Sat 10am-2pm">
-                            </div>
-                            <div class="form-group">
-                                <label for="bizPhone">Business Phone</label>
-                                <input type="tel" id="bizPhone" placeholder="(555) 123-4567">
-                            </div>
-                        </div>
-                        <div class="form-group">
-                            <label for="bizServices">Key Services (comma separated)</label>
-                            <input type="text" id="bizServices"
-                                placeholder="Teeth cleaning, Root canals, Cosmetic dentistry, Orthodontics">
-                        </div>
-                        <div class="form-group">
-                            <label for="bizFaqs">Common Questions & Answers (optional)</label>
-                            <textarea id="bizFaqs" rows="3"
-                                placeholder="Do you accept walk-ins? — Yes, but appointments are preferred.&#10;Do you take insurance? — We accept most major dental insurance plans."></textarea>
-                        </div>
-                    </form>
-                </div>
-
-                <!-- ════════ STEP 3: Integrations ════════ -->
-                <div class="wizard-step" id="step3">
-                    <h2 class="step-title">Connect Your Tools</h2>
-                    <p class="step-subtitle">Allow your AI receptionist to book appointments and sync data directly to
-                        your CRM.</p>
-
-                    <div class="selection-summary" id="step3Summary"></div>
-
-                    <div class="biz-form">
-                        <div class="form-group">
-                            <label for="bookingLink">Scheduling Link (Optional)</label>
-                            <input type="url" id="bookingLink" placeholder="e.g. https://calendly.com/your-name/30min">
-                            <small
-                                style="color:var(--text-muted); font-size: 0.8rem; margin-top: 6px; display: block;">Paste
-                                your Calendly, Cal.com, or other scheduling link.</small>
-                        </div>
-
-                        <div class="form-group" id="crmGroup">
-                            <label for="crmLink">CRM Webhook / API Key (Optional)</label>
-                            <input type="password" id="crmLink" placeholder="Paste your CRM Webhook URL or API Key">
-                            <small
-                                style="color:var(--text-muted); font-size: 0.8rem; margin-top: 6px; display: block;">Connect
-                                Twenty CRM or any Webhook to log calls automatically.</small>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Script Preview (shown after generation) -->
-                <div class="script-preview" id="scriptPreview">
-                    <div class="script-preview-header">
-                        <h3>✨ Your AI Receptionist Script</h3>
-                        <div class="script-actions">
-                            <button class="btn-script-action btn-regenerate" onclick="regenerateScript()"
-                                title="Generate a new script">
-                                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                                    stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                                    <path
-                                        d="M21 2v6h-6M3 12a9 9 0 0 1 15-6.7L21 8M3 22v-6h6M21 12a9 9 0 0 1-15 6.7L3 16" />
-                                </svg>
-                                Regenerate
-                            </button>
-                            <button class="btn-script-action btn-edit" id="btnEditScript" onclick="toggleEditMode()">
-                                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                                    stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                                    <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7" />
-                                    <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z" />
-                                </svg>
-                                <span id="editBtnText">Edit Manually</span>
-                            </button>
-                            <button class="btn-script-action btn-save" id="btnSaveScript" onclick="saveManualEdits()"
-                                style="display:none;">
-                                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                                    stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                                    <polyline points="20 6 9 17 4 12" />
-                                </svg>
-                                Save Changes
-                            </button>
-                        </div>
-                    </div>
-                    <div class="script-box">
-                        <div class="script-section">
-                            <div class="script-label">Greeting</div>
-                            <div class="script-text" id="scriptGreeting"></div>
-                            <textarea class="script-textarea" id="scriptGreetingEdit" style="display:none;" rows="3"
-                                placeholder="Enter the greeting..."></textarea>
-                        </div>
-                        <div class="script-section">
-                            <div class="script-label">Personality</div>
-                            <div class="script-text" id="scriptPersonality"></div>
-                            <textarea class="script-textarea" id="scriptPersonalityEdit" style="display:none;" rows="3"
-                                placeholder="Describe the personality..."></textarea>
-                        </div>
-                        <div class="script-section">
-                            <div class="script-label">Full Script</div>
-                            <div class="script-text" id="scriptFull"></div>
-                            <textarea class="script-textarea" id="scriptFullEdit" style="display:none;" rows="8"
-                                placeholder="Enter the full script..."></textarea>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Loading state -->
-                <div class="script-loading" id="scriptLoading" style="display:none;">
-                    <svg class="spinner" width="32" height="32" viewBox="0 0 24 24">
-                        <circle cx="12" cy="12" r="10" stroke="var(--accent-purple)" stroke-width="3" fill="none"
-                            stroke-dasharray="31.4 31.4" stroke-linecap="round" />
+            <!-- Navigation Buttons (outside wizardContainer, hidden when gate showing) -->
+            <div class="wizard-nav" id="wizardNav" style="display:none;">
+                <button class="btn-back" id="btnBack" onclick="prevStep()" style="visibility:hidden;">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                        stroke-linecap="round" stroke-linejoin="round">
+                        <polyline points="15 18 9 12 15 6" />
                     </svg>
-                    <p>Generating your AI receptionist script...</p>
-                </div>
+                    Back
+                </button>
+                <div class="nav-spacer"></div>
+                <button class="btn btn-primary btn-glow" id="btnNext" onclick="nextStep()">
+                    Next
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                        stroke-linecap="round" stroke-linejoin="round">
+                        <polyline points="9 18 15 12 9 6" />
+                    </svg>
+                </button>
             </div>
-
-        </div>
-
-        <!-- Navigation Buttons -->
-        <div class="wizard-nav" id="wizardNav">
-            <button class="btn-back" id="btnBack" onclick="prevStep()" style="visibility:hidden;">
-                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
-                    stroke-linecap="round" stroke-linejoin="round">
-                    <polyline points="15 18 9 12 15 6" />
-                </svg>
-                Back
-            </button>
-            <div class="nav-spacer"></div>
-            <button class="btn btn-primary btn-glow" id="btnNext" onclick="nextStep()">
-                Next
-                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
-                    stroke-linecap="round" stroke-linejoin="round">
-                    <polyline points="9 18 15 12 9 6" />
-                </svg>
-            </button>
-        </div>
 
         </div>
     </main>
