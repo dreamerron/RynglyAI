@@ -104,18 +104,30 @@ async function handleSubmit(e) {
     const countryCode = document.getElementById('countryCode').value;
     const phone = document.getElementById('userPhone').value.trim();
 
-    // Basic validation
-    const cleanPhone = phone.replace(/[\s\-\(\)\.]/g, '');
+    // Remove all non-numeric characters EXCEPT a leading '+'
+    let cleanPhone = phone.replace(/[^\d+]/g, '');
+    
+    // If the user included a country code in their typed number (starts with +), use it.
+    // Otherwise, prepend the countryCode from the dropdown.
+    let fullNumber;
+    if (cleanPhone.startsWith('+')) {
+        fullNumber = cleanPhone;
+    } else {
+        fullNumber = countryCode + cleanPhone;
+    }
+
     if (!name) {
         alert('Please enter your name.');
         return;
     }
-    if (cleanPhone.length < 7 || !/^\d+$/.test(cleanPhone)) {
-        alert('Please enter a valid phone number.');
+    
+    // Basic length validation (at least 7 digits)
+    const digitCount = fullNumber.replace(/\D/g, '').length;
+    if (digitCount < 7) {
+        alert('Please enter a valid phone number with at least 7 digits.');
         return;
     }
 
-    const fullNumber = countryCode + cleanPhone;
     setLoading(true);
 
     try {
