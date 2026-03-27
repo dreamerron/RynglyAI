@@ -2,14 +2,14 @@
    WeDeskAI — Premium Landing Page Styles
    =================================================== */
 :root {
-    --bg-deep: #050510;
-    --bg-card: rgba(255, 255, 255, 0.04);
-    --bg-card-hover: rgba(255, 255, 255, 0.07);
-    --glass-border: rgba(255, 255, 255, 0.08);
-    --glass-border-hover: rgba(255, 255, 255, 0.15);
-    --text-primary: #f0f0f5;
-    --text-secondary: #9ca3af;
-    --text-muted: #6b7280;
+    --bg-deep: #fdfbf7;
+    --bg-card: rgba(255, 255, 255, 0.6);
+    --bg-card-hover: rgba(255, 255, 255, 0.85);
+    --glass-border: rgba(0, 0, 0, 0.05);
+    --glass-border-hover: rgba(0, 0, 0, 0.1);
+    --text-primary: #1f2937;
+    --text-secondary: #4b5563;
+    --text-muted: #9ca3af;
     --accent-purple: #7c3aed;
     --accent-cyan: #06b6d4;
     --accent-pink: #a855f7;
