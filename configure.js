@@ -490,7 +490,7 @@ async function showFinalConfirmation() {
 
     } catch (err) {
         console.error('Save error:', err);
-        alert('Something went wrong saving your configuration. Please try again.');
+        alert('Save failed: ' + (err.message || 'Unknown error'));
     } finally {
         if (btnNext) {
             btnNext.disabled = false;
