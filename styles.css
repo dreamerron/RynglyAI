@@ -1732,6 +1732,16 @@ section {
 .modal-disclaimer a:hover {
     color: #2d4036 !important;
 }
+.modal .modal-icon {
+    background: rgba(155, 181, 169, 0.15);
+    width: 72px;
+    height: 72px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto 20px;
+}
 .modal .consent-checkmark {
     border: 2px solid #6b9487 !important;
     background: #ffffff !important;
