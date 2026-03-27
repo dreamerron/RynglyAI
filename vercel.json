@@ -2,9 +2,6 @@
     "buildCommand": "",
     "outputDirectory": ".",
     "framework": null,
-    "env": {
-        "VAPI_PRIVATE_KEY": "@vapi_private_key"
-    },
     "headers": [
         {
             "source": "/api/(.*)",
