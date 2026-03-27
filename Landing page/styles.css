@@ -50,11 +50,21 @@ body {
     position: relative
 }
 
-/* Animated BG Orbs */
+/* Animated BG Orbs & Theme */
+.theme-layer {
+    position: fixed;
+    inset: 0;
+    z-index: -1;
+    background: url('../WeDeskAI/Theme.webp') center/cover no-repeat;
+    mix-blend-mode: multiply;
+    pointer-events: none;
+    opacity: 0.8;
+}
+
 .bg-orbs {
     position: fixed;
     inset: 0;
-    z-index: 0;
+    z-index: -2;
     overflow: hidden;
     pointer-events: none
 }
