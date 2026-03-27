@@ -32,7 +32,7 @@ module.exports = async function handler(req, res) {
             },
             body: JSON.stringify({
                 assistantId: '3015c8af-a34f-4f28-8047-f68990092f87',
-                phoneNumberId: 'ad2048fc-2bad-4364-b93a-d87fc43a1e9f',
+                phoneNumberId: 'e82d9ec7-d963-40ea-9efb-93b4c8d27eab',
                 customer: {
                     number: phoneNumber,
                     name: name
