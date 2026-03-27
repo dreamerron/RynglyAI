@@ -1712,9 +1712,19 @@ section {
 .modal .btn-primary {
     background: #2d4036 !important;
     color: #fffdf6 !important;
+    padding: 14px 32px !important;
+    font-size: 1rem !important;
+    font-weight: 600 !important;
+    border-radius: 50px !important;
+    cursor: pointer !important;
+    pointer-events: auto !important;
+    position: relative !important;
+    z-index: 1 !important;
 }
 .modal .btn-primary:hover {
     background: #3a4d43 !important;
+    transform: translateY(-2px) !important;
+    box-shadow: 0 8px 20px rgba(45, 64, 54, 0.25) !important;
 }
 .modal-disclaimer, .modal-disclaimer a, .consent-text {
     color: #6b7a70 !important;
@@ -1723,7 +1733,22 @@ section {
     color: #2d4036 !important;
 }
 .modal .consent-checkmark {
-    border-color: #9bb5a9 !important;
+    border: 2px solid #6b9487 !important;
+    background: #ffffff !important;
+}
+.modal .consent-label input:checked ~ .consent-checkmark {
+    background: #2d4036 !important;
+    border-color: #2d4036 !important;
+}
+.modal .consent-label input:checked ~ .consent-checkmark::after {
+    color: #fffdf6 !important;
+}
+.modal .consent-label input:focus-visible ~ .consent-checkmark {
+    box-shadow: 0 0 0 3px rgba(155, 181, 169, 0.4) !important;
+}
+.modal .consent-text a {
+    color: #3a4d43 !important;
+    text-decoration: underline !important;
 }
 .modal-success h3, .modal-error h3 {
     color: #2d4036 !important;
