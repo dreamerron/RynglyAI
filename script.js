@@ -6,7 +6,10 @@
 // CONFIGURATION
 // =====================================================
 // Backend API endpoint — works for both local dev and Vercel production
-const API_URL = '/api/call-me';
+// Backend API endpoint — dynamically adjusts for local dev vs production
+const API_URL = (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1') && window.location.port !== '3000'
+    ? 'http://localhost:3000/api/call-me'
+    : '/api/call-me';
 
 // Vapi credentials (used as fallback for direct client-side calls)
 const VAPI_CONFIG = {
@@ -103,6 +106,12 @@ async function handleSubmit(e) {
     const name = document.getElementById('userName').value.trim();
     const countryCode = document.getElementById('countryCode').value;
     const phone = document.getElementById('userPhone').value.trim();
+    const consentCheck = document.getElementById('consentCheck');
+
+    if (!consentCheck || !consentCheck.checked) {
+        alert('Please agree to the consent terms to proceed.');
+        return;
+    }
 
     // Remove all non-numeric characters EXCEPT a leading '+'
     let cleanPhone = phone.replace(/[^\d+]/g, '');
@@ -142,6 +151,17 @@ async function handleSubmit(e) {
             })
         });
 
+        // Handle common local development errors
+        if (response.status === 404 || response.status === 405) {
+            let errorMsg = "Local Backend Not Detected. ";
+            if (window.location.port === '8765') {
+                errorMsg += "You are running on a static server (8765). Please use 'vercel dev' to run the backend API.";
+            } else if (window.location.port === '3000') {
+               errorMsg += "A non-WeDesk service (like Open WebUI) might be occupying Port 3000.";
+            }
+            throw new Error(errorMsg);
+        }
+
         const data = await response.json();
 
         if (!response.ok) {
@@ -151,7 +171,12 @@ async function handleSubmit(e) {
         showSuccess();
     } catch (err) {
         console.error('Call error:', err);
-        showError(err.message || "Something went wrong. Please check your connection and try again.");
+        // Special handling for syntax error (usually HTML response on 404)
+        if (err.name === 'SyntaxError' || err.message.includes('Unexpected token')) {
+            showError("Backend Error: Received HTML instead of JSON. Ensure your server is running 'vercel dev'.");
+        } else {
+            showError(err.message || "Something went wrong. Please check your connection and try again.");
+        }
     }
 }
 
