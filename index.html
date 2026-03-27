@@ -24,9 +24,18 @@
     <!-- Navbar -->
     <nav class="navbar" id="navbar">
         <div class="container nav-container">
-            <a href="#" class="logo">
-                <img src="logo.png" alt="WeDeskAI" class="logo-img">
-                <span class="logo-text">WeDesk<span class="logo-highlight">AI</span></span>
+            <a href="#" class="logo" style="display: flex; align-items: center; gap: 8px; text-decoration: none;">
+                <svg width="32" height="32" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <rect x="4" y="4" width="40" height="40" rx="8" fill="url(#paint0_linear_x)" />
+                    <path d="M16 16L32 32M32 16L16 32" stroke="#1a202c" stroke-width="4" stroke-linecap="round" stroke-linejoin="round" />
+                    <defs>
+                        <linearGradient id="paint0_linear_x" x1="4" y1="4" x2="44" y2="44" gradientUnits="userSpaceOnUse">
+                            <stop stop-color="#fef08a"/>
+                            <stop offset="1" stop-color="#eab308"/>
+                        </linearGradient>
+                    </defs>
+                </svg>
+                <span class="logo-text" style="color: var(--text-primary); font-size: 1.6rem; font-weight: 700;">WeDesk</span>
             </a>
             <ul class="nav-links" id="navLinks">
                 <li><a href="#features">Features</a></li>
@@ -448,7 +457,19 @@
     <footer class="footer">
         <div class="container footer-container">
             <div class="footer-brand">
-                <span class="logo-text">WeDesk<span class="logo-highlight">AI</span></span>
+                <div class="logo-text" style="display: flex; align-items: center; gap: 8px; margin-bottom: 8px;">
+                    <svg width="24" height="24" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <rect x="4" y="4" width="40" height="40" rx="8" fill="url(#paint0_linear_foot)" />
+                        <path d="M16 16L32 32M32 16L16 32" stroke="#1a202c" stroke-width="4" stroke-linecap="round" stroke-linejoin="round" />
+                        <defs>
+                            <linearGradient id="paint0_linear_foot" x1="4" y1="4" x2="44" y2="44" gradientUnits="userSpaceOnUse">
+                                <stop stop-color="#fef08a"/>
+                                <stop offset="1" stop-color="#eab308"/>
+                            </linearGradient>
+                        </defs>
+                    </svg>
+                    <span style="color: var(--text-primary); font-size: 1.4rem; font-weight: 700;">WeDesk</span>
+                </div>
                 <p>Your AI receptionist that never sleeps.</p>
             </div>
             <div class="footer-contact">
