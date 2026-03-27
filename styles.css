@@ -1634,3 +1634,9 @@ section {
 .footer .logo-text, .footer-brand span {
     font-family: var(--font-heading) !important;
 }
+.robot-avatar {
+    filter: drop-shadow(0 20px 40px rgba(0,0,0,0.1));
+    z-index: 2;
+    position: relative;
+    max-width: 100%;
+}
