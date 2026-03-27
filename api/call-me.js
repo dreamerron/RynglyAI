@@ -1,5 +1,9 @@
 module.exports = async function handler(req, res) {
-    // Only allow POST
+    // Handle CORS preflight
+    if (req.method === 'OPTIONS') {
+        return res.status(200).end();
+    }
+
     if (req.method !== 'POST') {
         return res.status(405).json({ error: 'Method not allowed' });
     }
@@ -10,11 +14,20 @@ module.exports = async function handler(req, res) {
         return res.status(400).json({ error: 'Name and phone number are required' });
     }
 
+    const vapiKey = process.env.VAPI_PRIVATE_KEY;
+    if (!vapiKey) {
+        console.error('VAPI_PRIVATE_KEY is not set in environment variables');
+        return res.status(500).json({
+            error: 'Server misconfiguration: VAPI_PRIVATE_KEY not set',
+            details: 'Add VAPI_PRIVATE_KEY to your Vercel project environment variables'
+        });
+    }
+
     try {
-        const response = await fetch('https://api.vapi.ai/call', {
+        const vapiRes = await fetch('https://api.vapi.ai/call', {
             method: 'POST',
             headers: {
-                'Authorization': `Bearer ${process.env.VAPI_PRIVATE_KEY}`,
+                'Authorization': `Bearer ${vapiKey}`,
                 'Content-Type': 'application/json'
             },
             body: JSON.stringify({
@@ -25,20 +38,23 @@ module.exports = async function handler(req, res) {
                     name: name
                 },
                 assistantOverrides: {
-                    variableValues: {
-                        name: name
-                    }
+                    variableValues: { name }
                 }
             })
         });
 
-        const data = await response.json();
+        const data = await vapiRes.json();
 
-        if (!response.ok) {
-            throw new Error(data.message || 'Failed to create call');
+        if (!vapiRes.ok) {
+            console.error('Vapi error:', vapiRes.status, JSON.stringify(data));
+            return res.status(502).json({
+                error: 'Vapi API error',
+                details: data.message || data.error || JSON.stringify(data),
+                vapiStatus: vapiRes.status
+            });
         }
 
-        res.status(200).json({
+        return res.status(200).json({
             success: true,
             callId: data.id,
             message: `Alex is calling ${name} at ${phoneNumber} now!`
@@ -46,7 +62,7 @@ module.exports = async function handler(req, res) {
 
     } catch (error) {
         console.error('Error creating call:', error);
-        res.status(500).json({
+        return res.status(500).json({
             error: 'Failed to initiate call',
             details: error.message
         });

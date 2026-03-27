@@ -109,7 +109,16 @@ async function handleSubmit(e) {
     const consentCheck = document.getElementById('consentCheck');
 
     if (!consentCheck || !consentCheck.checked) {
-        alert('Please agree to the consent terms to proceed.');
+        const checkmark = document.querySelector('.consent-checkmark');
+        const consentGroup = document.querySelector('.consent-group');
+        if (checkmark) {
+            checkmark.style.transition = 'border-color 0.2s, transform 0.1s';
+            checkmark.style.borderColor = '#c0392b';
+            checkmark.style.transform = 'scale(1.15)';
+            setTimeout(() => { checkmark.style.transform = 'scale(1)'; }, 150);
+            setTimeout(() => { checkmark.style.borderColor = '#6b9487'; }, 2000);
+        }
+        if (consentGroup) consentGroup.scrollIntoView({ behavior: 'smooth', block: 'center' });
         return;
     }
 
@@ -162,21 +171,22 @@ async function handleSubmit(e) {
             throw new Error(errorMsg);
         }
 
-        const data = await response.json();
+        let data;
+        try {
+            data = await response.json();
+        } catch {
+            throw new Error("Server returned an unexpected response. Make sure 'vercel dev' is running locally.");
+        }
 
         if (!response.ok) {
-            throw new Error(data.error || data.details || 'Call initiation failed');
+            const msg = data.details || data.error || data.message || 'Call initiation failed';
+            throw new Error(`[${response.status}] ${msg}`);
         }
 
         showSuccess();
     } catch (err) {
         console.error('Call error:', err);
-        // Special handling for syntax error (usually HTML response on 404)
-        if (err.name === 'SyntaxError' || err.message.includes('Unexpected token')) {
-            showError("Backend Error: Received HTML instead of JSON. Ensure your server is running 'vercel dev'.");
-        } else {
-            showError(err.message || "Something went wrong. Please check your connection and try again.");
-        }
+        showError(err.message || "Something went wrong. Please check your connection and try again.");
     }
 }
 
