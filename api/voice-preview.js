@@ -1,5 +1,5 @@
 // ===================================================
-// RinglyAI — ElevenLabs Voice Preview
+// WeDeskAI — ElevenLabs Voice Preview
 // ===================================================
 // Env vars needed: ELEVENLABS_API_KEY
 // GET /api/voice-preview?voice=alex

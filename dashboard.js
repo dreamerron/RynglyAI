@@ -1,5 +1,5 @@
 // ===================================================
-// RinglyAI — Customer Dashboard Scripts
+// WeDeskAI — Customer Dashboard Scripts
 // ===================================================
 
 let supabaseClient = null;

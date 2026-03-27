@@ -1,5 +1,5 @@
 // ===================================================
-// RinglyAI — Stripe Customer Portal Session
+// WeDeskAI — Stripe Customer Portal Session
 // ===================================================
 
 module.exports = async function handler(req, res) {

@@ -1,5 +1,5 @@
 // ===================================================
-// RinglyAI — Admin Dashboard JS
+// WeDeskAI — Admin Dashboard JS
 // ===================================================
 
 let ALL_CONFIGS = [];

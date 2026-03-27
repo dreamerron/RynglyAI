@@ -1,5 +1,5 @@
 // ===================================================
-// RinglyAI — Save Config + Create Stripe Checkout
+// WeDeskAI — Save Config + Create Stripe Checkout
 // ===================================================
 // Env vars needed:
 //   SUPABASE_URL, SUPABASE_ANON_KEY

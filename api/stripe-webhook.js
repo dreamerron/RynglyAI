@@ -1,5 +1,5 @@
 // ===================================================
-// RinglyAI — Stripe Webhook Handler
+// WeDeskAI — Stripe Webhook Handler
 // ===================================================
 // Env vars: STRIPE_SECRET_KEY, STRIPE_WEBHOOK_SECRET,
 //           SUPABASE_URL, SUPABASE_ANON_KEY
@@ -255,7 +255,7 @@ async function provisionReceptionist(config, supabaseUrl, supabaseKey) {
                     // 2. Buy the number
                     const purchasedNumber = await twilioClient.incomingPhoneNumbers.create({
                         phoneNumber: numberToBuy,
-                        friendlyName: `RinglyAI - ${config.business_name}`
+                        friendlyName: `WeDeskAI - ${config.business_name}`
                     });
 
                     twilioNumberStr = purchasedNumber.phoneNumber;
@@ -274,7 +274,7 @@ async function provisionReceptionist(config, supabaseUrl, supabaseKey) {
                             twilioAccountSid: twilioAccountSid,
                             twilioAuthToken: twilioAuthToken,
                             assistantId: assistant.id,
-                            name: `RinglyAI - ${config.business_name}`
+                            name: `WeDeskAI - ${config.business_name}`
                         })
                     });
 

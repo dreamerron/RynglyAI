@@ -1,5 +1,5 @@
 // ===================================================
-// RinglyAI — Vapi End-of-Call Webhook -> Call Logs
+// WeDeskAI — Vapi End-of-Call Webhook -> Call Logs
 // ===================================================
 
 const twilio = require('twilio');
@@ -17,7 +17,7 @@ module.exports = async function handler(req, res) {
             const call = payload.message;
             const configId = call.assistantId; // Assuming we mapped assistant tags or use assistant ID
 
-            // Wait, we need the Ringly config UUID. 
+            // Wait, we need the WeDesk config UUID. 
             // In provision.js Phase 3, we should store config_id in Vapi assistant metadata if possible, 
             // but for now, we'll look up by vapi_assistant_id or use the raw data if they match.
             const vapiAssistantId = call.assistant?.id || call.assistantId;
@@ -83,7 +83,7 @@ module.exports = async function handler(req, res) {
             if (isUrgent && businessPhone && twilioSid && twilioToken && twilioPhone) {
                 const client = twilio(twilioSid, twilioToken);
                 await client.messages.create({
-                    body: `🚨 RinglyAI Alert: You received an urgent call from ${customerPhone}. Summary: ${summary.substring(0, 100)}... Check dashboard for details.`,
+                    body: `🚨 WeDeskAI Alert: You received an urgent call from ${customerPhone}. Summary: ${summary.substring(0, 100)}... Check dashboard for details.`,
                     from: twilioPhone,
                     to: businessPhone
                 });

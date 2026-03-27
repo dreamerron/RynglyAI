@@ -1,5 +1,5 @@
 /* ===================================================
-   RinglyAI — Configurator Wizard Logic
+   WeDeskAI — Configurator Wizard Logic
    =================================================== */
 
 // =====================================================
@@ -677,7 +677,7 @@ function showCheckoutResult(status) {
                     <p style="color: var(--text-secondary); font-size: .95rem; margin-bottom: 16px;">Create an account or sign in to manage your AI receptionist, view call logs, and track appointments.</p>
                     <a href="dashboard.html" class="btn btn-primary btn-glow" style="display: inline-flex; width: 100%; justify-content: center;">Sign In / Create Account →</a>
                 </div>
-                <a href="index.html" style="display: inline-block; margin-top: 20px; color: var(--text-secondary); font-size: .9rem; text-decoration: underline;">← Back to RinglyAI Home</a>
+                <a href="index.html" style="display: inline-block; margin-top: 20px; color: var(--text-secondary); font-size: .9rem; text-decoration: underline;">← Back to WeDeskAI Home</a>
             </div>`;
     } else {
         container.innerHTML = `

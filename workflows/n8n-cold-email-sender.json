@@ -1,5 +1,5 @@
 {
-  "name": "RinglyAI — AI Cold Email Sender",
+  "name": "WeDeskAI — AI Cold Email Sender",
   "nodes": [
     {
       "parameters": {
@@ -50,7 +50,7 @@
           "values": [
             {
               "role": "system",
-              "content": "You are an expert cold email copywriter for a B2B AI receptionist SaaS called RinglyAI. Your emails must be:\n- Exactly 3-4 sentences long\n- Hyper-personalized to the specific business\n- Start with a genuine compliment about something specific to their business\n- Mention the pain point of missed calls costing them revenue\n- End with a soft CTA offering a free 14-day AI receptionist trial\n- Sound human, warm, and conversational — NOT salesy\n- Use the business owner's first name if available\n\nReturn ONLY a JSON object with two keys:\n- \"subject\": a short, curiosity-driven subject line (under 50 chars)\n- \"body\": the email body (3-4 sentences, plain text, no HTML)"
+              "content": "You are an expert cold email copywriter for a B2B AI receptionist SaaS called WeDeskAI. Your emails must be:\n- Exactly 3-4 sentences long\n- Hyper-personalized to the specific business\n- Start with a genuine compliment about something specific to their business\n- Mention the pain point of missed calls costing them revenue\n- End with a soft CTA offering a free 14-day AI receptionist trial\n- Sound human, warm, and conversational — NOT salesy\n- Use the business owner's first name if available\n\nReturn ONLY a JSON object with two keys:\n- \"subject\": a short, curiosity-driven subject line (under 50 chars)\n- \"body\": the email body (3-4 sentences, plain text, no HTML)"
             },
             {
               "role": "user",
@@ -88,9 +88,9 @@
         "sendTo": "={{ $json['Email'] }}",
         "subject": "={{ $json.email_subject }}",
         "emailType": "text",
-        "message": "={{ $json.email_body }}\n\n---\nBest,\nRon\nRinglyAI — Your 24/7 AI Receptionist\nhttps://ringly.ai\n\nP.S. Reply STOP to opt out.",
+        "message": "={{ $json.email_body }}\n\n---\nBest,\nRon\nWeDeskAI — Your 24/7 AI Receptionist\nhttps://WeDesk.ai\n\nP.S. Reply STOP to opt out.",
         "options": {
-          "replyTo": "ron@ringly.ai"
+          "replyTo": "ron@WeDesk.ai"
         }
       },
       "id": "send-gmail",
@@ -156,6 +156,6 @@
   },
   "settings": { "executionOrder": "v1" },
   "staticData": null,
-  "tags": [{ "name": "RinglyAI Marketing" }],
+  "tags": [{ "name": "WeDeskAI Marketing" }],
   "triggerCount": 1
 }

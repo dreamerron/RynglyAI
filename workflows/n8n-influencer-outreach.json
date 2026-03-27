@@ -1,5 +1,5 @@
 {
-  "name": "RinglyAI — Influencer Affiliate Outreach",
+  "name": "WeDeskAI — Influencer Affiliate Outreach",
   "nodes": [
     {
       "parameters": {},
@@ -35,7 +35,7 @@
           "values": [
             {
               "role": "system",
-              "content": "You are a partnership outreach specialist for RinglyAI, an AI receptionist SaaS for small businesses. Write a warm, professional partnership proposal email.\n\nKey details to include:\n- RinglyAI is an AI phone receptionist that answers calls 24/7 for small businesses\n- We offer a 30% RECURRING monthly commission for every customer they refer\n- Average customer pays $99/mo, so that's ~$30/mo per referral, forever\n- We provide a custom referral link, promo codes, and marketing assets\n- Their audience of small business owners is the perfect fit\n- We handle all customer support, billing, and onboarding\n\nKeep the email under 150 words. Be genuine and enthusiastic. End with a CTA to book a 15-min alignment call.\n\nReturn ONLY valid JSON with keys: \"subject\" and \"body\"."
+              "content": "You are a partnership outreach specialist for WeDeskAI, an AI receptionist SaaS for small businesses. Write a warm, professional partnership proposal email.\n\nKey details to include:\n- WeDeskAI is an AI phone receptionist that answers calls 24/7 for small businesses\n- We offer a 30% RECURRING monthly commission for every customer they refer\n- Average customer pays $99/mo, so that's ~$30/mo per referral, forever\n- We provide a custom referral link, promo codes, and marketing assets\n- Their audience of small business owners is the perfect fit\n- We handle all customer support, billing, and onboarding\n\nKeep the email under 150 words. Be genuine and enthusiastic. End with a CTA to book a 15-min alignment call.\n\nReturn ONLY valid JSON with keys: \"subject\" and \"body\"."
             },
             {
               "role": "user",
@@ -59,7 +59,7 @@
     },
     {
       "parameters": {
-        "jsCode": "let raw = $input.first().json.text || $input.first().json.message?.content || '';\nraw = raw.replace(/```json\\n?/g, '').replace(/```\\n?/g, '').trim();\n\ntry {\n  const parsed = JSON.parse(raw);\n  return [{\n    json: {\n      ...$input.first().json,\n      email_subject: parsed.subject || 'Partnership Opportunity — RinglyAI',\n      email_body: parsed.body || raw,\n    }\n  }];\n} catch (e) {\n  return [{\n    json: {\n      ...$input.first().json,\n      email_subject: 'Partnership Opportunity — RinglyAI x ' + ($input.first().json['Name'] || 'You'),\n      email_body: raw,\n    }\n  }];\n}"
+        "jsCode": "let raw = $input.first().json.text || $input.first().json.message?.content || '';\nraw = raw.replace(/```json\\n?/g, '').replace(/```\\n?/g, '').trim();\n\ntry {\n  const parsed = JSON.parse(raw);\n  return [{\n    json: {\n      ...$input.first().json,\n      email_subject: parsed.subject || 'Partnership Opportunity — WeDeskAI',\n      email_body: parsed.body || raw,\n    }\n  }];\n} catch (e) {\n  return [{\n    json: {\n      ...$input.first().json,\n      email_subject: 'Partnership Opportunity — WeDeskAI x ' + ($input.first().json['Name'] || 'You'),\n      email_body: raw,\n    }\n  }];\n}"
       },
       "id": "parse-proposal",
       "name": "Parse AI Response",
@@ -72,9 +72,9 @@
         "sendTo": "={{ $json['Email'] }}",
         "subject": "={{ $json.email_subject }}",
         "emailType": "text",
-        "message": "={{ $json.email_body }}\n\n📅 Book a 15-min call: https://calendly.com/YOUR_CALENDLY_LINK\n\n---\nBest,\nRon\nFounder, RinglyAI\nhttps://ringly.ai\n\nP.S. Reply STOP to opt out.",
+        "message": "={{ $json.email_body }}\n\n📅 Book a 15-min call: https://calendly.com/YOUR_CALENDLY_LINK\n\n---\nBest,\nRon\nFounder, WeDeskAI\nhttps://WeDesk.ai\n\nP.S. Reply STOP to opt out.",
         "options": {
-          "replyTo": "ron@ringly.ai"
+          "replyTo": "ron@WeDesk.ai"
         }
       },
       "id": "send-gmail",
@@ -131,6 +131,6 @@
   },
   "settings": { "executionOrder": "v1" },
   "staticData": null,
-  "tags": [{ "name": "RinglyAI Marketing" }],
+  "tags": [{ "name": "WeDeskAI Marketing" }],
   "triggerCount": 0
 }

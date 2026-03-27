@@ -1,5 +1,5 @@
 {
-  "name": "RinglyAI — Google Maps Lead Scraper",
+  "name": "WeDeskAI — Google Maps Lead Scraper",
   "nodes": [
     {
       "parameters": {
@@ -199,6 +199,6 @@
   },
   "settings": { "executionOrder": "v1" },
   "staticData": null,
-  "tags": [{ "name": "RinglyAI Marketing" }],
+  "tags": [{ "name": "WeDeskAI Marketing" }],
   "triggerCount": 1
 }

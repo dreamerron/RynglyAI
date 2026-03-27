@@ -1,5 +1,5 @@
 // ===================================================
-// RinglyAI — Environment exposure for public variables
+// WeDeskAI — Environment exposure for public variables
 // ===================================================
 
 module.exports = async function handler(req, res) {

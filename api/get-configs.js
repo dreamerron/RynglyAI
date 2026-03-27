@@ -1,5 +1,5 @@
 // ===================================================
-// RinglyAI — Get Configs Endpoint (Admin)
+// WeDeskAI — Get Configs Endpoint (Admin)
 // ===================================================
 
 module.exports = async function handler(req, res) {

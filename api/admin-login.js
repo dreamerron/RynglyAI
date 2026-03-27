@@ -1,5 +1,5 @@
 // ===================================================
-// RinglyAI — Admin Login Endpoint
+// WeDeskAI — Admin Login Endpoint
 // ===================================================
 
 const crypto = require('crypto');

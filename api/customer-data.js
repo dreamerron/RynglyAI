@@ -1,5 +1,5 @@
 // ===================================================
-// RinglyAI — Fetch Dashboard Data (Auth'd)
+// WeDeskAI — Fetch Dashboard Data (Auth'd)
 // ===================================================
 
 module.exports = async function handler(req, res) {
