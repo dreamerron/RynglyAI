@@ -2,26 +2,26 @@
    WeDeskAI — Premium Landing Page Styles
    =================================================== */
 :root {
-    --bg-deep: #fdfbf7;
-    --bg-card: rgba(255, 255, 255, 0.6);
-    --bg-card-hover: rgba(255, 255, 255, 0.85);
-    --glass-border: rgba(0, 0, 0, 0.05);
-    --glass-border-hover: rgba(0, 0, 0, 0.1);
-    --text-primary: #1f2937;
-    --text-secondary: #4b5563;
-    --text-muted: #9ca3af;
-    --accent-purple: #7c3aed;
-    --accent-cyan: #06b6d4;
-    --accent-pink: #a855f7;
-    --gradient-primary: linear-gradient(135deg, #7c3aed, #06b6d4);
-    --gradient-glow: linear-gradient(135deg, #7c3aed, #a855f7, #06b6d4);
-    --success: #22c55e;
-    --error: #ef4444;
+    --bg-deep: #fffcfd;
+    --bg-card: rgba(255, 255, 255, 0.7);
+    --bg-card-hover: rgba(255, 255, 255, 0.9);
+    --glass-border: rgba(255, 182, 193, 0.4);
+    --glass-border-hover: rgba(255, 182, 193, 0.6);
+    --text-primary: #2d3748;
+    --text-secondary: #4a5568;
+    --text-muted: #718096;
+    --accent-purple: #d6bcfa;
+    --accent-cyan: #9ae6b4;
+    --accent-pink: #fbb6ce;
+    --gradient-primary: linear-gradient(135deg, #fbb6ce, #d6bcfa);
+    --gradient-glow: linear-gradient(135deg, #fbb6ce, #d6bcfa, #9ae6b4);
+    --success: #68d391;
+    --error: #fc8181;
     --radius-sm: 8px;
     --radius-md: 16px;
     --radius-lg: 24px;
     --radius-xl: 32px;
-    --shadow-glow: 0 0 40px rgba(124, 58, 237, .3), 0 0 80px rgba(6, 182, 212, .15);
+    --shadow-glow: 0 0 40px rgba(251, 182, 206, .4), 0 0 80px rgba(214, 188, 250, .25);
     --font-heading: 'Outfit', sans-serif;
     --font-body: 'Inter', sans-serif;
     --container-max: 1200px;
@@ -50,17 +50,7 @@ body {
     position: relative
 }
 
-/* Animated BG Orbs & Theme */
-.theme-layer {
-    position: fixed;
-    inset: 0;
-    z-index: -1;
-    background: url('../WeDeskAI/Theme.webp') center/cover no-repeat;
-    mix-blend-mode: multiply;
-    pointer-events: none;
-    opacity: 0.8;
-}
-
+/* Animated BG Orbs */
 .bg-orbs {
     position: fixed;
     inset: 0;
@@ -73,14 +63,14 @@ body {
     position: absolute;
     border-radius: 50%;
     filter: blur(100px);
-    opacity: .4;
+    opacity: .6;
     animation: float 20s ease-in-out infinite
 }
 
 .orb-1 {
     width: 600px;
     height: 600px;
-    background: radial-gradient(circle, #7c3aed 0%, transparent 70%);
+    background: radial-gradient(circle, #fbb6ce 0%, transparent 70%);
     top: -10%;
     left: -10%;
     animation-duration: 25s
@@ -89,7 +79,7 @@ body {
 .orb-2 {
     width: 500px;
     height: 500px;
-    background: radial-gradient(circle, #06b6d4 0%, transparent 70%);
+    background: radial-gradient(circle, #d6bcfa 0%, transparent 70%);
     top: 50%;
     right: -15%;
     animation-duration: 30s;
@@ -99,7 +89,7 @@ body {
 .orb-3 {
     width: 400px;
     height: 400px;
-    background: radial-gradient(circle, #a855f7 0%, transparent 70%);
+    background: radial-gradient(circle, #9ae6b4 0%, transparent 70%);
     bottom: 10%;
     left: 30%;
     animation-duration: 22s;
@@ -109,12 +99,12 @@ body {
 .orb-4 {
     width: 300px;
     height: 300px;
-    background: radial-gradient(circle, #0ea5e9 0%, transparent 70%);
+    background: radial-gradient(circle, #fbd38d 0%, transparent 70%);
     top: 30%;
     left: 50%;
     animation-duration: 28s;
     animation-delay: -15s;
-    opacity: .25
+    opacity: .4
 }
 
 @keyframes float {
