@@ -52,7 +52,7 @@
 
             <div class="config-header fade-in visible">
                 <h1>Build Your <span class="gradient-text">AI Receptionist</span></h1>
-                <p>Customize your receptionist in 5 easy steps. Takes under 2 minutes.</p>
+                <p>Customize your receptionist in 3 easy steps. Takes under 2 minutes.</p>
             </div>
 
             <!-- Progress Bar -->
@@ -66,27 +66,13 @@
                 </div>
                 <div class="progress-step" data-step="2">
                     <div class="step-circle">2</div>
-                    <span class="step-label">Voice</span>
+                    <span class="step-label">Business Info</span>
                 </div>
                 <div class="progress-line" id="line2">
                     <div class="line-fill"></div>
                 </div>
                 <div class="progress-step" data-step="3">
                     <div class="step-circle">3</div>
-                    <span class="step-label">Style</span>
-                </div>
-                <div class="progress-line" id="line3">
-                    <div class="line-fill"></div>
-                </div>
-                <div class="progress-step" data-step="4">
-                    <div class="step-circle">4</div>
-                    <span class="step-label">Business Info</span>
-                </div>
-                <div class="progress-line" id="line4">
-                    <div class="line-fill"></div>
-                </div>
-                <div class="progress-step" data-step="5">
-                    <div class="step-circle">5</div>
                     <span class="step-label">Tools</span>
                 </div>
             </div>
@@ -193,47 +179,12 @@
                     </div>
                 </div>
 
-                <!-- ════════ STEP 2: Voice Selection ════════ -->
+                <!-- ════════ STEP 2: Business Info ════════ -->
                 <div class="wizard-step" id="step2">
-                    <h2 class="step-title">Pick a Voice</h2>
-                    <p class="step-subtitle">Choose how your AI receptionist sounds. Tap play to preview.</p>
-
-                    <div class="selection-summary" id="step2Summary"></div>
-
-                    <div class="voice-grid" id="voiceGrid">
-                        <!-- Voices injected by JS -->
-                    </div>
-                </div>
-
-                <!-- ════════ STEP 3: Style & Tone ════════ -->
-                <div class="wizard-step" id="step3">
-                    <h2 class="step-title">Set the Tone</h2>
-                    <p class="step-subtitle">Choose a personality that matches your brand.</p>
-
-                    <div class="selection-summary" id="step3Summary"></div>
-
-                    <div class="style-grid" id="styleGrid">
-                        <!-- Styles injected by JS -->
-                    </div>
-
-                    <div class="custom-style-area" id="customStyleArea">
-                        <label class="form-group">
-                            <span
-                                style="display:block;font-size:.85rem;font-weight:500;color:var(--text-secondary);margin-bottom:8px">
-                                Custom Personality Description
-                            </span>
-                            <textarea id="customStyleText"
-                                placeholder="Describe your ideal receptionist personality... e.g. 'Warm and professional with a slight sense of humor, speaks like a seasoned concierge at a luxury hotel.'"></textarea>
-                        </label>
-                    </div>
-                </div>
-
-                <!-- ════════ STEP 4: Business Info ════════ -->
-                <div class="wizard-step" id="step4">
                     <h2 class="step-title">Tell Us About Your Business</h2>
                     <p class="step-subtitle">We'll use this to generate your receptionist's script automatically.</p>
 
-                    <div class="selection-summary" id="step4Summary"></div>
+                    <div class="selection-summary" id="step2Summary"></div>
 
                     <form class="biz-form" id="bizForm" onsubmit="return false;">
                         <div class="form-row">
@@ -308,13 +259,13 @@
                     </form>
                 </div>
 
-                <!-- ════════ STEP 5: Integrations ════════ -->
-                <div class="wizard-step" id="step5">
+                <!-- ════════ STEP 3: Integrations ════════ -->
+                <div class="wizard-step" id="step3">
                     <h2 class="step-title">Connect Your Tools</h2>
                     <p class="step-subtitle">Allow your AI receptionist to book appointments and sync data directly to
                         your CRM.</p>
 
-                    <div class="selection-summary" id="step5Summary"></div>
+                    <div class="selection-summary" id="step3Summary"></div>
 
                     <div class="biz-form">
                         <div class="form-group">

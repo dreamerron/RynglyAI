@@ -3,38 +3,8 @@
    =================================================== */
 
 // =====================================================
-// DATA — Voices, Styles, Plan config
+// DATA — Plan config
 // =====================================================
-const VOICES = [
-    // Basic tier (starter)
-    { id: 'alex', name: 'Alex', gender: 'male', desc: 'Warm & professional', emoji: '👨‍💼', tier: 'starter' },
-    { id: 'sarah', name: 'Sarah', gender: 'female', desc: 'Friendly & confident', emoji: '👩‍💼', tier: 'starter' },
-    { id: 'james', name: 'James', gender: 'male', desc: 'Calm & authoritative', emoji: '🧑‍💼', tier: 'starter' },
-    { id: 'emma', name: 'Emma', gender: 'female', desc: 'Energetic & approachable', emoji: '👩', tier: 'starter' },
-    // Growth tier
-    { id: 'daniel', name: 'Daniel', gender: 'male', desc: 'Deep & reassuring', emoji: '👨', tier: 'growth' },
-    { id: 'maya', name: 'Maya', gender: 'female', desc: 'Smooth & articulate', emoji: '👩‍🦰', tier: 'growth' },
-    { id: 'chris', name: 'Chris', gender: 'male', desc: 'Upbeat & conversational', emoji: '🧑', tier: 'growth' },
-    { id: 'sofia', name: 'Sofia', gender: 'female', desc: 'Bilingual EN/ES', emoji: '💃', tier: 'growth' },
-    // Enterprise tier
-    { id: 'marcus', name: 'Marcus', gender: 'male', desc: 'Executive gravitas', emoji: '🤵', tier: 'enterprise' },
-    { id: 'lily', name: 'Lily', gender: 'female', desc: 'Soothing & empathetic', emoji: '🧑‍⚕️', tier: 'enterprise' },
-    { id: 'raj', name: 'Raj', gender: 'male', desc: 'Multilingual specialist', emoji: '🧑‍💻', tier: 'enterprise' },
-    { id: 'aiko', name: 'Aiko', gender: 'female', desc: 'Multilingual EN/JP/KR', emoji: '👩‍🎤', tier: 'enterprise' }
-];
-
-const STYLES = [
-    // Basic tier
-    { id: 'professional', name: 'Professional', emoji: '💼', desc: 'Polished and business-like', tier: 'starter' },
-    { id: 'friendly', name: 'Friendly', emoji: '😊', desc: 'Warm, welcoming, and casual', tier: 'starter' },
-    { id: 'concise', name: 'Concise', emoji: '⚡', desc: 'Efficient and straight to the point', tier: 'starter' },
-    // Growth tier
-    { id: 'energetic', name: 'Energetic', emoji: '🚀', desc: 'High-energy and enthusiastic', tier: 'growth' },
-    { id: 'empathetic', name: 'Empathetic', emoji: '💛', desc: 'Caring, patient, and understanding', tier: 'growth' },
-    { id: 'luxury', name: 'Luxury', emoji: '✨', desc: 'Premium concierge-level service', tier: 'growth' },
-    // Enterprise tier
-    { id: 'custom', name: 'Custom', emoji: '🎨', desc: 'Write your own personality', tier: 'enterprise' }
-];
 
 const PLAN_TIERS = {
     starter: { level: 0, label: 'Essentials', price: '$69/mo', type: 'voice' },
@@ -45,20 +15,11 @@ const PLAN_TIERS = {
     bundle: { level: 1, label: 'Voice + Text', price: '$129/mo', type: 'bundle' }
 };
 
-const TIER_ORDER = ['starter', 'growth', 'enterprise'];
-
-// Helper: does this plan skip voice/style steps?
-function isSMSOnlyPlan(plan) {
-    return PLAN_TIERS[plan]?.type === 'sms';
-}
-
 // =====================================================
 // STATE
 // =====================================================
 let currentStep = 1;
 let selectedPlan = null;
-let selectedVoice = null;
-let selectedStyle = null;
 let generatedScript = null;
 let isEditMode = false;
 
@@ -108,10 +69,6 @@ document.addEventListener('DOMContentLoaded', () => {
 function selectPlan(planId) {
     selectedPlan = planId;
 
-    // Reset voice/style if plan changes
-    selectedVoice = null;
-    selectedStyle = null;
-
     // UI — highlight selected card across all grids
     document.querySelectorAll('.plan-select-card').forEach(card => {
         card.classList.toggle('selected', card.dataset.plan === planId);
@@ -136,174 +93,14 @@ function switchPlanType(type) {
 }
 
 // =====================================================
-// VOICE RENDERING
-// =====================================================
-function renderVoices() {
-    const grid = document.getElementById('voiceGrid');
-    const planLevel = PLAN_TIERS[selectedPlan].level;
-
-    grid.innerHTML = VOICES.map(voice => {
-        const voiceTierLevel = TIER_ORDER.indexOf(voice.tier);
-        const locked = voiceTierLevel > planLevel;
-        const isSelected = selectedVoice === voice.id;
-
-        return `
-            <div class="voice-card ${isSelected ? 'selected' : ''} ${locked ? 'locked' : ''}"
-                 data-voice="${voice.id}"
-                 onclick="${locked ? '' : `selectVoice('${voice.id}')`}">
-                ${locked ? `<div class="lock-badge">🔒 ${PLAN_TIERS[TIER_ORDER[voiceTierLevel]].label}</div>` : ''}
-                <div class="voice-avatar">${voice.emoji}</div>
-                <div class="voice-info">
-                    <h4>${voice.name}</h4>
-                    <p>${voice.desc} · ${voice.gender === 'male' ? '♂ Male' : '♀ Female'}</p>
-                </div>
-                <button class="voice-play-btn" onclick="event.stopPropagation(); playVoicePreview('${voice.id}')" ${locked ? 'disabled' : ''}>
-                    <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor">
-                        <polygon points="5 3 19 12 5 21 5 3"/>
-                    </svg>
-                </button>
-            </div>`;
-    }).join('');
-}
-
-function selectVoice(voiceId) {
-    selectedVoice = voiceId;
-    renderVoices();
-}
-
-// Track currently playing audio so we can stop it
-let _previewAudio = null;
-
-async function playVoicePreview(voiceId) {
-    const voice = VOICES.find(v => v.id === voiceId);
-    if (!voice) return;
-
-    // Stop any current playback
-    if (_previewAudio) {
-        _previewAudio.pause();
-        _previewAudio = null;
-    }
-
-    const btn = document.querySelector(`.voice-card[data-voice="${voiceId}"] .voice-play-btn`);
-
-    // Set loading state on button
-    const setBtn = (state) => {
-        if (!btn) return;
-        if (state === 'loading') {
-            btn.innerHTML = `<svg class="spinner" width="14" height="14" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10" stroke="currentColor" stroke-width="3" fill="none" stroke-dasharray="31.4 31.4" stroke-linecap="round"/></svg>`;
-            btn.style.background = 'var(--gradient-primary)';
-            btn.style.color = 'white';
-        } else if (state === 'playing') {
-            btn.innerHTML = `<svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><rect x="6" y="4" width="4" height="16"/><rect x="14" y="4" width="4" height="16"/></svg>`;
-        } else {
-            btn.innerHTML = `<svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"/></svg>`;
-            btn.style.background = '';
-            btn.style.color = '';
-        }
-    };
-
-    try {
-        setBtn('loading');
-
-        const response = await fetch(`/api/voice-preview?voice=${voiceId}`);
-
-        if (!response.ok) {
-            throw new Error('API unavailable');
-        }
-
-        const blob = await response.blob();
-        const url = URL.createObjectURL(blob);
-        _previewAudio = new Audio(url);
-
-        setBtn('playing');
-
-        _previewAudio.onended = () => {
-            setBtn('idle');
-            URL.revokeObjectURL(url);
-            _previewAudio = null;
-        };
-
-        _previewAudio.onerror = () => {
-            setBtn('idle');
-            _previewAudio = null;
-        };
-
-        await _previewAudio.play();
-
-    } catch (err) {
-        // Fallback to browser SpeechSynthesis
-        console.warn('ElevenLabs preview unavailable, using browser TTS:', err.message);
-        setBtn('idle');
-
-        if ('speechSynthesis' in window) {
-            window.speechSynthesis.cancel();
-            const utterance = new SpeechSynthesisUtterance(
-                `Hi there! I'm ${voice.name}, your AI receptionist. How can I help you today?`
-            );
-            utterance.pitch = voice.gender === 'female' ? 1.2 : 0.9;
-            utterance.rate = 1.0;
-            window.speechSynthesis.speak(utterance);
-        }
-    }
-}
-
-// =====================================================
-// STYLE RENDERING
-// =====================================================
-function renderStyles() {
-    const grid = document.getElementById('styleGrid');
-    const planLevel = PLAN_TIERS[selectedPlan].level;
-
-    grid.innerHTML = STYLES.map(style => {
-        const styleTierLevel = TIER_ORDER.indexOf(style.tier);
-        const locked = styleTierLevel > planLevel;
-        const isSelected = selectedStyle === style.id;
-
-        return `
-            <div class="style-card ${isSelected ? 'selected' : ''} ${locked ? 'locked' : ''}"
-                 data-style="${style.id}"
-                 onclick="${locked ? '' : `selectStyle('${style.id}')`}">
-                ${locked ? `<div class="lock-badge">🔒 ${PLAN_TIERS[TIER_ORDER[styleTierLevel]].label}</div>` : ''}
-                <span class="style-emoji">${style.emoji}</span>
-                <h4>${style.name}</h4>
-                <p>${style.desc}</p>
-            </div>`;
-    }).join('');
-
-    // Show/hide custom textarea
-    const customArea = document.getElementById('customStyleArea');
-    if (selectedStyle === 'custom' && planLevel >= 2) {
-        customArea.classList.add('visible');
-    } else {
-        customArea.classList.remove('visible');
-    }
-}
-
-function selectStyle(styleId) {
-    selectedStyle = styleId;
-    renderStyles();
-}
-
-// =====================================================
 // SELECTION SUMMARY CHIPS
 // =====================================================
 function renderSummaryChips(containerId) {
     const container = document.getElementById(containerId);
-    let chips = '';
-
+    if (!container) return;
     if (selectedPlan) {
-        chips += `<div class="summary-chip"><span class="chip-label">Plan:</span> ${PLAN_TIERS[selectedPlan].label} (${PLAN_TIERS[selectedPlan].price})</div>`;
+        container.innerHTML = `<div class="summary-chip"><span class="chip-label">Plan:</span> ${PLAN_TIERS[selectedPlan].label} (${PLAN_TIERS[selectedPlan].price})</div>`;
     }
-    if (selectedVoice) {
-        const voice = VOICES.find(v => v.id === selectedVoice);
-        chips += `<div class="summary-chip"><span class="chip-label">Voice:</span> ${voice.emoji} ${voice.name}</div>`;
-    }
-    if (selectedStyle) {
-        const style = STYLES.find(s => s.id === selectedStyle);
-        chips += `<div class="summary-chip"><span class="chip-label">Style:</span> ${style.emoji} ${style.name}</div>`;
-    }
-
-    container.innerHTML = chips;
 }
 
 // =====================================================
@@ -313,9 +110,7 @@ function updateProgressBar() {
     const steps = document.querySelectorAll('.progress-step');
     const lines = [
         document.getElementById('line1'),
-        document.getElementById('line2'),
-        document.getElementById('line3'),
-        document.getElementById('line4')
+        document.getElementById('line2')
     ];
 
     steps.forEach((step, i) => {
@@ -333,7 +128,7 @@ function updateProgressBar() {
     });
 
     lines.forEach((line, i) => {
-        line.classList.toggle('filled', i < currentStep - 1);
+        if (line) line.classList.toggle('filled', i < currentStep - 1);
     });
 }
 
@@ -347,7 +142,7 @@ function showStep(step) {
 
     // Next button text
     const btnNext = document.getElementById('btnNext');
-    if (step === 5) {
+    if (step === 3) {
         if (generatedScript) {
             btnNext.innerHTML = '🚀 Start Free Trial';
         } else {
@@ -369,27 +164,15 @@ function showStep(step) {
 
     // Render step-specific content
     if (step === 2) {
-        renderVoices();
         renderSummaryChips('step2Summary');
     }
     if (step === 3) {
-        renderStyles();
         renderSummaryChips('step3Summary');
-    }
-    if (step === 4) {
-        renderSummaryChips('step4Summary');
-    }
-    if (step === 5) {
-        renderSummaryChips('step5Summary');
 
         // Hide CRM if not Enterprise (planGate)
         const crmGroup = document.getElementById('crmGroup');
         const planLevel = PLAN_TIERS[selectedPlan]?.level || 0;
-        if (planLevel < 2) {
-            crmGroup.style.display = 'none';
-        } else {
-            crmGroup.style.display = 'block';
-        }
+        crmGroup.style.display = planLevel >= 2 ? 'block' : 'none';
     }
 
     // Scroll to top
@@ -397,54 +180,29 @@ function showStep(step) {
 }
 
 function nextStep() {
-    // Validation per step
     if (currentStep === 1) {
         if (!selectedPlan) {
             alert('Please select a plan to continue.');
             return;
         }
     } else if (currentStep === 2) {
-        if (!selectedVoice) {
-            alert('Please select a voice for your receptionist.');
-            return;
-        }
-    } else if (currentStep === 3) {
-        if (!selectedStyle) {
-            alert('Please select a style for your receptionist.');
-            return;
-        }
-    } else if (currentStep === 4) {
         if (!validateBizForm()) return;
-    } else if (currentStep === 5) {
+    } else if (currentStep === 3) {
         if (generatedScript) {
-            // Final confirmation
             showFinalConfirmation();
             return;
         }
-        // Generate script
         generateScript();
         return;
     }
 
     currentStep++;
-
-    // SMS-only plans skip voice (step 2) and style (step 3)
-    if (isSMSOnlyPlan(selectedPlan) && (currentStep === 2 || currentStep === 3)) {
-        currentStep = 4;
-    }
-
     showStep(currentStep);
 }
 
 function prevStep() {
     if (currentStep > 1) {
         currentStep--;
-
-        // SMS-only plans skip back over voice/style
-        if (isSMSOnlyPlan(selectedPlan) && (currentStep === 2 || currentStep === 3)) {
-            currentStep = 1;
-        }
-
         showStep(currentStep);
     }
 }
@@ -492,10 +250,8 @@ async function generateScript() {
         phone: document.getElementById('bizPhone').value.trim(),
         services: document.getElementById('bizServices').value.trim(),
         faqs: document.getElementById('bizFaqs').value.trim(),
-        voiceName: VOICES.find(v => v.id === selectedVoice)?.name || 'Alex',
-        style: selectedStyle === 'custom'
-            ? document.getElementById('customStyleText').value.trim() || 'Professional'
-            : STYLES.find(s => s.id === selectedStyle)?.name || 'Professional'
+        voiceName: 'Alex',
+        style: 'Professional'
     };
 
     // Show loading
@@ -598,11 +354,8 @@ async function showFinalConfirmation() {
     try {
         const payload = {
             plan: selectedPlan,
-            voiceId: selectedVoice,
-            style: selectedStyle,
-            customStyle: selectedStyle === 'custom'
-                ? document.getElementById('customStyleText').value.trim()
-                : null,
+            voiceId: 'alex',
+            style: 'professional',
             language: 'en',
             businessName: document.getElementById('bizName').value.trim(),
             industry: document.getElementById('bizIndustry').value,
@@ -638,9 +391,7 @@ async function showFinalConfirmation() {
         }
 
         // No Stripe → show confirmation
-        const voice = VOICES.find(v => v.id === selectedVoice);
-        const style = STYLES.find(s => s.id === selectedStyle);
-        alert(`🎉 Configuration saved!\n\n📋 Plan: ${PLAN_TIERS[selectedPlan].label}\n🎙️ Voice: ${voice?.name}\n🎨 Style: ${style?.name}\n🏢 Business: ${payload.businessName}\n\nWe'll reach out to ${payload.customerEmail} to finalize setup!`);
+        alert(`🎉 Configuration saved!\n\n📋 Plan: ${PLAN_TIERS[selectedPlan].label}\n🏢 Business: ${payload.businessName}\n\nWe'll reach out to ${payload.customerEmail} to finalize setup!`);
 
     } catch (err) {
         console.error('Save error:', err);
