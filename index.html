@@ -25,7 +25,10 @@
     <nav class="navbar" id="navbar">
         <div class="container nav-container">
             <a href="#" class="logo" style="display: flex; align-items: center; gap: 10px; text-decoration: none;">
-                <img src="logo.png" alt="WeDesk" style="width: 34px; height: 34px; object-fit: contain;">
+                <svg width="34" height="34" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg" style="border-radius: 6px; overflow: hidden;">
+                    <rect width="48" height="48" fill="#eab308"/>
+                    <path d="M14 14L34 34M34 14L14 34" stroke="#111827" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
                 <span class="logo-text" style="color: #ffffff; font-family: 'Playfair Display', serif; font-size: 1.7rem; font-weight: 700; letter-spacing: -0.5px;">WeDesk</span>
             </a>
             <ul class="nav-links" id="navLinks">
@@ -33,7 +36,7 @@
                 <li><a href="#how-it-works">How It Works</a></li>
                 <li><a href="#pricing">Pricing</a></li>
                 <li><a href="dashboard.html" class="nav-login">Login</a></li>
-                <li><a href="#demo" class="nav-cta">Get Demo Call</a></li>
+                <li><a href="#" class="nav-cta" onclick="openModal()">Get Demo Call</a></li>
             </ul>
             <button class="mobile-toggle" id="mobileToggle" aria-label="Toggle navigation">
                 <span></span><span></span><span></span>
@@ -70,7 +73,7 @@
                 </div>
             </div>
             <div class="hero-visual fade-in">
-                <img src="WeDeskAI/robot 2.png" alt="AI Receptionist" class="robot-avatar" style="max-height: 88vh; width: auto; object-fit: contain;">
+                <img src="WeDeskAI/change 1.png" alt="AI Receptionist" class="robot-avatar" style="max-height: 88vh; width: auto; object-fit: contain;">
             </div>
         </div>
     </header>
@@ -447,8 +450,11 @@
         <div class="container footer-container">
             <div class="footer-brand">
                 <div class="logo-text" style="display: flex; align-items: center; gap: 10px; margin-bottom: 8px;">
-                    <img src="logo.png" alt="WeDesk" style="width: 28px; height: 28px; object-fit: contain;">
-                    <span style="font-family: 'Playfair Display', serif; font-size: 1.4rem; font-weight: 700; letter-spacing: -0.3px;">WeDesk</span>
+                    <svg width="28" height="28" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg" style="border-radius: 4px; overflow: hidden;">
+                        <rect width="48" height="48" fill="#eab308"/>
+                        <path d="M14 14L34 34M34 14L14 34" stroke="#111827" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"/>
+                    </svg>
+                    <span style="font-family: 'Playfair Display', serif; font-size: 1.4rem; font-weight: 700; letter-spacing: -0.3px; color: #ffffff;">WeDesk</span>
                 </div>
                 <p>Your AI receptionist that never sleeps.</p>
             </div>
