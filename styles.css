@@ -1429,3 +1429,166 @@ section {
         font-size: 1rem
     }
 }
+
+/* ===== THEME 2 SPECIFIC OVERRIDES ===== */
+@media (min-width: 992px) {
+    .hero-container {
+        flex-direction: row !important;
+        justify-content: space-between !important;
+        text-align: left !important;
+        gap: 60px;
+    }
+    .hero-content {
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+        align-items: flex-start !important;
+    }
+    .hero-actions {
+        align-items: flex-start !important;
+    }
+    .hero-visual {
+        flex: 1;
+        display: flex;
+        justify-content: flex-end;
+    }
+    .pricing-grid {
+        grid-template-columns: repeat(3, 1fr) !important;
+        gap: 40px !important;
+    }
+}
+
+@media (max-width: 991px) {
+    .hero-content, .hero-actions {
+        align-items: center !important;
+        text-align: center !important;
+    }
+    .hero-container {
+        flex-direction: column !important;
+        text-align: center !important;
+    }
+}
+
+.hero-actions { margin-bottom: 0 !important; }
+
+/* Pricing Grid Overrides */
+.pricing-card {
+    background: transparent !important;
+    border: none !important;
+    box-shadow: none !important;
+    padding: 20px !important;
+    text-align: left;
+}
+.plan-badge {
+    background: transparent !important;
+    border: 1px solid var(--text-primary) !important;
+    color: var(--text-primary) !important;
+    border-radius: 20px !important;
+    padding: 6px 16px !important;
+    font-size: 0.8rem !important;
+    letter-spacing: 1px !important;
+    display: inline-block !important;
+    margin-bottom: 20px !important;
+    text-transform: uppercase;
+}
+.trial-badge {
+    background: #b0e0d3 !important;
+    color: #2d4036 !important;
+    border-radius: 20px !important;
+    padding: 6px 16px !important;
+    font-size: 0.8rem !important;
+    float: right !important;
+}
+.plan-name {
+    font-family: var(--font-heading) !important;
+    font-size: 2.8rem !important;
+    color: var(--text-primary) !important;
+    margin-bottom: 10px !important;
+    font-weight: 600 !important;
+}
+.plan-desc {
+    color: var(--text-muted) !important;
+    font-size: 1.05rem !important;
+    margin-bottom: 30px !important;
+    min-height: 48px;
+    line-height: 1.5;
+}
+.plan-price {
+    font-family: var(--font-heading) !important;
+    font-size: 4.5rem !important;
+    color: var(--text-primary) !important;
+    font-weight: 500 !important;
+    margin-bottom: 5px !important;
+    line-height: 1 !important;
+    display: flex;
+    align-items: baseline;
+}
+.price-currency {
+    font-size: 2.5rem !important;
+    vertical-align: top;
+    position: relative;
+    top: -15px;
+    margin-right: 2px;
+}
+.price-amount {
+    font-size: 5.5rem !important;
+    letter-spacing: -2px;
+}
+.price-period {
+    font-size: 1.1rem !important;
+    font-family: var(--font-body) !important;
+    color: var(--text-muted) !important;
+    margin-left: 8px;
+}
+.price-subtext {
+    color: var(--text-muted) !important;
+    font-size: 0.95rem !important;
+    margin-top: 5px !important;
+    margin-bottom: 30px !important;
+}
+.plan-features {
+    border-top: 1px solid rgba(0,0,0,0.1) !important;
+    padding-top: 20px !important;
+    margin-bottom: 40px !important;
+    list-style: none;
+    padding-left: 0;
+}
+.plan-features li {
+    border-bottom: 1px solid rgba(0,0,0,0.1) !important;
+    padding: 16px 0 !important;
+    color: var(--text-primary) !important;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    font-size: 1.05rem;
+}
+.plan-features li:last-child {
+    border-bottom: none !important;
+}
+.check {
+    color: var(--text-primary) !important;
+    font-weight: bold;
+}
+.cross {
+    color: rgba(0,0,0,0.3) !important;
+}
+.disabled {
+    color: rgba(0,0,0,0.5) !important;
+}
+.plan-overage {
+    color: var(--text-muted) !important;
+    font-size: 0.9rem !important;
+    text-align: center !important;
+    margin-bottom: 20px !important;
+}
+.pricing-card .btn-outline, .pricing-card .btn-primary {
+    background: #44564a !important;
+    color: #ffffff !important;
+    border-radius: var(--radius-xl) !important;
+    border: none !important;
+    font-weight: 500 !important;
+    padding: 16px 24px !important;
+    width: 100% !important;
+    display: block;
+    text-align: center;
+}
