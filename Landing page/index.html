@@ -11,20 +11,14 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link
-        href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Outfit:wght@500;600;700;800&display=swap"
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&display=swap"
         rel="stylesheet">
     <link rel="stylesheet" href="styles.css">
 </head>
 
 <body>
 
-    <!-- Animated background orbs -->
-    <div class="bg-orbs" aria-hidden="true">
-        <div class="orb orb-1"></div>
-        <div class="orb orb-2"></div>
-        <div class="orb orb-3"></div>
-        <div class="orb orb-4"></div>
-    </div>
+
 
     <!-- Navbar -->
     <nav class="navbar" id="navbar">
@@ -45,7 +39,7 @@
     </nav>
 
     <!-- Hero Section -->
-    <header class="hero" id="hero">
+    <header class="hero bg-sage" id="hero">
         <div class="container hero-container">
             <div class="hero-badge fade-in">
                 <span class="badge-dot"></span>
@@ -71,31 +65,15 @@
                 <p class="hero-note">Free • No credit card • 30-second setup</p>
             </div>
             <div class="hero-visual fade-in">
-                <div class="phone-mockup">
-                    <div class="phone-screen">
-                        <div class="call-ui">
-                            <div class="call-avatar">
-                                <div class="call-avatar-ring"></div>
-                                <img src="../WeDeskAI/Robot.png" alt="AI Receptionist" style="width: 100%; height: 100%; border-radius: 50%; object-fit: cover; position: relative; z-index: 2; mix-blend-mode: multiply;">
-                            </div>
-                            <p class="call-name">WeDeskAI Assistant</p>
-                            <p class="call-status">
-                                <span class="pulse-dot"></span>
-                                Active • Answering calls
-                            </p>
-                            <div class="call-wave">
-                                <span></span><span></span><span></span><span></span><span></span>
-                                <span></span><span></span><span></span><span></span><span></span>
-                            </div>
-                        </div>
-                    </div>
+                <div class="hero-blob">
+                    <img src="../WeDeskAI/Robot.png" alt="AI Receptionist" class="robot-avatar" style="mix-blend-mode: multiply;">
                 </div>
             </div>
         </div>
     </header>
 
     <!-- Features Section -->
-    <section class="features" id="features">
+    <section class="features bg-cream" id="features">
         <div class="container">
             <div class="section-header fade-in">
                 <span class="section-tag">Why WeDeskAI</span>

@@ -42,70 +42,81 @@ html {
 
 body {
     font-family: var(--font-body);
-    background: var(--bg-deep);
+    background: var(--bg-sage);
     color: var(--text-primary);
     line-height: 1.7;
     overflow-x: hidden;
     min-height: 100vh;
-    position: relative
+    position: relative;
+    -webkit-font-smoothing: antialiased;
 }
 
-/* Animated BG Orbs */
-.bg-orbs {
-    position: fixed;
-    inset: 0;
-    z-index: -2;
-    overflow: hidden;
-    pointer-events: none
+h1, h2, h3, h4, h5, h6, .logo-text {
+    font-family: var(--font-heading);
+    font-weight: 600;
+    line-height: 1.2;
 }
 
-.orb {
-    position: absolute;
-    border-radius: 50%;
-    filter: blur(100px);
-    opacity: .6;
-    animation: float 20s ease-in-out infinite
+/* ===== NEW OVERRIDE STYLES (Theme 2 Layout) ===== */
+.bg-sage {
+    background-color: var(--bg-sage) !important;
+    color: var(--text-light) !important;
+}
+.bg-sage .section-title, .bg-sage h1, .bg-sage h2, .bg-sage h3, .bg-sage p {
+    color: var(--text-light) !important;
+}
+.bg-cream {
+    background-color: var(--bg-cream) !important;
+    color: var(--text-primary) !important;
+}
+.bg-cream .section-title, .bg-cream h1, .bg-cream h2, .bg-cream h3, .bg-cream p, .bg-cream .feature-card p, .bg-cream .pricing-card p {
+    color: var(--text-primary) !important;
 }
 
-.orb-1 {
-    width: 600px;
-    height: 600px;
-    background: radial-gradient(circle, #fbb6ce 0%, transparent 70%);
-    top: -10%;
-    left: -10%;
-    animation-duration: 25s
+.hero-blob {
+    background-color: var(--bg-cream);
+    border-radius: 40% 60% 70% 30% / 40% 50% 60% 50%;
+    width: 450px;
+    height: 450px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto;
+    position: relative;
+    max-width: 100%;
+}
+.robot-avatar {
+    width: 130%;
+    height: auto;
+    margin-top: -10%;
+    position: relative;
+    z-index: 2;
 }
 
-.orb-2 {
-    width: 500px;
-    height: 500px;
-    background: radial-gradient(circle, #d6bcfa 0%, transparent 70%);
-    top: 50%;
-    right: -15%;
-    animation-duration: 30s;
-    animation-delay: -5s
+.glass, .feature-card, .pricing-card {
+    background: transparent !important;
+    border: none !important;
+    box-shadow: none !important;
+    backdrop-filter: none !important;
+    -webkit-backdrop-filter: none !important;
 }
 
-.orb-3 {
-    width: 400px;
-    height: 400px;
-    background: radial-gradient(circle, #9ae6b4 0%, transparent 70%);
-    bottom: 10%;
-    left: 30%;
-    animation-duration: 22s;
-    animation-delay: -10s
+.btn-primary {
+    background: var(--accent-dark) !important;
+    color: var(--text-light) !important;
+    border-radius: var(--radius-xl) !important;
+    box-shadow: none !important;
+    border: none !important;
+    padding: 0.75rem 2rem !important;
 }
+.btn-primary::before { display: none !important; }
 
-.orb-4 {
-    width: 300px;
-    height: 300px;
-    background: radial-gradient(circle, #fbd38d 0%, transparent 70%);
-    top: 30%;
-    left: 50%;
-    animation-duration: 28s;
-    animation-delay: -15s;
-    opacity: .4
+.gradient-text {
+    background: none !important;
+    -webkit-text-fill-color: inherit !important;
+    color: inherit !important;
 }
+/* ============================================== */
 
 @keyframes float {
 
