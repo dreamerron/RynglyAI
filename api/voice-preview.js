@@ -1,83 +1,70 @@
 // ===================================================
-// WeDeskAI — ElevenLabs Voice Preview
+// WeDeskAI — Voice Preview via Vapi Voice Library
 // ===================================================
-// Env vars needed: ELEVENLABS_API_KEY
+// Uses VAPI_PRIVATE_KEY (already set) — no extra ElevenLabs key needed
 // GET /api/voice-preview?voice=alex
 
-// ElevenLabs voice IDs (same as used in Vapi provisioning)
 const VOICE_MAP = {
-    'alex': { id: 'pNInz6obpgDQGcFmaJgB', name: 'Alex' },
-    'sarah': { id: '21m00Tcm4TlvDq8ikWAM', name: 'Sarah' },
-    'james': { id: 'VR6AewLTigWG4xSOukaG', name: 'James' },
-    'emma': { id: 'EXAVITQu4vr4xnSDxMaL', name: 'Emma' },
-    'daniel': { id: 'onwK4e9ZLuTAKqWW03F9', name: 'Daniel' },
-    'maya': { id: 'XB0fDUnXU5powFXDhCwa', name: 'Maya' },
-    'chris': { id: 'iP95p4xoKVk53GoZ742B', name: 'Chris' },
-    'sofia': { id: 'ThT5KcBeYPX3keUQqHPh', name: 'Sofia' },
-    'marcus': { id: 'N2lVS1w4EtoT3dr4eOWO', name: 'Marcus' },
-    'lily': { id: 'pFZP5JQG7iQjIQuC4Bku', name: 'Lily' },
-    'raj': { id: 'TX3LPaxmHKxFdv7VOQHJ', name: 'Raj' },
-    'aiko': { id: 'XrExE9yKIg1WjnnlVkGX', name: 'Aiko' }
+    'alex':   'pNInz6obpgDQGcFmaJgB',
+    'sarah':  '21m00Tcm4TlvDq8ikWAM',
+    'james':  'VR6AewLTigWG4xSOukaG',
+    'emma':   'EXAVITQu4vr4xnSDxMaL',
+    'daniel': 'onwK4e9ZLuTAKqWW03F9',
+    'maya':   'XB0fDUnXU5powFXDhCwa',
+    'chris':  'iP95p4xoKVk53GoZ742B',
+    'sofia':  'ThT5KcBeYPX3keUQqHPh',
+    'marcus': 'N2lVS1w4EtoT3dr4eOWO',
+    'lily':   'pFZP5JQG7iQjIQuC4Bku',
+    'raj':    'TX3LPaxmHKxFdv7VOQHJ',
+    'aiko':   'XrExE9yKIg1WjnnlVkGX'
 };
 
 module.exports = async function handler(req, res) {
-    // Allow GET and OPTIONS
-    if (req.method === 'OPTIONS') {
-        return res.status(200).end();
-    }
+    if (req.method === 'OPTIONS') return res.status(200).end();
 
-    const voiceKey = req.query?.voice || req.body?.voice;
+    const voiceKey = req.query?.voice;
+    if (!voiceKey) return res.status(400).json({ error: 'Missing voice parameter' });
 
-    if (!voiceKey) {
-        return res.status(400).json({ error: 'Missing voice parameter' });
-    }
+    const elevenLabsId = VOICE_MAP[voiceKey];
+    if (!elevenLabsId) return res.status(400).json({ error: `Unknown voice: ${voiceKey}` });
 
-    const voice = VOICE_MAP[voiceKey];
-    if (!voice) {
-        return res.status(400).json({ error: `Unknown voice: ${voiceKey}` });
-    }
-
-    const apiKey = process.env.ELEVENLABS_API_KEY;
-    if (!apiKey) {
-        return res.status(503).json({ error: 'ElevenLabs API key not configured' });
-    }
+    const vapiKey = process.env.VAPI_PRIVATE_KEY;
+    if (!vapiKey) return res.status(503).json({ error: 'VAPI_PRIVATE_KEY not configured' });
 
     try {
-        const previewText = `Hi there! I'm ${voice.name}, your dedicated AI receptionist. How can I help you today?`;
+        // Fetch Vapi voice library — includes previewUrl for each voice
+        const libraryRes = await fetch('https://api.vapi.ai/voice-library?limit=100', {
+            headers: { 'Authorization': `Bearer ${vapiKey}` }
+        });
 
-        const response = await fetch(
-            `https://api.elevenlabs.io/v1/text-to-speech/${voice.id}`,
-            {
-                method: 'POST',
-                headers: {
-                    'xi-api-key': apiKey,
-                    'Content-Type': 'application/json',
-                    'Accept': 'audio/mpeg'
-                },
-                body: JSON.stringify({
-                    text: previewText,
-                    model_id: 'eleven_turbo_v2',
-                    voice_settings: {
-                        stability: 0.5,
-                        similarity_boost: 0.75,
-                        style: 0.2,
-                        use_speaker_boost: true
-                    }
-                })
-            }
-        );
-
-        if (!response.ok) {
-            const err = await response.text();
-            console.error('ElevenLabs error:', err);
-            return res.status(502).json({ error: 'Voice generation failed', details: err });
+        if (!libraryRes.ok) {
+            const err = await libraryRes.text();
+            return res.status(502).json({ error: 'Vapi voice library error', details: err });
         }
 
-        // Stream audio back to client
-        const audioBuffer = await response.arrayBuffer();
+        const library = await libraryRes.json();
+        const voices = Array.isArray(library) ? library : (library.results || library.voices || []);
 
-        res.setHeader('Content-Type', 'audio/mpeg');
-        res.setHeader('Cache-Control', 'public, max-age=86400'); // cache 24h
+        // Find the matching voice by ElevenLabs voiceId
+        const match = voices.find(v =>
+            v.voiceId === elevenLabsId ||
+            v.voice_id === elevenLabsId ||
+            v.id === elevenLabsId
+        );
+
+        if (!match || !match.previewUrl) {
+            return res.status(404).json({ error: 'Preview not available for this voice' });
+        }
+
+        // Proxy the audio so the browser doesn't need to handle CORS
+        const audioRes = await fetch(match.previewUrl);
+        if (!audioRes.ok) {
+            return res.status(502).json({ error: 'Failed to fetch preview audio' });
+        }
+
+        const audioBuffer = await audioRes.arrayBuffer();
+        res.setHeader('Content-Type', audioRes.headers.get('content-type') || 'audio/mpeg');
+        res.setHeader('Cache-Control', 'public, max-age=86400');
         res.setHeader('Content-Length', audioBuffer.byteLength);
         return res.status(200).send(Buffer.from(audioBuffer));
 
