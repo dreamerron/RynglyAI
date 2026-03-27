@@ -759,3 +759,24 @@
         font-size: 1.5rem;
     }
 }
+
+/* ===== DASHBOARD AUTH & CONTRAST REFINEMENTS ===== */
+.auth-card {
+    background: #ffffff !important;
+    color: #111827 !important;
+    box-shadow: 0 20px 40px rgba(0,0,0,0.1) !important;
+    border: none !important;
+}
+.auth-form input {
+    background: #f9fafb !important;
+    border: 1px solid #d1d5db !important;
+    color: #111827 !important;
+}
+.auth-form .form-group label {
+    color: #4b5563 !important;
+}
+.auth-tab { color: #6b7280 !important; }
+.auth-tab:hover:not(.active) { color: #111827 !important; }
+.auth-tabs { background: #f3f4f6 !important; }
+.auth-link, .auth-link a, .social-divider span { color: #4b5563 !important; }
+.dashboard-header h1, .dashboard-header p { color: #111827 !important; }

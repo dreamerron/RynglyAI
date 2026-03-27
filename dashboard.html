@@ -21,9 +21,18 @@
     <!-- Header -->
     <header class="navbar">
         <div class="nav-container">
-            <a href="index.html" class="logo">
-                <img src="logo.png" alt="WeDeskAI Logo" class="logo-img">
-                <span class="logo-text">WeDesk<span class="logo-highlight">AI</span></span>
+            <a href="index.html" class="logo" style="display: flex; align-items: center; gap: 8px; text-decoration: none;">
+                <svg width="32" height="32" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <rect x="4" y="4" width="40" height="40" rx="8" fill="url(#paint0_linear_dash)" />
+                    <path d="M16 16L32 32M32 16L16 32" stroke="#1a202c" stroke-width="4" stroke-linecap="round" stroke-linejoin="round" />
+                    <defs>
+                        <linearGradient id="paint0_linear_dash" x1="4" y1="4" x2="44" y2="44" gradientUnits="userSpaceOnUse">
+                            <stop stop-color="#fef08a"/>
+                            <stop offset="1" stop-color="#eab308"/>
+                        </linearGradient>
+                    </defs>
+                </svg>
+                <span class="logo-text" style="color: #ffffff; font-size: 1.6rem; font-weight: 700;">WeDesk</span>
             </a>
             <div class="nav-actions">
                 <button class="btn btn-outline" id="btnLogout" style="display: none;">Logout</button>

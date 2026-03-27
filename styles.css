@@ -1592,3 +1592,45 @@ section {
     display: block;
     text-align: center;
 }
+
+/* ===== SS1 FINAL REFINEMENTS ===== */
+.navbar {
+    background: #1f2937 !important;
+    border-bottom: none !important;
+}
+.nav-links a { 
+    color: #9ca3af !important; 
+}
+.nav-links a:hover { 
+    color: #ffffff !important; 
+}
+.modal-content {
+    background: #ffffff !important;
+    color: #111827 !important;
+    box-shadow: 0 25px 50px -12px rgba(0,0,0,0.25) !important;
+}
+.modal-title, .modal-content h2, .modal-content h3 { 
+    color: #111827 !important; 
+    border-color: #e5e7eb !important; 
+}
+.modal-body, .modal-content p, .modal-content label { 
+    color: #4b5563 !important; 
+}
+.modal-content input, .modal-content select, .modal-content textarea {
+    background: #f9fafb !important;
+    border: 1px solid #d1d5db !important;
+    color: #111827 !important;
+}
+.modal-close { 
+    color: #6b7280 !important; 
+}
+.modal-close:hover { 
+    color: #111827 !important; 
+}
+.navbar .logo-text, .navbar span[style*="font-size: 1.6rem"] {
+    font-family: var(--font-heading) !important;
+    color: #ffffff !important;
+}
+.footer .logo-text, .footer-brand span {
+    font-family: var(--font-heading) !important;
+}
