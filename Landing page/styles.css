@@ -497,6 +497,7 @@ section {
     background: conic-gradient(from 0deg, #7c3aed, #06b6d4, #a855f7, #7c3aed) border-box;
     -webkit-mask: linear-gradient(#fff 0 0) padding-box, linear-gradient(#fff 0 0);
     -webkit-mask-composite: xor;
+    mask: linear-gradient(#fff 0 0) padding-box, linear-gradient(#fff 0 0);
     mask-composite: exclude;
     animation: spin-ring 4s linear infinite
 }
@@ -1580,40 +1581,145 @@ section {
 }
 
 /* ===== SS1 FINAL REFINEMENTS ===== */
+
+/* Navbar — always dark, matching SS1 */
 .navbar {
-    background: #1f2937 !important;
-    border-bottom: none !important;
+    background: #111827 !important;
+    border-bottom: 1px solid rgba(255,255,255,0.06) !important;
 }
-.nav-links a { 
-    color: #9ca3af !important; 
+.navbar.scrolled {
+    background: rgba(17, 24, 39, 0.97) !important;
 }
-.nav-links a:hover { 
-    color: #ffffff !important; 
+.nav-links a {
+    color: #9ca3af !important;
 }
-.modal-content {
+.nav-links a:hover {
+    color: #ffffff !important;
+}
+.nav-cta {
     background: #ffffff !important;
     color: #111827 !important;
-    box-shadow: 0 25px 50px -12px rgba(0,0,0,0.25) !important;
+    font-weight: 600 !important;
+    border-radius: 50px !important;
+    padding: 10px 22px !important;
 }
-.modal-title, .modal-content h2, .modal-content h3 { 
-    color: #111827 !important; 
-    border-color: #e5e7eb !important; 
+.nav-cta:hover {
+    background: #f3f4f6 !important;
+    transform: translateY(-2px) !important;
+    box-shadow: none !important;
 }
-.modal-body, .modal-content p, .modal-content label { 
-    color: #4b5563 !important; 
+.nav-login {
+    color: #d1d5db !important;
 }
-.modal-content input, .modal-content select, .modal-content textarea {
-    background: #f9fafb !important;
-    border: 1px solid #d1d5db !important;
-    color: #111827 !important;
+
+/* Logo */
+.logo-img {
+    filter: none !important;
 }
-.modal-close { 
-    color: #6b7280 !important; 
+
+/* Hero — row layout matching SS1 */
+.hero-container {
+    flex-direction: row !important;
+    text-align: left !important;
+    align-items: center !important;
+    justify-content: space-between !important;
+    gap: 40px !important;
 }
-.modal-close:hover { 
-    color: #111827 !important; 
+.hero-content {
+    flex: 0 0 52% !important;
+    max-width: 52% !important;
+    align-items: flex-start !important;
 }
-.navbar .logo-text, .navbar span[style*="font-size: 1.6rem"] {
+.hero-actions {
+    align-items: flex-start !important;
+}
+.hero-badge {
+    align-self: flex-start !important;
+    background: rgba(255,255,255,0.15) !important;
+    border-color: rgba(255,255,255,0.3) !important;
+    color: #ffffff !important;
+}
+.badge-dot {
+    background: #6ee7b7 !important;
+}
+.hero-visual {
+    flex: 0 0 46% !important;
+    max-width: 46% !important;
+    display: flex !important;
+    justify-content: flex-end !important;
+    align-items: flex-end !important;
+    align-self: flex-end !important;
+}
+.robot-avatar {
+    filter: drop-shadow(0 24px 48px rgba(0,0,0,0.18));
+    z-index: 2;
+    position: relative;
+    max-width: 100%;
+    width: 100% !important;
+    margin-top: 0 !important;
+}
+
+/* Demo Call Modal — sage/cream themed */
+.modal {
+    background: #fffdf6 !important;
+    border: 1px solid rgba(155, 181, 169, 0.4) !important;
+    box-shadow: 0 24px 60px rgba(45,64,54,0.2) !important;
+}
+.modal-title {
+    color: #2d4036 !important;
+}
+.modal-subtitle {
+    color: #4a5c50 !important;
+}
+.modal-close {
+    background: rgba(155, 181, 169, 0.2) !important;
+    border-color: rgba(155, 181, 169, 0.4) !important;
+    color: #4a5c50 !important;
+}
+.modal-close:hover {
+    background: rgba(155, 181, 169, 0.4) !important;
+    color: #2d4036 !important;
+}
+.modal .form-group label {
+    color: #4a5c50 !important;
+}
+.modal input, .modal select {
+    background: #ffffff !important;
+    border: 1px solid rgba(155, 181, 169, 0.6) !important;
+    color: #2d4036 !important;
+}
+.modal input:focus, .modal select:focus {
+    border-color: #9bb5a9 !important;
+    box-shadow: 0 0 0 3px rgba(155, 181, 169, 0.25) !important;
+}
+.modal input::placeholder {
+    color: #9bb5a9 !important;
+}
+.modal .btn-primary {
+    background: #2d4036 !important;
+    color: #fffdf6 !important;
+}
+.modal .btn-primary:hover {
+    background: #3a4d43 !important;
+}
+.modal-disclaimer, .modal-disclaimer a, .consent-text {
+    color: #6b7a70 !important;
+}
+.modal-disclaimer a:hover {
+    color: #2d4036 !important;
+}
+.modal .consent-checkmark {
+    border-color: #9bb5a9 !important;
+}
+.modal-success h3, .modal-error h3 {
+    color: #2d4036 !important;
+}
+.modal-success p, .modal-error p {
+    color: #4a5c50 !important;
+}
+
+/* Login page — theme continuity */
+.navbar .logo-text, .navbar span[style*="font-size: 1.7rem"] {
     font-family: var(--font-heading) !important;
     color: #ffffff !important;
 }

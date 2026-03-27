@@ -760,23 +760,38 @@
     }
 }
 
-/* ===== DASHBOARD AUTH & CONTRAST REFINEMENTS ===== */
+/* ===== DASHBOARD AUTH — SAGE/CREAM THEME ===== */
 .auth-card {
-    background: #ffffff !important;
-    color: #111827 !important;
-    box-shadow: 0 20px 40px rgba(0,0,0,0.1) !important;
-    border: none !important;
+    background: #fffdf6 !important;
+    color: #2d4036 !important;
+    box-shadow: 0 24px 48px rgba(45, 64, 54, 0.18) !important;
+    border: 1px solid rgba(155, 181, 169, 0.35) !important;
+    backdrop-filter: none !important;
+    -webkit-backdrop-filter: none !important;
+}
+.auth-card h2, .auth-card h3 {
+    color: #2d4036 !important;
+    font-family: 'Playfair Display', serif !important;
 }
 .auth-form input {
-    background: #f9fafb !important;
-    border: 1px solid #d1d5db !important;
-    color: #111827 !important;
+    background: #ffffff !important;
+    border: 1px solid rgba(155, 181, 169, 0.6) !important;
+    color: #2d4036 !important;
 }
-.auth-form .form-group label {
-    color: #4b5563 !important;
+.auth-form input:focus {
+    border-color: #9bb5a9 !important;
+    box-shadow: 0 0 0 3px rgba(155, 181, 169, 0.25) !important;
 }
-.auth-tab { color: #6b7280 !important; }
-.auth-tab:hover:not(.active) { color: #111827 !important; }
-.auth-tabs { background: #f3f4f6 !important; }
-.auth-link, .auth-link a, .social-divider span { color: #4b5563 !important; }
-.dashboard-header h1, .dashboard-header p { color: #111827 !important; }
+.auth-form input::placeholder { color: #9bb5a9 !important; }
+.auth-form .form-group label { color: #4a5c50 !important; }
+.auth-tab { color: #6b7a70 !important; }
+.auth-tab:hover:not(.active) { color: #2d4036 !important; }
+.auth-tab.active { background: #2d4036 !important; color: #fffdf6 !important; }
+.auth-tabs { background: rgba(155, 181, 169, 0.2) !important; }
+.auth-link { color: #4a5c50 !important; }
+.auth-link a { color: #3a4d43 !important; }
+.social-divider span { color: #6b7a70 !important; }
+.social-divider::before, .social-divider::after { background: rgba(155, 181, 169, 0.4) !important; }
+.auth-msg.success { color: #3a7d5c !important; }
+.auth-msg.error { color: #b54a4a !important; }
+.dashboard-header h1, .dashboard-header p { color: #2d4036 !important; }
