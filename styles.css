@@ -154,7 +154,7 @@ section {
     backdrop-filter: blur(20px);
     -webkit-backdrop-filter: blur(20px);
     border-radius: var(--radius-lg);
-    transition: all .4s cubic-bezier(.4, 0, .2, 1)
+    transition: background .4s cubic-bezier(.4, 0, .2, 1), border-color .4s cubic-bezier(.4, 0, .2, 1), box-shadow .4s cubic-bezier(.4, 0, .2, 1)
 }
 
 .glass:hover {
@@ -170,7 +170,7 @@ section {
     right: 0;
     z-index: 100;
     padding: 16px 0;
-    transition: all .3s ease;
+    transition: background .3s ease, border-color .3s ease, padding .3s ease;
     background: transparent
 }
 
@@ -278,7 +278,7 @@ section {
     height: 2px;
     background: var(--text-primary);
     border-radius: 2px;
-    transition: all .3s ease
+    transition: transform .3s ease, opacity .3s ease
 }
 
 /* Hero */
@@ -406,7 +406,7 @@ section {
     border-radius: 50px;
     border: none;
     cursor: pointer;
-    transition: all .4s cubic-bezier(.4, 0, .2, 1);
+    transition: transform .4s cubic-bezier(.4, 0, .2, 1), box-shadow .4s cubic-bezier(.4, 0, .2, 1), background .4s cubic-bezier(.4, 0, .2, 1), border-color .4s cubic-bezier(.4, 0, .2, 1);
     position: relative;
     overflow: hidden
 }
@@ -891,7 +891,7 @@ section {
     font-size: .9rem;
     font-weight: 500;
     cursor: pointer;
-    transition: all .3s ease
+    transition: background .3s ease, color .3s ease, border-color .3s ease
 }
 
 .toggle-btn:hover {
@@ -1136,7 +1136,7 @@ section {
     -webkit-backdrop-filter: blur(8px);
     opacity: 0;
     visibility: hidden;
-    transition: all .4s ease;
+    transition: opacity .4s ease, visibility .4s ease, transform .4s ease;
     padding: 20px
 }
 
@@ -1176,7 +1176,7 @@ section {
     color: var(--text-secondary);
     font-size: 1.3rem;
     cursor: pointer;
-    transition: all .3s ease
+    transition: background .3s ease, color .3s ease
 }
 
 .modal-close:hover {
@@ -1228,7 +1228,7 @@ section {
     color: var(--text-primary);
     font-family: var(--font-body);
     font-size: 1rem;
-    transition: all .3s ease;
+    transition: border-color .3s ease, box-shadow .3s ease;
     outline: none
 }
 
@@ -1287,7 +1287,7 @@ section {
     display: flex;
     align-items: center;
     justify-content: center;
-    transition: all .3s ease;
+    transition: background .3s ease, border-color .3s ease;
     margin-top: 2px
 }
 
