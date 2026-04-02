@@ -490,7 +490,8 @@ async function showFinalConfirmation() {
 
     } catch (err) {
         console.error('Save error:', err);
-        alert('Save failed: ' + (err.message || 'Unknown error'));
+        const errorMsg = err.message || 'Unknown error';
+        alert('Save failed: ' + errorMsg + '\n\nIf this persists, please contact support with this message.');
     } finally {
         if (btnNext) {
             btnNext.disabled = false;

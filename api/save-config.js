@@ -73,7 +73,9 @@ module.exports = async function handler(req, res) {
                 const rows = await dbResponse.json();
                 configId = rows[0]?.id;
             } else {
-                console.error('Supabase error:', await dbResponse.text());
+                const errBody = await dbResponse.text();
+                console.error('Supabase error:', errBody);
+                // We keep configId = null and proceed, but we log the specific error
             }
         }
 
@@ -92,11 +94,11 @@ module.exports = async function handler(req, res) {
             const priceId = priceMap[plan];
 
             if (!priceId) {
-                return res.status(400).json({ error: `No Stripe price configured for plan: ${plan}` });
+                return res.status(400).json({ error: `Stripe price ID not configured for plan: ${plan}. Please check your environment variables.` });
             }
 
             // Build the checkout session via Stripe REST API
-            const origin = req.headers.origin || req.headers.referer?.replace(/\/[^/]*$/, '') || 'https://your-domain.com';
+            const origin = req.headers.origin || req.headers.referer?.replace(/\/[^/]*$/, '') || 'https://wedeskai.com';
 
             const params = new URLSearchParams();
             params.append('mode', 'subscription');
@@ -112,7 +114,7 @@ module.exports = async function handler(req, res) {
                 params.append('metadata[config_id]', configId);
             }
             params.append('metadata[plan]', plan);
-            params.append('metadata[business_name]', businessName);
+            params.append('metadata[business_name]', String(businessName).substring(0, 200)); // Guard against long names
 
             const stripeResponse = await fetch('https://api.stripe.com/v1/checkout/sessions', {
                 method: 'POST',
@@ -158,6 +160,10 @@ module.exports = async function handler(req, res) {
 
     } catch (error) {
         console.error('Save config error:', error);
-        return res.status(500).json({ error: 'Failed to save configuration', details: error.message });
+        // Important: return the actual error message in the 'error' field so the client can show it
+        return res.status(500).json({ 
+            error: error.message || 'Failed to save configuration', 
+            details: error.stack 
+        });
     }
 };
