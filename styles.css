@@ -831,6 +831,22 @@ section {
     margin-top: 12px
 }
 
+.pricing-section-label {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 8px 20px;
+    border-radius: 50px;
+    border: 1px solid var(--glass-border);
+    background: var(--bg-card);
+    color: var(--text-secondary);
+    font-size: .85rem;
+    font-weight: 600;
+    letter-spacing: .5px;
+    text-transform: uppercase;
+    margin-bottom: 32px
+}
+
 .pricing-toggle {
     display: flex;
     justify-content: center;
