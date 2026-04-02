@@ -832,19 +832,21 @@ section {
 }
 
 .pricing-section-label {
-    display: inline-flex;
+    display: flex;
     align-items: center;
-    gap: 8px;
-    padding: 8px 20px;
-    border-radius: 50px;
-    border: 1px solid var(--glass-border);
-    background: var(--bg-card);
-    color: var(--text-secondary);
-    font-size: .85rem;
-    font-weight: 600;
-    letter-spacing: .5px;
-    text-transform: uppercase;
+    gap: 12px;
+    font-family: var(--font-heading);
+    font-size: 1.6rem;
+    font-weight: 700;
+    color: var(--text-primary);
     margin-bottom: 32px
+}
+
+.pricing-section-label svg {
+    color: var(--accent-purple);
+    width: 24px;
+    height: 24px;
+    flex-shrink: 0
 }
 
 .pricing-toggle {
