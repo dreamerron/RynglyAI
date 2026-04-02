@@ -15,6 +15,7 @@
         rel="stylesheet">
     <link rel="stylesheet" href="styles.css">
     <link rel="icon" type="image/png" href="logo.png">
+    <script type="module" src="https://unpkg.com/@splinetool/viewer@1.9.82/build/spline-viewer.js"></script>
 </head>
 
 <body>
@@ -76,7 +77,11 @@
                 </div>
             </div>
             <div class="hero-visual fade-in">
-                <img src="WeDeskAI/change 1.png" alt="AI Receptionist" class="robot-avatar" style="max-height: 88vh; width: auto; object-fit: contain;">
+                <spline-viewer
+                    url="https://prod.spline.design/kZDDjO5HuC9GJUM2/scene.splinecode"
+                    events-target="global"
+                    class="spline-robot">
+                </spline-viewer>
             </div>
         </div>
     </header>

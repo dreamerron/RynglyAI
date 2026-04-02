@@ -489,6 +489,24 @@ section {
     z-index: 2
 }
 
+.spline-robot {
+    width: 100%;
+    height: 600px;
+    border-radius: var(--radius-xl);
+    overflow: hidden;
+    position: relative;
+    z-index: 2
+}
+
+.spline-robot::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    border-radius: var(--radius-xl);
+    box-shadow: 0 0 60px rgba(124, 58, 237, .3), 0 0 120px rgba(6, 182, 212, .15);
+    pointer-events: none
+}
+
 /* Phone Mockup (legacy) */
 
 .phone-mockup {
