@@ -47,7 +47,10 @@ module.exports = async function handler(req, res) {
 
         if (!vapiRes.ok) {
             console.error('Vapi error:', vapiRes.status, JSON.stringify(data));
-            return res.status(502).json({
+            // If Vapi returns a validation error (400), we should pass that through.
+            // Otherwise, it's a 502 (Bad Gateway) for an external system failure.
+            const statusCode = vapiRes.status === 400 ? 400 : 502;
+            return res.status(statusCode).json({
                 error: 'Vapi API error',
                 details: data.message || data.error || JSON.stringify(data),
                 vapiStatus: vapiRes.status

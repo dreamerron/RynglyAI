@@ -62,10 +62,17 @@ function showSuccess() {
     modalError.style.display = 'none';
 }
 
-function showError(message) {
+function showError(message, isUserError = false) {
     modalForm.style.display = 'none';
     modalSuccess.style.display = 'none';
     modalError.style.display = '';
+    
+    // If it's a user error, we might want to change the title or icon
+    const errorTitle = document.querySelector('#modalError h3');
+    if (errorTitle) {
+        errorTitle.textContent = isUserError ? "Action Required" : "Something went wrong";
+    }
+    
     errorMessage.textContent = message || "We couldn't initiate the call. Please try again.";
 }
 
@@ -171,22 +178,33 @@ async function handleSubmit(e) {
             throw new Error(errorMsg);
         }
 
-        let data;
-        try {
-            data = await response.json();
-        } catch {
-            throw new Error("Server returned an unexpected response. Make sure 'vercel dev' is running locally.");
+        const data = await response.json();
+
+        // If the API returns a 400 (Bad Request), it's a validation issue
+        if (response.status === 400) {
+            const detail = data.details || data.error || 'Please check your phone number format.';
+            // Add a friendly tip for E.164 errors
+            let friendlyDetail = detail;
+            if (detail.toLowerCase().includes('e.164')) {
+                friendlyDetail = "Format Error: Please include your country code (e.g. +1 for US/Canada).";
+            }
+            showError(friendlyDetail, true); // Pass true to indicate a 'User Error'
+            return;
         }
 
         if (!response.ok) {
-            const msg = data.details || data.error || data.message || 'Call initiation failed';
-            throw new Error(`[${response.status}] ${msg}`);
+            throw new Error(data.error || data.details || 'Call initiation failed');
         }
 
         showSuccess();
     } catch (err) {
         console.error('Call error:', err);
-        showError(err.message || "Something went wrong. Please check your connection and try again.");
+        // Special handling for syntax error (usually HTML response on 404)
+        if (err.name === 'SyntaxError' || err.message.includes('Unexpected token')) {
+            showError("Backend Error: Received HTML instead of JSON. Ensure your server is running 'vercel dev'.");
+        } else {
+            showError(err.message || "Something went wrong. Please check your connection and try again.");
+        }
     }
 }
 
