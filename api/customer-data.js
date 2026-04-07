@@ -35,7 +35,7 @@ module.exports = async function handler(req, res) {
     // ── POST: Create appointment ──
     if (req.method === 'POST') {
         try {
-            const { action, client_name, date, service, notes } = req.body;
+            const { action, client_name, client_phone, date, service, notes } = req.body;
 
             if (action !== 'create_appointment') {
                 return res.status(400).json({ error: 'Unknown action' });
@@ -56,6 +56,7 @@ module.exports = async function handler(req, res) {
                 body: JSON.stringify({
                     user_email: userEmail,
                     client_name,
+                    client_phone: client_phone || null,
                     date,
                     service: service || null,
                     notes: notes || null
@@ -68,6 +69,41 @@ module.exports = async function handler(req, res) {
             }
 
             const appt = await apptRes.json();
+
+            // After creating appointment, send SMS notification to business owner
+            let businessPhone = null;
+            try {
+                const cfgRes = await fetch(`${supabaseUrl}/rest/v1/receptionist_configs?customer_email=eq.${encodeURIComponent(userEmail)}&select=phone`, {
+                    headers: { 'apikey': supabaseKey, 'Authorization': `Bearer ${supabaseKey}` }
+                });
+                if (cfgRes.ok) {
+                    const cfgs = await cfgRes.json();
+                    if (cfgs && cfgs.length > 0) businessPhone = cfgs[0].phone;
+                }
+            } catch (e) {
+                console.error('Failed to fetch business phone for SMS:', e);
+            }
+
+            if (businessPhone) {
+                const twilioSid = process.env.TWILIO_ACCOUNT_SID;
+                const twilioToken = process.env.TWILIO_AUTH_TOKEN;
+                const twilioPhone = process.env.TWILIO_PHONE_NUMBER;
+                if (twilioSid && twilioToken && twilioPhone) {
+                    const client = require('twilio')(twilioSid, twilioToken);
+                    const smsBody = `📅 New appointment booked!\nClient: ${client_name}\nDate: ${new Date(date).toLocaleString()}\nService: ${service || 'N/A'}\nCheck dashboard for details.`;
+                    try {
+                        await client.messages.create({
+                            body: smsBody,
+                            from: twilioPhone,
+                            to: businessPhone
+                        });
+                        console.log('Appointment SMS sent to', businessPhone);
+                    } catch (smsErr) {
+                        console.error('Failed to send appointment SMS:', smsErr.message);
+                    }
+                }
+            }
+
             return res.status(201).json({ success: true, appointment: appt[0] || appt });
 
         } catch (error) {

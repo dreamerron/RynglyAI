@@ -16,7 +16,7 @@ module.exports = async function handler(req, res) {
         plan, voiceId, style, customStyle, language,
         businessName, industry, hours, phone, services, faqs, country,
         greeting, personality, script,
-        customerEmail, bookingLink, crmLink,
+        customerEmail, crmLink,
         smsRules, smsFallback
     } = req.body;
 
@@ -52,7 +52,6 @@ module.exports = async function handler(req, res) {
                 personality: personality || null,
                 script: script || null,
                 customer_email: customerEmail,
-                booking_link: bookingLink || null,
                 crm_link: crmLink || null,
                 sms_rules: smsRules || null,
                 sms_fallback: smsFallback || null

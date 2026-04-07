@@ -13,6 +13,8 @@
     <link rel="stylesheet" href="styles.css">
     <!-- Admin styles -->
     <link rel="stylesheet" href="admin.css">
+    <!-- Chart.js -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
 
 <body>
@@ -63,6 +65,22 @@
                         <div class="stat-value" id="statPaid">-</div>
                         <div class="stat-label">Paid Accounts</div>
                     </div>
+                    <div class="stat-card">
+                        <div class="stat-value" id="statTrials">-</div>
+                        <div class="stat-label">Active Trials</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Charts Section -->
+            <div class="charts-grid" style="display: grid; grid-template-columns: 1fr 1fr; gap: 24px; margin-bottom: 32px;">
+                <div class="chart-container" style="background: var(--surface-light); border: 1px solid var(--border-color); border-radius: 12px; padding: 20px;">
+                    <h3 style="margin-top:0; font-size: 1.1rem; color: var(--text-secondary); margin-bottom: 16px;">Plan Distribution</h3>
+                    <canvas id="planChart" height="200"></canvas>
+                </div>
+                <div class="chart-container" style="background: var(--surface-light); border: 1px solid var(--border-color); border-radius: 12px; padding: 20px;">
+                    <h3 style="margin-top:0; font-size: 1.1rem; color: var(--text-secondary); margin-bottom: 16px;">Account Statuses</h3>
+                    <canvas id="statusChart" height="200"></canvas>
                 </div>
             </div>
 

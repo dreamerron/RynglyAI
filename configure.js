@@ -455,8 +455,6 @@ async function showFinalConfirmation() {
         if (selectedProduct === 'voice') {
             payload.voiceId = 'alex';
             payload.style = 'professional';
-            payload.bookingLink = document.getElementById('bookingLink').value.trim() || null;
-            payload.crmLink = document.getElementById('crmLink').value.trim() || null;
             payload.greeting = generatedScript?.greeting || null;
             payload.personality = generatedScript?.personality || null;
             payload.script = generatedScript?.script || null;
@@ -464,7 +462,6 @@ async function showFinalConfirmation() {
             // SMS
             payload.smsRules = smsRules.filter(r => r.keyword.trim());
             payload.smsFallback = document.getElementById('smsFallback').value.trim() || null;
-            payload.bookingLink = document.getElementById('bookingLinkSms').value.trim() || null;
         }
 
         const response = await fetch('/api/save-config', {

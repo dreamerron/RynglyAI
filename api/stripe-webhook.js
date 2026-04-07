@@ -215,9 +215,11 @@ async function provisionReceptionist(config, supabaseUrl, supabaseKey) {
                     model: 'gpt-4o-mini',
                     messages: [{
                         role: 'system',
-                        content: config.script || `You are the AI receptionist for ${config.business_name}.`
+                        content: (config.script || `You are the AI receptionist for ${config.business_name}.`) + 
+                                 (config.phone ? `\n\nIf the caller indicates a true emergency or extreme urgency, use the transfer call tool to forward them directly to the business owner.` : '')
                     }]
                 },
+                forwardingPhoneNumber: config.phone || undefined,
                 voice: {
                     provider: '11labs',
                     voiceId: voiceConfig.voiceId,

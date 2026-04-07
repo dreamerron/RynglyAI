@@ -96,11 +96,89 @@ async function loadData() {
     }
 }
 
+let _planChart = null;
+let _statusChart = null;
+
 function updateStats() {
     document.getElementById('statTotal').innerText = ALL_CONFIGS.length;
     const paid = ALL_CONFIGS.filter(c => ['paid', 'live', 'trial', 'active'].includes(c.status)).length;
     document.getElementById('statPaid').innerText = paid;
+    
+    const trials = ALL_CONFIGS.filter(c => c.status === 'trial').length;
+    document.getElementById('statTrials').innerText = trials;
+
+    renderCharts();
 }
+
+function renderCharts() {
+    // 1. Plan Distribution Chart
+    const planCounts = ALL_CONFIGS.reduce((acc, c) => {
+        const p = c.plan || 'unknown';
+        acc[p] = (acc[p] || 0) + 1;
+        return acc;
+    }, {});
+
+    const planCtx = document.getElementById('planChart').getContext('2d');
+    if (_planChart) _planChart.destroy();
+    _planChart = new Chart(planCtx, {
+        type: 'doughnut',
+        data: {
+            labels: Object.keys(planCounts).map(p => p.toUpperCase()),
+            datasets: [{
+                data: Object.values(planCounts),
+                backgroundColor: [
+                    'rgba(124, 58, 237, 0.8)',  // Primary purple
+                    'rgba(6, 182, 212, 0.8)',   // Accent cyan
+                    'rgba(244, 63, 94, 0.8)',   // Rose
+                    'rgba(16, 185, 129, 0.8)',  // Emerald
+                    'rgba(245, 158, 11, 0.8)',  // Amber
+                    'rgba(107, 114, 128, 0.8)'  // Gray
+                ]
+            }]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: {
+                legend: { position: 'right', labels: { color: 'var(--text-secondary)' } }
+            }
+        }
+    });
+
+    // 2. Status Distribution Chart
+    const statusCounts = ALL_CONFIGS.reduce((acc, c) => {
+        const s = c.status || 'unknown';
+        acc[s] = (acc[s] || 0) + 1;
+        return acc;
+    }, {});
+
+    const statusCtx = document.getElementById('statusChart').getContext('2d');
+    if (_statusChart) _statusChart.destroy();
+    _statusChart = new Chart(statusCtx, {
+        type: 'pie',
+        data: {
+            labels: Object.keys(statusCounts).map(s => s.toUpperCase()),
+            datasets: [{
+                data: Object.values(statusCounts),
+                backgroundColor: Object.keys(statusCounts).map(s => {
+                    if (s === 'active' || s === 'live' || s === 'paid') return 'rgba(16, 185, 129, 0.8)'; // Green
+                    if (s === 'trial') return 'rgba(124, 58, 237, 0.8)'; // Purple 
+                    if (s === 'draft') return 'rgba(107, 114, 128, 0.8)'; // Gray
+                    if (s === 'cancelled') return 'rgba(239, 68, 68, 0.8)'; // Red
+                    return 'rgba(245, 158, 11, 0.8)'; // Amber
+                })
+            }]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: {
+                legend: { position: 'right', labels: { color: 'var(--text-secondary)' } }
+            }
+        }
+    });
+}
+
 
 function renderTable() {
     const tbody = document.getElementById('customersBody');

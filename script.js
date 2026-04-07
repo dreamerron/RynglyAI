@@ -114,6 +114,7 @@ async function handleSubmit(e) {
     const countryCode = document.getElementById('countryCode').value;
     const phone = document.getElementById('userPhone').value.trim();
     const consentCheck = document.getElementById('consentCheck');
+    const botField = document.getElementById('botField')?.value || "";
 
     if (!consentCheck || !consentCheck.checked) {
         const checkmark = document.querySelector('.consent-checkmark');
@@ -163,7 +164,8 @@ async function handleSubmit(e) {
             },
             body: JSON.stringify({
                 name: name,
-                phoneNumber: fullNumber
+                phoneNumber: fullNumber,
+                b_phone: botField
             })
         });
 
@@ -189,6 +191,12 @@ async function handleSubmit(e) {
                 friendlyDetail = "Format Error: Please include your country code (e.g. +1 for US/Canada).";
             }
             showError(friendlyDetail, true); // Pass true to indicate a 'User Error'
+            return;
+        }
+
+        // If the API returns a 429 (Too Many Requests), it's a rate limit issue
+        if (response.status === 429) {
+            showError(data.details || "Daily Limit Reached. Please try again tomorrow.", true);
             return;
         }
 
