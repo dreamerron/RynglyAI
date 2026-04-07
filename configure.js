@@ -23,7 +23,7 @@ const PLAN_TIERS = {
     growth:    { level: 1, label: 'Professional',    price: '$99/mo',  type: 'voice' },
     sms_basic: { level: 0, label: 'SMS Starter',     price: '$29/mo',  type: 'sms'   },
     sms_pro:   { level: 1, label: 'SMS Growth',      price: '$59/mo',  type: 'sms'   },
-    sms_scale: { level: 2, label: 'SMS Scale',       price: '$149/mo', type: 'sms'   }
+    bundle:    { level: 2, label: 'Voice + Text',    price: '$129/mo', type: 'sms'   }
 };
 
 // =====================================================
